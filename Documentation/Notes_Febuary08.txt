@@ -1,0 +1,20 @@
+HTTPS, das S steht für SWAG
+
+Monitoring/Controller Website
+- Abfragen welches gerät welche Jobs hat
+- Jobs in die richtige reihenfolge bringen
+- Status der registrierten Geräte
+
+Allgemein:
+- ein Job hat:
+    - Reihenfolge der nötigen schritte
+    - Status
+    - nächster Job
+    - IP vom gerät das den Job macht
+    - Eindeutige kennung Guid
+- SPS und DoBot müssen funktion haben um HTTP zu senden 
+Config der Geräte
+- Monitor hat feste IP
+- Monitor IP bei SPS und DoBot eintragen (http put)
+- im fehlerfall 2 Dinge:
+    - stopp an nachfolgendes Gerät und Status an Monitor
