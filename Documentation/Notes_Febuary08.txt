@@ -18,3 +18,25 @@ Config der Geräte
 - Monitor IP bei SPS und DoBot eintragen (http put)
 - im fehlerfall 2 Dinge:
     - stopp an nachfolgendes Gerät und Status an Monitor
+
+IDs!
+
+Anmeldung:
+- GET(IP des Monitors) - jedes Gerät empfängt diese Nachricht
+- POST(ID, eigene IP, Gerätetyp) - jedes Gerät schickt nach den Erhalt der IP des Monitors diese Nachricht an den Monitor
+
+Monitor:
+- POST(IP, JobIds) - fragt die einzelnen Geräte nach den Jobs
+- Notstop - verschickt Nachricht an allen Geräten
+- Jobreihenfolge -> schickt dem Gerät, mache Jobx + Info, welcher Job + IP als nächstes dran ist
+
+Geräte:
+- empfängt Anfrage von Monitor nach Jobs und gibt Liste von Jobs + Reihenfolge zurück
+- verschickt Nachricht an nächstes Gerät, dass Job x beendet ist und jetzt Job y dran ist
+- Monitor schickt den Geräten, wenn Jobx beendet, dann Job y beginnen (mit IP des Geräts)
+Gerät schickt dann Post an nächsten Gerät
+- Status an Monitor (Id, IP, jobid, status, zeitstempel, ) - job starten und job beenden, Level: info, warnung, fehler
+
+Gerätetyp: 
+    1 = SPS
+    2 = Dobot
