@@ -1,0 +1,140 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "description": "This is the dobot api documentation.",
+    "version": "1.0.0",
+    "title": "Dobot Api Docs",
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://127.0.0.1:5000/"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Get",
+      "description": "This are the get endpoints for te dobot api."
+    }
+  ],
+  "paths": {
+    "/start": {
+      "post": {
+        "tags": [
+          "Post"
+        ],
+        "summary": "Start the Dobot",
+        "requestBody": {
+          "description": "Starts the dobot. This will run the configured task.",
+          "required": true
+        },
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "The was sucessfully started."
+          },
+          "400": {
+            "description": "Failed. The Dobot could not be started."
+          }
+        }
+      }
+    },
+    "/stop": {
+      "post": {
+        "tags": [
+          "Post"
+        ],
+        "summary": "Stop the Dobot",
+        "requestBody": {
+          "description": "Stops the dobot after it finishes its current running task.",
+          "required": true
+        },
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "The action was sucessfull."
+          },
+          "400": {
+            "description": "Failed. The Dobot could not be stopped."
+          }
+        }
+      }
+    },
+    "/emergency-stop": {
+      "post": {
+        "tags": [
+          "Post"
+        ],
+        "summary": "Stops the Dobot immediately",
+        "requestBody": {
+          "description": "Stops the dobot immediately. This will stop currently running tasks. And run a move upwards.",
+          "required": true
+        },
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "The dobot was immediately stopped."
+          },
+          "400": {
+            "description": "Failed. The Dobot could not be stopped immediately."
+          }
+        }
+      }
+    },
+    "/position": {
+      "post": {
+        "tags": [
+          "Post"
+        ],
+        "summary": "Position",
+        "requestBody": {
+          "description": "Add summary",
+          "required": true
+        },
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "TODO"
+          },
+          "400": {
+            "description": "TODO"
+          }
+        }
+      }
+    },
+    "/login": {
+      "post": {
+        "tags": [
+          "Post"
+        ],
+        "summary": "TODO",
+        "requestBody": {
+          "description": "TODO",
+          "required": true
+        },
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "TODO"
+          },
+          "400": {
+            "description": "TODO"
+          }
+        }
+      }
+    }
+  }
+}
