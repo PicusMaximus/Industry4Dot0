@@ -40,3 +40,5 @@ Gerät schickt dann Post an nächsten Gerät
 Gerätetyp: 
     1 = SPS
     2 = Dobot
+
+Öffnen der YAML über folgende Website möglich: https://editor.swagger.io/
