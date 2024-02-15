@@ -1,6 +1,4 @@
 from flask import Flask, jsonify, request
-# from flasgger import Swagger, LazyString, LazyJSONEncoder
-# from flasgger import swag_from
 from flask_swagger_ui import get_swaggerui_blueprint
 
 app = Flask(__name__)
@@ -12,7 +10,7 @@ SWAGGERUI_BLUEPRINT = get_swaggerui_blueprint(
     SWAGGER_URL,
     API_URL,
     config={
-        'app_name': "Seans-Python-Flask-REST-Boilerplate"
+        'app_name': "DOBOT-API"
     }
 )
 app.register_blueprint(SWAGGERUI_BLUEPRINT, url_prefix=SWAGGER_URL)
