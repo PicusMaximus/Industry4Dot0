@@ -1,5 +1,6 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify
 from flask_swagger_ui import get_swaggerui_blueprint
+import _thread
 
 app = Flask(__name__)
 
@@ -22,6 +23,7 @@ app.register_blueprint(SWAGGERUI_BLUEPRINT, url_prefix=SWAGGER_URL)
 @app.route("/start", methods=['POST'])
 def startDoBot():
     # Do the stuff you need to do
+    _thread.start_new_thread(run, ())
     return jsonify(processResult)
 
 @app.route("/stop", methods=['POST'])
@@ -32,6 +34,7 @@ def stopDoBot():
 @app.route("/emergency-stop", methods=['POST'])
 def emergencyStop():
     # Do the stuff you need to do
+    _thread.start_new_thread(emergencyStop, ())
     return jsonify(), 200
 
 @app.route("/position", methods=['POST'])
@@ -46,3 +49,14 @@ def login():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+
+def run():
+    while True:
+        print("Alive :)")
+
+
+def emergencyStop():
+    print("Thread unsubscribed from live.")
+    _thread.exit()
+    print("Killed")
