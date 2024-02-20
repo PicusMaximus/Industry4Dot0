@@ -1,6 +1,8 @@
 from flask import Flask, jsonify
 from flask_swagger_ui import get_swaggerui_blueprint
 import _thread
+from time import sleep
+from multiprocessing import Process
 
 app = Flask(__name__)
 
@@ -17,46 +19,55 @@ SWAGGERUI_BLUEPRINT = get_swaggerui_blueprint(
 app.register_blueprint(SWAGGERUI_BLUEPRINT, url_prefix=SWAGGER_URL)
 ### end swagger specific ###
 
+processStop = False
+
+processes = []
+
+def run():
+    global processStop
+
+    while True:
+        sleep(1)
+        if processStop == True:
+            break
+        print("Alive :)")
+
 
 ### api endpoints
 
 @app.route("/start", methods=['POST'])
 def startDoBot():
-    # Do the stuff you need to do
-    _thread.start_new_thread(run, ())
-    return jsonify(processResult)
+    proc = Process(target=run, daemon=True)
+    processes.append(proc)
+    proc.start()
+    return jsonify("Hello World")
 
 @app.route("/stop", methods=['POST'])
 def stopDoBot():
     # Do the stuff you need to do
-    return jsonify(processResult), 200
+    # This will just set an boolean value that
+    # will stop the processes at a possible moment
+    global processStop
+    processStop = True
+    return jsonify("Hello World"), 200
 
 @app.route("/emergency-stop", methods=['POST'])
 def emergencyStop():
+    print(processes)
+    for proc in processes:
+        proc.kill()
     # Do the stuff you need to do
-    _thread.start_new_thread(emergencyStop, ())
-    return jsonify(), 200
+    return jsonify("Hello World"), 200
 
 @app.route("/position", methods=['POST'])
 def position():
     # Do the stuff you need to do
-    return jsonify(), 200
+    return jsonify("Hello World"), 200
 
 @app.route("/login", methods=['POST'])
 def login():
     # Do the stuff you need to do
-    return jsonify(), 200
+    return jsonify("Hello World"), 200
 
 if __name__ == '__main__':
     app.run(debug=True)
-
-
-def run():
-    while True:
-        print("Alive :)")
-
-
-def emergencyStop():
-    print("Thread unsubscribed from live.")
-    _thread.exit()
-    print("Killed")
