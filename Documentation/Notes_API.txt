@@ -1,4 +1,4 @@
-** = in APIVorlage.yaml definiert!
+** = in APIVorlage.yaml (src/ApiVorlage.yaml) definiert!
 Öffnen der YAML über folgende Website möglich: https://editor.swagger.io/
 
 Anmeldung:
