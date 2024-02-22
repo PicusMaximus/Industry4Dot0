@@ -26,7 +26,7 @@ Anmeldung:
 - /api/device/login: POST(id (GUID), ip, type (string, sps oder dobot), name (string, max. 20 Zeichen)) - jedes Gerät schickt nach den Erhalt der IP des Monitors diese Nachricht an den Monitor
 
 Monitor:
-- POST(deviceIp, JobIds, Jobbezeichnung) - fragt die einzelnen Geräte nach den Jobs
+- POST(id (jobId), name (Jobbezeichnung)) - fragt die einzelnen Geräte nach den Jobs
 - Notstop - verschickt Nachricht an allen Geräten
 - Jobreihenfolge -> schickt dem Gerät, mache Jobx + Info, welcher Job + IP als nächstes dran ist
 
