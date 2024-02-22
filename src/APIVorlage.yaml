@@ -3,22 +3,43 @@ info:
   title: Swagger Maschinenpark
   version: 1.0.0
 tags:
-  - name: Dobot
-    description: Everything about your Dobot
-  - name: SPS
-    description: SPS
+  - name: Device
+    description: Everything for the devices
   - name: Monitor
     description: Operations about main
 paths:
-  /Dobot/Login:
+
+  /api/device/setMonitorIp:
+    post:
+      tags: 
+        - Device
+      summary: gets the ip from the monitor
+      parameters:
+        - name: ip
+          description: monitor ip
+          in: query
+          required: true
+          schema:
+            type: string
+            example: '192.168.1.1'
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Invalid input
+        '422':
+          description: Validation exception
+        
+    
+  /api/monitor/login:
     post:
       tags:
-        - Dobot
-      summary: Monitor IP Address
-      description: Get monitor IP
-      operationId: monitorIp
+        - Monitor
+      summary: registration
+      description: registration
+      operationId: deviceRegistration
       requestBody:
-        description: Create a new pet in the store
+        description: post login
         content:
           application/json:
             schema:
@@ -31,22 +52,47 @@ paths:
           description: Invalid input
         '422':
           description: Validation exception
-  
-  /Monitor/GetJobs:
-    get:
+          
+  /api/log/:
+    post:
       tags:
         - Monitor
+      summary: status changed
+      requestBody:
+        description: post status changed
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/statusChanged'
+              required: true
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Invalid input
+        '422':
+          description: Validation exception
+          
+  /api/device/notstop:
+    delete:
+      tags:
+        - Device
+      summary: stops the jobs
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Invalid input
+        '422':
+          description: Validation exception
+  
+  /api/device/getJobs:
+    get:
+      tags:
+        - Device
       summary: Gets the jobs of the device
       description: Retrieves the jobs of the device.
       operationId: getMonitorJobs
-      parameters:
-        - name: Ip
-          in: query
-          description: Device IP Address
-          required: true
-          schema:
-            type: string
-            example: '192.168.1.1'
       responses:
         '200':
           description: Successful operation
@@ -61,61 +107,65 @@ paths:
           description: error
         '404':
           description: not found
-          
-  /SPS/Login:
-    post:
-      tags:
-        - SPS
-      summary: SPS Login adress
-      description: Post SPS Login
-      operationId: spsId
-      requestBody:
-        description: Posts Login with Ip, GuId, and DeviceType
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Login'
-        required: true
-      responses:
-        '200':
-          description: Successfully logged in!
-        '400':
-          description: Invalid input
-        '422':
-          description: Validation exception
+
 components:
   schemas:
     Login:
       type: object
       properties:
-        Ip:
+        ip:
           type: string
           format: string
           example: '192.128.1.1'
-        GuId:
+        id:
           type: string
           example: 'b805b5ce-43fd-4d42-b6c9-db40ce8a95d9'
-        DeviceType:
-          type: integer
-          example: 2
+        type:
+          type: string
+          example: "dobot"
+        name:
+          type: string
+          description: max. 20 Zeichen
+          example: dobot 1
       xml:
         name: login
+        
+    statusChanged:
+      type: object
+      properties:
+        deviceId:
+          type: string
+          example: 'b805b5ce-43fd-4d42-b6c9-db40ce8a95d9'
+        jobId:
+          type: string
+          example: 'b805b5ce-43fd-4d42-b6c9-db40ce8a95d9'
+        level:
+          type: string
+          example: "info"
+        timestamp:
+          type: string
+          example: "2024-02-22T09:02:11+0000"
+        message:
+          type: string
+          example: "Sauger ist kaputt"
+        status:
+          type: string
+          example: gestartet
+      xml:
+        name: statusChanged
+    
     JobsVomGeraet:
       type: object
       properties:
-        Ip:
-          type: string
-          format: string
-          example: '192.128.1.1'
-        GerätId:
+        deviceId:
           type: string
           example: 'b805b5ce-43fd-4d42-b6c9-db40ce8a95d9'
-        JobIds:
-          type: string
-          description: kommaseparierte Liste
-          example: 'b805b5ce-43fd-4d42-b6c9-db40ce8a95d9,a605b5ce-43fd-4d42-b6c9-db40ce8a95d9'
+        jobs:
+          type: json
+          example: "'805b5ce-43fd-4d42-b6c9-db40ce8a95d9, Job1', 'a605b5ce-43fd-4d42-b6c9-db40ce8a95d9, Job2'"
       xml:
         name: Jobs
+        
     ApiResponse:
       type: object
       properties:
