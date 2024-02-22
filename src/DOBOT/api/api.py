@@ -20,8 +20,6 @@ SWAGGERUI_BLUEPRINT = get_swaggerui_blueprint(
 app.register_blueprint(SWAGGERUI_BLUEPRINT, url_prefix=SWAGGER_URL)
 ### end swagger specific ###
 
-processStop = False
-
 processes = []
 
 def run():
@@ -29,9 +27,7 @@ def run():
     
     while True:
         sleep(1)
-        if processStop == True:
-            break
-        #print("Alive :)")
+        print("Alive :)")
 
 
 ### api endpoints
@@ -45,20 +41,18 @@ def startDoBot():
 
 @app.route("/stop", methods=['POST'])
 def stopDoBot():
-    # Do the stuff you need to do
-    # This will just set an boolean value that
-    # will stop the processes at a possible moment
-    global processStop
-    processStop = True
+    #dType.SetQueuedCmdStopExec(api)
+    #ggf. die Query notfalls clearen um einen frischen Start zu haben
     return jsonify("Hello World"), 200
 
 @app.route("/emergency-stop", methods=['POST'])
 def emergencyStop():
+    #dType.SetQueuedCmdForceStopExec(api)
+    #ggf. die Query notfalls clearen um einen frischen Start zu haben
     print(processes)
     for proc in processes:
         proc.kill()
     print("Processes where killed")
-    # Do the stuff you need to do
     return jsonify("Hello World"), 200
 
 @app.route("/position", methods=['POST'])
