@@ -1,3 +1,30 @@
+** = in APIVorlage.yaml definiert!
+Öffnen der YAML über folgende Website möglich: https://editor.swagger.io/
+
+Anmeldung:
+**- GET(IP des Monitors) - jedes Gerät empfängt diese Nachricht
+**- /api/monitor/login: POST(id (GUID), ip, type (string, sps oder dobot), name (string, max. 20 Zeichen)) - jedes Gerät schickt nach den Erhalt der IP des Monitors diese Nachricht an den Monitor
+
+Monitor:
+**- /api/device/getJobs: POST(deviceId, jobs (JSON mit ids + name)) - fragt die einzelnen Geräte nach den Jobs
+**- /api/device/notstop: Notstop - verschickt Nachricht an allen Geräten
+**- /api/device/setJobOrder: Jobreihenfolge -> schickt dem Gerät, mache Jobx + Info, welcher Job + IP als nächstes dran ist
+
+Geräte:
+**- /api/device/getJobs: empfängt Anfrage von Monitor nach Jobs und gibt Liste von Jobs + Reihenfolge zurück
+**- /api/device/startJob: verschickt Nachricht an nächstes Gerät, dass Job x beendet ist und jetzt Job y dran ist
+**- /api/device/setJobOrder: Monitor schickt den Geräten, wenn Jobx beendet, dann Job y beginnen (mit IP des Geräts); Gerät schickt dann Post an     nächsten Gerät
+**- /api/log/: POST: Status an Monitor (deviceId, jobId, level, timestamp(string möglich, mit millisek.), message (optional), status) 
+    Level: info, waring, error
+    Message: Fehlermessage
+    status: string, Status des Jobs (gestartet, beendet)
+
+Gerätetyp: 
+    sps
+    dobot
+
+--------------------------------------
+
 HTTPS, das S steht für SWAG
 
 Monitoring/Controller Website
@@ -19,27 +46,6 @@ Config der Geräte
 - im fehlerfall 2 Dinge:
     - stopp an nachfolgendes Gerät und Status an Monitor
 
-** = in APIVorlage.yaml definiert!
-Öffnen der YAML über folgende Website möglich: https://editor.swagger.io/
 
-Anmeldung:
-**- GET(IP des Monitors) - jedes Gerät empfängt diese Nachricht
-**- /api/monitor/login: POST(id (GUID), ip, type (string, sps oder dobot), name (string, max. 20 Zeichen)) - jedes Gerät schickt nach den Erhalt der IP des Monitors diese Nachricht an den Monitor
 
-Monitor:
-**- /api/device/getJobs: POST(deviceId, jobs (JSON mit ids + name)) - fragt die einzelnen Geräte nach den Jobs
-**- /api/device/notstop: Notstop - verschickt Nachricht an allen Geräten
-- Jobreihenfolge -> schickt dem Gerät, mache Jobx + Info, welcher Job + IP als nächstes dran ist
 
-Geräte:
-- empfängt Anfrage von Monitor nach Jobs und gibt Liste von Jobs + Reihenfolge zurück
-- verschickt Nachricht an nächstes Gerät, dass Job x beendet ist und jetzt Job y dran ist
-- Monitor schickt den Geräten, wenn Jobx beendet, dann Job y beginnen (mit IP des Geräts); Gerät schickt dann Post an nächsten Gerät
-**- /api/log/: POST: Status an Monitor (deviceId, jobId, level, timestamp(string möglich, mit millisek.), message (optional), status) 
-    Level: info, waring, error
-    Message: Fehlermessage
-    status: string, Status des Jobs (gestartet, beendet)
-
-Gerätetyp: 
-    sps
-    dobot
