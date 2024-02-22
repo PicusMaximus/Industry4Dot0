@@ -1,1 +1,2 @@
 python-snap7
+setuptools
