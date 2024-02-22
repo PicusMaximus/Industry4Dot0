@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<!-- AWP_In_Variable Name='"START"' -->
+<!-- AWP_In_Variable Name='"STOP"' -->
+<!-- AWP_In_Variable Name='"MOTOR"' -->
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title> Webserver S7 1200 </title>
+	</head>
+	<body>
+		<h2>Test</h2>
+		<p>
+			<form>
+				<input type="hidden" name= '"STOP"' value="0">
+				<input type="hidden" name= '"START"' value="1">
+				<input type="submit" value="START">
+			</form>
+			<form>
+				<input type="hidden" name= '"STOP"' value="1">
+				<input type="hidden" name= '"START"' value="0">
+				<input type="submit" value="STOP">
+			</form>
+		</p>
+		<h1> Status :="MOTOR": </h1>
+	</body>
+</html>
