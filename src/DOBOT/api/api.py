@@ -3,6 +3,10 @@ from flask_swagger_ui import get_swaggerui_blueprint
 import _thread
 from time import sleep
 from multiprocessing import Process
+#importet alle Funktionen aus DOBOTMove.py
+#für einzelne Funktionen nutz: from DOBOTMove import {Funktionsname}
+# => dadurch müsste man auch nicht immer den Filename vor den Funktionsaufruf schreiben
+import DOBOTMove
 
 app = Flask(__name__)
 
@@ -30,7 +34,8 @@ def run():
         sleep(1)
         if processStop == True:
             break
-        print("Alive :)")
+        #print("Alive :)")
+        DOBOTMove.beispiel()
 
 
 ### api endpoints
