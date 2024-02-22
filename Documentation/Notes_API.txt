@@ -38,7 +38,7 @@ Gerät schickt dann Post an nächsten Gerät
 - Status an Monitor (Id, IP, jobid, status, zeitstempel, ) - job starten und job beenden, Level: info, warnung, fehler
 
 Gerätetyp: 
-    1 = SPS
-    2 = Dobot
+    sps
+    dobot
 
 Öffnen der YAML über folgende Website möglich: https://editor.swagger.io/
