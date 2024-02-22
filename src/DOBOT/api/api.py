@@ -26,7 +26,12 @@ processes = []
 
 def run():
     runDobot()
-
+    
+    while True:
+        sleep(1)
+        if processStop == True:
+            break
+        #print("Alive :)")
 
 
 ### api endpoints
