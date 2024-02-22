@@ -26,7 +26,7 @@ Anmeldung:
 - POST(ID, eigene IP, Gerätetyp) - jedes Gerät schickt nach den Erhalt der IP des Monitors diese Nachricht an den Monitor
 
 Monitor:
-- POST(IP, JobIds) - fragt die einzelnen Geräte nach den Jobs
+- POST(IP, JobIds, Jobbezeichnung) - fragt die einzelnen Geräte nach den Jobs
 - Notstop - verschickt Nachricht an allen Geräten
 - Jobreihenfolge -> schickt dem Gerät, mache Jobx + Info, welcher Job + IP als nächstes dran ist
 
