@@ -1,8 +1,9 @@
 from flask import Flask, jsonify
 from flask_swagger_ui import get_swaggerui_blueprint
-import _thread
 from time import sleep
 from multiprocessing import Process
+from DobotControl import runDobot
+import DobotDllType as dType
 
 app = Flask(__name__)
 
@@ -24,13 +25,8 @@ processStop = False
 processes = []
 
 def run():
-    global processStop
+    runDobot()
 
-    while True:
-        sleep(1)
-        if processStop == True:
-            break
-        print("Alive :)")
 
 
 ### api endpoints
@@ -56,6 +52,7 @@ def emergencyStop():
     print(processes)
     for proc in processes:
         proc.kill()
+    print("Processes where killed")
     # Do the stuff you need to do
     return jsonify("Hello World"), 200
 
