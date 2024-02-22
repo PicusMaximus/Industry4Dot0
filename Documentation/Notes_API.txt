@@ -23,7 +23,7 @@ IDs!
 
 Anmeldung:
 - GET(IP des Monitors) - jedes Gerät empfängt diese Nachricht
-- POST(ID, eigene IP, Gerätetyp) - jedes Gerät schickt nach den Erhalt der IP des Monitors diese Nachricht an den Monitor
+- /api/device/login: POST(ID als GUID, eigene IP, Gerätetyp als string, Name des Geräts (string, max. 20 Zeichen)) - jedes Gerät schickt nach den Erhalt der IP des Monitors diese Nachricht an den Monitor
 
 Monitor:
 - POST(IP, JobIds, Jobbezeichnung) - fragt die einzelnen Geräte nach den Jobs
