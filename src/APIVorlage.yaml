@@ -29,8 +29,47 @@ paths:
           description: Invalid input
         '422':
           description: Validation exception
-        
-    
+          
+  /api/device/setJobOrder:
+    post:
+      tags: 
+        - Device
+      summary:  sets the order of the jobs
+      requestBody:
+        description: set job order
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/setJobs'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Invalid input
+        '422':
+          description: Validation exception
+          
+  /api/device/startJob:
+    post:
+      tags: 
+        - Device
+      summary:  start job
+      requestBody:
+        description: start job
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/startJob'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Invalid input
+        '422':
+          description: Validation exception
+  
   /api/monitor/login:
     post:
       tags:
@@ -130,6 +169,15 @@ components:
       xml:
         name: login
         
+    startJob:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 'b805b5ce-43fd-4d42-b6c9-db40ce8a95d9'
+      xml:
+        name: startJob
+        
     statusChanged:
       type: object
       properties:
@@ -153,6 +201,24 @@ components:
           example: gestartet
       xml:
         name: statusChanged
+        
+    setJobs:
+      type: object
+      properties:
+        jobId:
+          type: string
+          example: 'b805b5ce-43fd-4d42-b6c9-db40ce8a95d9'
+        name:
+          type: string
+          example: "job2"
+        nextJobId:
+          type: string
+          example: 'a999b5ce-43fd-4d42-b6c9-db40ce8a95d9'
+        nextDeviceIp:
+          type: string
+          example: '128.0.0.1'
+      xml:
+        name: setJobs
     
     JobsVomGeraet:
       type: object
@@ -161,7 +227,7 @@ components:
           type: string
           example: 'b805b5ce-43fd-4d42-b6c9-db40ce8a95d9'
         jobs:
-          type: json
+          type: string
           example: "'805b5ce-43fd-4d42-b6c9-db40ce8a95d9, Job1', 'a605b5ce-43fd-4d42-b6c9-db40ce8a95d9, Job2'"
       xml:
         name: Jobs
