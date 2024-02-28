@@ -1,0 +1,288 @@
+openapi: 3.0.3
+info:
+  title: Swagger Maschinenpark
+  version: 1.0.0
+servers:
+- url: /
+tags:
+- description: Everything for the devices
+  name: Device
+- description: Operations about main
+  name: Monitor
+paths:
+  /api/device/getJobs:
+    get:
+      description: Retrieves the jobs of the device.
+      operationId: get_monitor_jobs
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JobsVomGeraet'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/JobsVomGeraet'
+          description: Successful operation
+        "400":
+          description: error
+        "404":
+          description: not found
+      summary: Gets the jobs of the device
+      tags:
+      - Device
+      x-openapi-router-controller: openapi_server.controllers.device_controller
+  /api/device/notstop:
+    delete:
+      operationId: api_device_notstop_delete
+      responses:
+        "200":
+          description: Successful operation
+        "400":
+          description: Invalid input
+        "422":
+          description: Validation exception
+      summary: stops the jobs
+      tags:
+      - Device
+      x-openapi-router-controller: openapi_server.controllers.device_controller
+  /api/device/setJobOrder:
+    post:
+      operationId: api_device_set_job_order_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/setJobs'
+        description: set job order
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+        "400":
+          description: Invalid input
+        "422":
+          description: Validation exception
+      summary: sets the order of the jobs
+      tags:
+      - Device
+      x-openapi-router-controller: openapi_server.controllers.device_controller
+  /api/device/setMonitorIp:
+    post:
+      operationId: api_device_set_monitor_ip_post
+      parameters:
+      - description: monitor ip
+        explode: true
+        in: query
+        name: ip
+        required: true
+        schema:
+          example: 192.168.1.1
+          type: string
+        style: form
+      responses:
+        "200":
+          description: Successful operation
+        "400":
+          description: Invalid input
+        "422":
+          description: Validation exception
+      summary: gets the ip from the monitor
+      tags:
+      - Device
+      x-openapi-router-controller: openapi_server.controllers.device_controller
+  /api/device/startJob:
+    post:
+      operationId: api_device_start_job_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/startJob'
+        description: start job
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+        "400":
+          description: Invalid input
+        "422":
+          description: Validation exception
+      summary: start job
+      tags:
+      - Device
+      x-openapi-router-controller: openapi_server.controllers.device_controller
+  /api/log/:
+    post:
+      operationId: api_log_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/statusChanged'
+        description: post status changed
+      responses:
+        "200":
+          description: Successful operation
+        "400":
+          description: Invalid input
+        "422":
+          description: Validation exception
+      summary: status changed
+      tags:
+      - Monitor
+      x-openapi-router-controller: openapi_server.controllers.monitor_controller
+  /api/monitor/login:
+    post:
+      description: registration
+      operationId: device_registration
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Login'
+        description: post login
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+        "400":
+          description: Invalid input
+        "422":
+          description: Validation exception
+      summary: registration
+      tags:
+      - Monitor
+      x-openapi-router-controller: openapi_server.controllers.monitor_controller
+components:
+  requestBodies:
+    Login:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Login'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/Login'
+      description: Login
+  schemas:
+    Login:
+      example:
+        ip: 192.128.1.1
+        name: dobot 1
+        id: b805b5ce-43fd-4d42-b6c9-db40ce8a95d9
+        type: dobot
+      properties:
+        ip:
+          example: 192.128.1.1
+          format: string
+          title: ip
+          type: string
+        id:
+          example: b805b5ce-43fd-4d42-b6c9-db40ce8a95d9
+          title: id
+          type: string
+        type:
+          example: dobot
+          title: type
+          type: string
+        name:
+          description: max. 20 Zeichen
+          example: dobot 1
+          title: name
+          type: string
+      title: Login
+      type: object
+      xml:
+        name: login
+    startJob:
+      properties:
+        id:
+          example: b805b5ce-43fd-4d42-b6c9-db40ce8a95d9
+          title: id
+          type: string
+      title: startJob
+      type: object
+      xml:
+        name: startJob
+    statusChanged:
+      properties:
+        deviceId:
+          example: b805b5ce-43fd-4d42-b6c9-db40ce8a95d9
+          title: deviceId
+          type: string
+        jobId:
+          example: b805b5ce-43fd-4d42-b6c9-db40ce8a95d9
+          title: jobId
+          type: string
+        level:
+          example: info
+          title: level
+          type: string
+        timestamp:
+          example: 2024-02-22T09:02:11+0000
+          title: timestamp
+          type: string
+        message:
+          example: Sauger ist kaputt
+          title: message
+          type: string
+        status:
+          example: gestartet
+          title: status
+          type: string
+      title: statusChanged
+      type: object
+      xml:
+        name: statusChanged
+    setJobs:
+      properties:
+        jobId:
+          example: b805b5ce-43fd-4d42-b6c9-db40ce8a95d9
+          title: jobId
+          type: string
+        name:
+          example: job2
+          title: name
+          type: string
+        nextJobId:
+          example: a999b5ce-43fd-4d42-b6c9-db40ce8a95d9
+          title: nextJobId
+          type: string
+        nextDeviceIp:
+          example: 128.0.0.1
+          title: nextDeviceIp
+          type: string
+      title: setJobs
+      type: object
+      xml:
+        name: setJobs
+    JobsVomGeraet:
+      example:
+        jobs: "'805b5ce-43fd-4d42-b6c9-db40ce8a95d9, Job1', 'a605b5ce-43fd-4d42-b6c9-db40ce8a95d9,\
+          \ Job2'"
+        deviceId: b805b5ce-43fd-4d42-b6c9-db40ce8a95d9
+      properties:
+        deviceId:
+          example: b805b5ce-43fd-4d42-b6c9-db40ce8a95d9
+          title: deviceId
+          type: string
+        jobs:
+          example: "'805b5ce-43fd-4d42-b6c9-db40ce8a95d9, Job1', 'a605b5ce-43fd-4d42-b6c9-db40ce8a95d9,\
+            \ Job2'"
+          title: jobs
+          type: string
+      title: JobsVomGeraet
+      type: object
+      xml:
+        name: Jobs
+    ApiResponse:
+      properties:
+        code:
+          format: int32
+          type: integer
+        type:
+          type: string
+        message:
+          type: string
+      type: object
