@@ -47,3 +47,10 @@ def runDobot():
 
     #Disconnect Dobot
     dType.DisconnectDobot(api)
+
+
+def forceStop():
+    api = dType.laod()
+
+    #immediatly stopping DOBOT
+    dType.SetQueuedCmdForceStopExec(api)

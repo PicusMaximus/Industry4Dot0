@@ -1,8 +1,8 @@
 from flask import Flask, jsonify
 from flask_swagger_ui import get_swaggerui_blueprint
 from time import sleep
-from multiprocessing import Process
 from DobotControl import runDobot
+from DobotControl import forceStop
 import DobotDllType as dType
 
 app = Flask(__name__)
@@ -20,23 +20,12 @@ SWAGGERUI_BLUEPRINT = get_swaggerui_blueprint(
 app.register_blueprint(SWAGGERUI_BLUEPRINT, url_prefix=SWAGGER_URL)
 ### end swagger specific ###
 
-processes = []
-
-def run():
-    runDobot()
-    
-    while True:
-        sleep(1)
-        print("Alive :)")
-
-
 ### api endpoints
 
 @app.route("/start", methods=['POST'])
 def startDoBot():
-    proc = Process(target=run, daemon=True)
-    processes.append(proc)
-    proc.start()
+    runDobot()
+    print("started")
     return jsonify("Hello World")
 
 @app.route("/stop", methods=['POST'])
@@ -47,11 +36,9 @@ def stopDoBot():
 
 @app.route("/emergency-stop", methods=['POST'])
 def emergencyStop():
-    #dType.SetQueuedCmdForceStopExec(api)
-    #ggf. die Query notfalls clearen um einen frischen Start zu haben
-    print(processes)
-    for proc in processes:
-        proc.kill()
+    forceStop()
+    print("Done")
+
     print("Processes where killed")
     return jsonify("Hello World"), 200
 
