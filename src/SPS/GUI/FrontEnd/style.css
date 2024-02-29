@@ -1,0 +1,54 @@
+.css-ampel {
+    display: inline-block;
+    width: 30px;
+    height: 90px;
+    border-radius: 6px;
+    position: relative;
+    background-color: black;
+    zoom: 1.7;
+  }
+  
+  .css-ampel span,
+  .css-ampel:before,
+  .css-ampel:after {
+      content: "";
+      color: white;
+      position: absolute;
+      border-radius: 15px;
+      width: 22px;
+      height: 22px;
+      left: 4px;
+  }    
+  
+  .css-ampel:before {
+      top: 6px;
+      background-color: red;
+      background-color: dimgrey;
+  }
+  
+  .css-ampel:after {
+      top: 34px;
+      background-color: yellow;
+      background-color: dimgrey;
+  }
+  
+  .css-ampel span {
+      top: 62px;
+      background-color: green;
+      background-color: dimgrey;
+  }    
+  
+  .ampelrot:before {
+      background-color: red;
+      box-shadow: 0 0 20px red;
+  }
+  
+  .ampelgelb:after {
+      background-color: yellow;
+      box-shadow: 0 0 20px yellow;
+  }
+  
+  .ampelgruen span {
+      background-color: limegreen;
+      box-shadow: 0 0 20px limegreen;
+  }
