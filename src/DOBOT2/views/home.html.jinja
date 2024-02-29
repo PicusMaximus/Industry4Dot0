@@ -1,0 +1,30 @@
+{% extends "layout.html.jinja" %}
+{% block title %}
+Dobot Home
+{% endblock title %}
+{% block content %}
+    {% if device and device.ser and device.state == Enums.ConnectState.CONNECTED %}
+        <div class="w-100 show-connected">
+    {% else %}
+        <div class="w-100 show-connected d-none">
+    {% endif %}
+            <div class="row">
+                <div class="col-12 text-center">
+                    <a class="btn btn-lg btn-primary btn-fill btn-operation" href="#" data-url="/controls/home">Home</a>
+                </div>
+            </div>
+            {% include "controls/speed.html.jinja" %}
+            {% include "controls/mainButtons.html.jinja" %}
+        </div>
+    {% if device and device.ser and device.state == Enums.ConnectState.NOT_CONNECTED %}
+        <div class="w-100 show-disconnected">
+    {% else %}
+        <div class="w-100 show-disconnected d-none">
+    {% endif %}
+            <div class="row">
+                <div class="col-12 text-center">
+                    Please connect to a Dobot to continue.
+                </div>
+            </div>
+        </div>
+{% endblock content %}

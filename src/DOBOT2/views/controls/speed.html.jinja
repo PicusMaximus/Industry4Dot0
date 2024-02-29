@@ -1,0 +1,27 @@
+
+            <div class="row">
+                <div class="col-12 text-center">
+                    <h4>Speed Control</h4>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-4 text-center">
+                    <label for="velocity">Velocity</label>
+                    {% if device and device.ser and device.state == Enums.ConnectState.CONNECTED %}
+                        <input type="number" style="width:100px" id="velocity" name="velocity" value="{{ device.get_speed()[0] }}" />
+                    {% else %}
+                        <input type="number" style="width:100px" id="velocity" name="velocity" value="100" />
+                    {% endif %}
+                </div>
+                <div class="col-4 text-center">
+                    <a id="set-speed" class="btn btn-lg btn-primary btn-fill w-100" href="#" data-url="/controls/setSpeed">Set</a>
+                </div>
+                <div class="col-4 text-center">
+                    <label for="acceleration">Acceleration</label>
+                    {% if device and device.ser and device.state == Enums.ConnectState.CONNECTED %}
+                        <input type="number" style="width:100px" id="acceleration" name="acceleration" value="{{ device.get_speed()[1] }}" />
+                    {% else %}
+                        <input type="number" style="width:100px" id="acceleration" name="acceleration" value="100" />
+                    {% endif %}
+                </div>
+            </div>

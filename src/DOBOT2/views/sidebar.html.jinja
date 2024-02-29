@@ -1,0 +1,20 @@
+
+<nav id="sidebar" class="sidebar bg-dark text-white">
+    
+  <a href="javascript:void(0)" class="sidebarCollapse">&times;</a>
+    <div class="sidebar-header">
+        <h3>Dobot</h3>
+    </div>
+
+    <ul class="nav flex-column">
+        <li class="nav-item">
+            <a class="nav-link" href="/">Home</a>
+        </li>
+        {% for addon in addons %}
+            <li class="nav-item">
+                <a class="nav-link" href="/{{ addon.lower() }}">{{ addon }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+
+</nav>
