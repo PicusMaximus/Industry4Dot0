@@ -51,6 +51,4 @@ def runDobot():
 
 def forceStop():
     api = dType.laod()
-
-    #immediatly stopping DOBOT
     dType.SetQueuedCmdForceStopExec(api)
