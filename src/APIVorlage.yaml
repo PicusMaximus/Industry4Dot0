@@ -92,7 +92,7 @@ paths:
         '422':
           description: Validation exception
           
-  /api/log/:
+  /api/monitor/log/:
     post:
       tags:
         - Monitor
@@ -227,8 +227,15 @@ components:
           type: string
           example: 'b805b5ce-43fd-4d42-b6c9-db40ce8a95d9'
         jobs:
-          type: string
-          example: "'805b5ce-43fd-4d42-b6c9-db40ce8a95d9, Job1', 'a605b5ce-43fd-4d42-b6c9-db40ce8a95d9, Job2'"
+          type: array
+          items:
+            type: array
+            items:
+              type: string
+              example: "'805b5ce-43fd-4d42-b6c9-db40ce8a95d9, Job1'"
+          example: 
+            - ["805b5ce-43fd-4d42-b6c9-db40ce8a95d9", "Job1"]
+            - ["a605b5ce-43fd-4d42-b6c9-db40ce8a95d9", "Job2"]
       xml:
         name: Jobs
         
