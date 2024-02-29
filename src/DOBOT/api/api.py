@@ -25,10 +25,6 @@ processes = []
 
 def run():
     runDobot()
-    
-    while True:
-        sleep(1)
-        print("Alive :)")
 
 def emergencyStop():
     forceStop()
@@ -54,7 +50,7 @@ def stopDoBot():
 def emergencyStop():
     proc = Process(target=emergencyStop, daemon=True)
     process.append(proc)
-    
+
     return jsonify("Hello World"), 200
 
 @app.route("/position", methods=['POST'])
