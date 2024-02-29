@@ -166,9 +166,29 @@ components:
           type: string
           description: max. 20 Zeichen
           example: dobot 1
+      required:
+        - ip
+        - id
+        - type
+        - name
       xml:
         name: login
-        
+
+    Job:
+      type: object
+      properties:
+        id: 
+          type: string
+          example: 'b805b5ce-43fd-4d42-b6c9-db40ce8a95d9'
+        name:
+          type: string
+          maxLength: 20
+          description: max. 20 Zeichen
+          example: Job 1
+      required: 
+        - id
+        - name
+
     startJob:
       type: object
       properties:
@@ -190,6 +210,7 @@ components:
         level:
           type: string
           example: "info"
+          default: "info"
         timestamp:
           type: string
           example: "2024-02-22T09:02:11+0000"
@@ -199,6 +220,9 @@ components:
         status:
           type: string
           example: gestartet
+      required: 
+        - deviceId
+        - timestamp
       xml:
         name: statusChanged
         
@@ -229,12 +253,10 @@ components:
         jobs:
           type: array
           items:
-            type: array
-            items:
-              type: string
-          example: 
-            - ["805b5ce-43fd-4d42-b6c9-db40ce8a95d9", "Job1"]
-            - ["a605b5ce-43fd-4d42-b6c9-db40ce8a95d9", "Job2"]
+            $ref: '#/components/schemas/Job'
+      required: 
+        - deviceId
+        - jobs
       xml:
         name: Jobs
         
