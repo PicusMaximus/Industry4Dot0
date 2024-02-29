@@ -1,3 +1,3 @@
 python-dotenv==1.0.1
-setuptools==58.1.0
-python-snap7
+setuptools==69.1.1
+python-snap7==1.3
