@@ -92,7 +92,7 @@ paths:
         '422':
           description: Validation exception
           
-  /api/monitor/log/:
+  /api/monitor/log:
     post:
       tags:
         - Monitor
