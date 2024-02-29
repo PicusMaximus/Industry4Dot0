@@ -1,5 +1,6 @@
 ** = in APIVorlage.yaml (src/ApiVorlage.yaml) definiert!
 Öffnen der YAML über folgende Website möglich: https://editor.swagger.io/
+Dort kann die YAML auch als Server oder Client in C#, Python, ... exportiert werden.
 
 Anmeldung:
 **- GET(IP des Monitors) - jedes Gerät empfängt diese Nachricht
