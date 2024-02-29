@@ -2,9 +2,6 @@ from flask import Flask, jsonify
 from flask_swagger_ui import get_swaggerui_blueprint
 from time import sleep
 from multiprocessing import Process
-from DobotControl import runDobot
-from DobotControl import forceStop
-import DobotDllType as dType
 
 app = Flask(__name__)
 
@@ -24,10 +21,10 @@ app.register_blueprint(SWAGGERUI_BLUEPRINT, url_prefix=SWAGGER_URL)
 processes = []
 
 def run():
-    runDobot()
+    ...
 
 def emergencyStop():
-    forceStop()
+    ...
 
 
 ### api endpoints
