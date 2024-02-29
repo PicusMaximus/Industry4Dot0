@@ -232,7 +232,6 @@ components:
             type: array
             items:
               type: string
-              example: "'805b5ce-43fd-4d42-b6c9-db40ce8a95d9, Job1'"
           example: 
             - ["805b5ce-43fd-4d42-b6c9-db40ce8a95d9", "Job1"]
             - ["a605b5ce-43fd-4d42-b6c9-db40ce8a95d9", "Job2"]
