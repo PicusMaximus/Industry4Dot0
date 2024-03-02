@@ -1,13 +1,21 @@
-from flask import Flask, jsonify
+import requests
+from flask import Flask, jsonify, request
 from flask_swagger_ui import get_swaggerui_blueprint
-from time import sleep
-from multiprocessing import Process
+from jobOrders import jobOrder 
+from devices import deviceId
+import uuid
 
 app = Flask(__name__)
 
+# __SERVER_IP__ = request.host.split(':')[0]
+# This is is another possible way to get the server ip address... without staticly type it.
+# __SERVER_IP__ = request.environ['SERVER_NAME']
+
+monitorIp = ''
+
 ### swagger specific ###
 SWAGGER_URL = '/api/docs'
-API_URL = '/static/swagger.config.json'
+API_URL = '/static/swagger/swagger.config.yaml'
 SWAGGERUI_BLUEPRINT = get_swaggerui_blueprint(
     SWAGGER_URL,
     API_URL,
@@ -18,47 +26,79 @@ SWAGGERUI_BLUEPRINT = get_swaggerui_blueprint(
 app.register_blueprint(SWAGGERUI_BLUEPRINT, url_prefix=SWAGGER_URL)
 ### end swagger specific ###
 
-processes = []
-
-def run():
-    ...
-
-def emergencyStop():
-    ...
+#helper function
+def getServerIp():
+    return request.host.split(':')[0]
+    # return request.environ['SERVER_NAME']
 
 
 ### api endpoints
+    
+@app.route("/api/device/setMonitorIp", methods=['POST'])
+def setMonitorIp():
+    monitorIp = request.args.get('ip')
+    print('The monitor with the ip of {ip} tryed to connect to this Dobot.'.format(ip=monitorIp))
+    return jsonify("Success"), 200
 
-@app.route("/start", methods=['POST'])
-def startDoBot():
-    proc = Process(target=run, daemon=True)
-    processes.append(proc)
-    proc.start()
+@app.route("/api/device/setJobOrder", methods=['POST'])
+def setJobOrder(orderedJobs):
+    jobOrder = orderedJobs
+    return jsonify("New job order was sucessfully saved"), 200
 
-    return jsonify("Hello World")
+@app.route("/api/device/startJob", methods=['POST'])
+def startJob():
 
-@app.route("/stop", methods=['POST'])
-def stopDoBot():
-    #dType.SetQueuedCmdStopExec(api)
-    #ggf. die Query notfalls clearen um einen frischen Start zu haben
-    return jsonify("Hello World"), 200
+    id = request.args.get('ip')
+    # Start job with given ip
 
-@app.route("/emergency-stop", methods=['POST'])
-def emergencyStop():
-    proc = Process(target=emergencyStop, daemon=True)
-    process.append(proc)
+    return jsonify("Success"), 200
 
-    return jsonify("Hello World"), 200
+@app.route("/api/device/notstop", methods=['Delete'])
+def notstop():
+    # Add function to stop the dobot here...
+    return jsonify("Successfully stoped the running task."), 200
 
-@app.route("/position", methods=['POST'])
-def position():
-    # Do the stuff you need to do
-    return jsonify("Hello World"), 200
+@app.route("/api/device/getJobs", methods=['GET'])
+def getJobs():
+    #This is just for debugging purpose...
+    return jsonify({ 
+        "deviceId": deviceId,
+        "jobs": [
+            {
+                "id": uuid.uuid4(),
+                "name": "Job 1"
+            }
+        ],
+        }
+    ), 200
 
-@app.route("/login", methods=['POST'])
+@app.route("/api/monitor/login", methods=['POST'])
 def login():
-    # Do the stuff you need to do
-    return jsonify("Hello World"), 200
+    json = jsonify({
+        "ip": getServerIp(),
+        "id": deviceId,
+        "type": "dobot",
+        "name": "dobot 1",
+    })
+
+    requests.post(url='https://{ip}/api/monitor/log'.format(ip=monitorIp), json=json)
+    return jsonify("Success"), 200
+    # return json, 200
+
+@app.route("/api/monitor/log", methods=['POST'])
+def log2Monitor():
+
+    json = jsonify({
+        "ip": getServerIp(),
+        "id": deviceId,
+        "type": "dobot",
+        "name": "dobot 1",
+    })
+
+    requests.post(url='https://{ip}/api/monitor/log'.format(ip=monitorIp), json=json)
+    return jsonify("Success"), 200
+    # return json, 200
+
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run( debug=True) #host='192.168.178.95'

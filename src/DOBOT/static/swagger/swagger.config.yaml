@@ -1,0 +1,262 @@
+openapi: 3.0.3
+info:
+  title: Swagger Dobot Api
+  version: 1.0.0
+tags:
+  - name: Dobot
+    description: Operations about main
+  - name: Monitor Related
+    description: Everything related to communication between the dobot and the monitor api.
+paths:
+  /api/device/setMonitorIp:
+    post:
+      tags: 
+        - Dobot
+      summary: gets the ip from the monitor
+      parameters:
+        - name: ip
+          description: monitor ip
+          in: query
+          required: true
+          schema:
+            type: string
+            example: '192.168.1.1'
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Invalid input
+        '422':
+          description: Validation exception
+          
+  /api/device/setJobOrder:
+    post:
+      tags: 
+        - Dobot
+      summary:  sets the order of the jobs
+      requestBody:
+        description: set job order
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/setJobs'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Invalid input
+        '422':
+          description: Validation exception
+          
+  /api/device/startJob:
+    post:
+      tags: 
+        - Dobot
+      summary:  start job
+      requestBody:
+        description: start job
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/startJob'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Invalid input
+        '422':
+          description: Validation exception
+
+  /api/device/getJobs:
+    get:
+      tags:
+        - Dobot
+      summary: Gets the jobs of the Dobot
+      description: Retrieves the jobs of the Dobot.
+      operationId: getMonitorJobs
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JobsVomGeraet'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/JobsVomGeraet'
+        '400':
+          description: error
+        '404':
+          description: not found
+
+  /api/device/notstop:
+    delete:
+      tags:
+        - Dobot
+      summary: stops the Dobot immediately
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Invalid input
+        '422':
+          description: Validation exception
+  
+  /api/monitor/login:
+    post:
+      tags:
+        - Monitor Related
+      summary: registration
+      description: registration
+      operationId: deviceRegistration
+      requestBody:
+        description: post login
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Login'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Invalid input
+        '422':
+          description: Validation exception
+        
+components:
+  schemas:
+    Login:
+      type: object
+      properties:
+        ip:
+          type: string
+          format: string
+          example: '192.128.1.1'
+        id:
+          type: string
+          example: 'b805b5ce-43fd-4d42-b6c9-db40ce8a95d9'
+        type:
+          type: string
+          example: "dobot"
+        name:
+          type: string
+          description: max. 20 Zeichen
+          example: dobot 1
+      required:
+        - ip
+        - id
+        - type
+        - name
+      xml:
+        name: login
+
+    Job:
+      type: object
+      properties:
+        id: 
+          type: string
+          example: 'b805b5ce-43fd-4d42-b6c9-db40ce8a95d9'
+        name:
+          type: string
+          maxLength: 20
+          description: max. 20 Zeichen
+          example: Job 1
+      required: 
+        - id
+        - name
+
+    startJob:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 'b805b5ce-43fd-4d42-b6c9-db40ce8a95d9'
+      xml:
+        name: startJob
+        
+    statusChanged:
+      type: object
+      properties:
+        deviceId:
+          type: string
+          example: 'b805b5ce-43fd-4d42-b6c9-db40ce8a95d9'
+        jobId:
+          type: string
+          example: 'b805b5ce-43fd-4d42-b6c9-db40ce8a95d9'
+        level:
+          type: string
+          example: "info"
+          default: "info"
+        timestamp:
+          type: string
+          example: "2024-02-22T09:02:11+0000"
+        message:
+          type: string
+          example: "Sauger ist kaputt"
+        status:
+          type: string
+          example: gestartet
+      required: 
+        - deviceId
+        - timestamp
+      xml:
+        name: statusChanged
+        
+    setJobs:
+      type: object
+      properties:
+        jobId:
+          type: string
+          example: 'b805b5ce-43fd-4d42-b6c9-db40ce8a95d9'
+        name:
+          type: string
+          example: "job2"
+        nextJobId:
+          type: string
+          example: 'a999b5ce-43fd-4d42-b6c9-db40ce8a95d9'
+        nextDeviceIp:
+          type: string
+          example: '128.0.0.1'
+      xml:
+        name: setJobs
+    
+    JobsVomGeraet:
+      type: object
+      properties:
+        deviceId:
+          type: string
+          example: 'b805b5ce-43fd-4d42-b6c9-db40ce8a95d9'
+        jobs:
+          type: array
+          items:
+            $ref: '#/components/schemas/Job'
+      required: 
+        - deviceId
+        - jobs
+      xml:
+        name: Jobs
+        
+    ApiResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        type:
+          type: string
+        message:
+          type: string
+  requestBodies:
+    Login:
+      description: Login
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Login'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/Login'
+ 
