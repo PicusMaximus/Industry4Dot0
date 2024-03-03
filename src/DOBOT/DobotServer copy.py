@@ -104,7 +104,6 @@ if __name__ == '__main__':
     cherrypy.config.update(wsConfig)
     
     root = DobotServer()
-    # The server will app will be mounted to the cherrypy here...
     app = cherrypy.tree.mount(root, '/', config='dobot.conf')
     app.merge(wsConfig)
 

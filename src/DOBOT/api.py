@@ -1,11 +1,11 @@
 import requests
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, render_template
 from flask_swagger_ui import get_swaggerui_blueprint
 from jobOrders import jobOrder 
 from devices import deviceId
 import uuid
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='./templates')
 
 # __SERVER_IP__ = request.host.split(':')[0]
 # This is is another possible way to get the server ip address... without staticly type it.
@@ -29,7 +29,7 @@ app.register_blueprint(SWAGGERUI_BLUEPRINT, url_prefix=SWAGGER_URL)
 #helper function
 def getServerIp():
     return request.host.split(':')[0]
-    # return request.environ['SERVER_NAME']
+    # return request.environ['SERVER_NAME']Bin
 
 
 ### api endpoints
@@ -99,6 +99,10 @@ def log2Monitor():
     return jsonify("Success"), 200
     # return json, 200
 
+
+@app.route('/', methods=['GET'])
+def getIndexPage():
+    return render_template('home.html')
 
 if __name__ == '__main__':
     app.run( debug=True) #host='192.168.178.95'
