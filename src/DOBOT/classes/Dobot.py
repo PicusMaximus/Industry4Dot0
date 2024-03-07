@@ -306,6 +306,19 @@ class Dobot:
         msg.ctrl = ControlValues.ONE
         return self._send_command(msg)
 
+    def forceStop(self):
+        return self._set_queued_cmd_force_stop_exec()
+
+    def _set_queued_cmd_force_stop_exec(self):
+        '''
+            Forcefully stop command
+        '''
+        msg = Message()
+        msg.id = CommunicationProtocolIDs.SET_QUEUED_CMD_FORCE_STOP_EXEC
+        msg.ctrl = ControlValues.ONE
+
+        return self._send_command(msg)
+
     def _set_home_cmd(self):
         '''
             Home command
