@@ -3,9 +3,14 @@ from flask import Flask, jsonify, request, render_template
 from flask_swagger_ui import get_swaggerui_blueprint
 from jobOrders import jobOrder 
 from devices import deviceId
+from classes import Dobot
+from serial.tools import list_ports
 import uuid
 
 app = Flask(__name__, template_folder='./templates')
+ports = list_ports.comports()
+dobot = Dobot.Dobot(ports[0])
+thisdict = {}
 
 # __SERVER_IP__ = request.host.split(':')[0]
 # This is is another possible way to get the server ip address... without staticly type it.
@@ -43,7 +48,35 @@ def setMonitorIp():
 @app.route("/api/device/setJobOrder", methods=['POST'])
 def setJobOrder(orderedJobs):
     jobOrder = orderedJobs
-    return jsonify("New job order was sucessfully saved"), 200
+    return jsonify("New job order was successfully saved"), 200
+
+@app.route("/api/device/setSuctionCupStatus", methods=['POST'])
+def setSuctionCupStatus(suctionCupStatus):
+    statusOfSuctionSup = suctionCupStatus
+    return jsonify("Status of suction cup was successfully set"), 200
+
+@app.route("/api/device/setPose", methods=['POST'])
+def setPose(posname):
+    position = dobot.pose_p()
+    #thisdict.update(posname, position)
+    print(position)
+    return jsonify("Pose was successfully set"), 200
+
+@app.route("/api/device/getPose", methods=['GET'])
+def getPose():
+    position = dobot.pose_p()
+    return jsonify({ 
+        "deviceId": deviceId,
+        "pose": [
+            {
+                "xCoordinate": position.x,
+                "yCoordinate": position.y,
+                "zCoordinate": position.z,
+                "rCoordinate": position.r
+            }
+        ],
+        }
+    ), 200
 
 @app.route("/api/device/startJob", methods=['POST'])
 def startJob():
