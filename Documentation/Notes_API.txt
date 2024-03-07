@@ -2,6 +2,23 @@
 Öffnen der YAML über folgende Website möglich: https://editor.swagger.io/
 Dort kann die YAML auch als Server oder Client in C#, Python, ... exportiert werden.
 
+MonitorIP wird am Anfang statisch gesetzt!
+
+Monitor:
+/api/monitor/log: Post(deviceId, jobId, level, timestamp, message, status); der Status der Geräte wird an das Monitor gesendet
+/api/monitor/login: Post(ip, id, type, name); Regestriert das Gerät beim Monitor
+
+Devices:
+/api/device/setMonitorIp: Setzt die Monitor IP
+/api/device/setJobOrder: Post(jobid, name, nextJobId, nextDeviceIp); setzt die Reihenfolge der Geräte
+/api/device/startJob: Post(id); Startet den Job
+/api/device/notstop: Delete; Not Stop des Geräts
+/api/device/getJobs: Get() Response(deviceId, jobs); sendet die Jobs vom Gerät ans Monitor
+
+
+------------------
+veraltet
+------------------
 Anmeldung:
 **- GET(IP des Monitors) - jedes Gerät empfängt diese Nachricht
 **- /api/monitor/login: POST(id (GUID), ip, type (string, sps oder dobot), name (string, max. 20 Zeichen)) - jedes Gerät schickt nach den Erhalt der IP des Monitors diese Nachricht an den Monitor
