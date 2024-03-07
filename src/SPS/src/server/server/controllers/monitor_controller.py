@@ -3,9 +3,9 @@ from typing import Dict
 from typing import Tuple
 from typing import Union
 
-from server.models.login import Login  # noqa: E501
-from server.models.status_changed import StatusChanged  # noqa: E501
-from server import util
+from server.server.models.login import Login  # noqa: E501
+from server.server.models.status_changed import StatusChanged  # noqa: E501
+from server.server import util
 
 
 def api_log_post(status_changed=None):  # noqa: E501

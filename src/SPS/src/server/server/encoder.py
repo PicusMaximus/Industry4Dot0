@@ -1,6 +1,6 @@
 from connexion.apps.flask_app import FlaskJSONEncoder
 
-from server.models.base_model import Model
+from server.server.models.base_model import Model
 
 
 class JSONEncoder(FlaskJSONEncoder):
