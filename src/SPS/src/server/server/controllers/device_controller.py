@@ -3,10 +3,10 @@ from typing import Dict
 from typing import Tuple
 from typing import Union
 
-from server.models.jobs_vom_geraet import JobsVomGeraet  # noqa: E501
-from server.models.set_jobs import SetJobs  # noqa: E501
-from server.models.start_job import StartJob  # noqa: E501
-from server import util
+from server.server.models.jobs_vom_geraet import JobsVomGeraet  # noqa: E501
+from server.server.models.set_jobs import SetJobs  # noqa: E501
+from server.server.models.start_job import StartJob  # noqa: E501
+from server.server import util
 
 
 def api_device_notstop_delete():  # noqa: E501
@@ -71,4 +71,5 @@ def get_monitor_jobs():  # noqa: E501
 
     :rtype: Union[JobsVomGeraet, Tuple[JobsVomGeraet, int], Tuple[JobsVomGeraet, int, Dict[str, str]]
     """
-    return 'do some magic!'
+    
+    return JobsVomGeraet()
