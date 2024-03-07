@@ -1,7 +1,7 @@
 import datetime
 
 import typing
-from server import typing_utils
+from server.server import typing_utils
 
 
 def _deserialize(data, klass):

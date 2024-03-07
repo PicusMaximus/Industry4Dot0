@@ -1,54 +1,176 @@
-.css-ampel {
-    display: inline-block;
-    width: 30px;
-    height: 90px;
-    border-radius: 6px;
-    position: relative;
-    background-color: black;
-    zoom: 1.7;
+* {
+    margin: 0;
+    padding: 0;
+    font-size: 1.05em;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+button {
+    padding: 1em;
+    background-color: aliceblue;
+    border: 3px solid black;
+    border-radius: 20px;
+    font-weight: 800;
+    font-size: 1.1em;
+}
+
+button:hover {
+    background-color: aquamarine;
+    cursor: pointer;
+}
+
+button:active {
+    background-color: aqua;
+}
+
+.table {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1em;
+}
+
+table {
+    border: 2px solid azure;
+    background-color: #ccc;
+}
+
+th {
+    color: white;
+    background-color: lightseagreen;
+    padding: 0.5em;
+}
+
+tr {
+    background-color: aliceblue;
+}
+
+td {
+    padding: 0.5em;
+}
+
+.nav {
+    display: flex;
+    gap: 3em;
+    justify-content: center;
+    align-items: center;
+    padding: 0.5em 0;
+    border-bottom: 2px solid black;
+    background-color: #efefef;
+}
+
+.status {
+    display: flex;
+    align-items: center;
+    gap: 0.3em;
+}
+
+.ampel {
+    display: flex;
+    gap: 0.2em;
+}
+
+.ampel-punkt {
+    padding: 0.8em;
+    border-radius: 100%;
+    border: 1px solid black;
+}
+
+.rot {
+    background-color: red;
+}
+
+.gelb {
+    background-color: yellow;
+}
+
+.gruen {
+    background-color: lime;
+}
+
+.gray {
+    background-color: lightgray;
+}
+
+#load {
+    display: none;
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0,0,0,0.3);
+}
+
+.loader {
+    transform: rotateZ(45deg);
+    perspective: 1000px;
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    color: black;
   }
-  
-  .css-ampel span,
-  .css-ampel:before,
-  .css-ampel:after {
-      content: "";
-      color: white;
+    .loader:before,
+    .loader:after {
+      content: '';
+      display: block;
       position: absolute;
-      border-radius: 15px;
-      width: 22px;
-      height: 22px;
-      left: 4px;
-  }    
-  
-  .css-ampel:before {
-      top: 6px;
-      background-color: red;
-      background-color: dimgrey;
+      top: 0;
+      left: 0;
+      width: inherit;
+      height: inherit;
+      border-radius: 50%;
+      transform: rotateX(70deg);
+      animation: 1s spin linear infinite;
+    }
+    .loader:after {
+      color: aqua;
+      transform: rotateY(70deg);
+      animation-delay: .4s;
+    }
+
+  @keyframes rotate {
+    0% {
+      transform: translate(-50%, -50%) rotateZ(0deg);
+    }
+    100% {
+      transform: translate(-50%, -50%) rotateZ(360deg);
+    }
   }
-  
-  .css-ampel:after {
-      top: 34px;
-      background-color: yellow;
-      background-color: dimgrey;
+
+  @keyframes rotateccw {
+    0% {
+      transform: translate(-50%, -50%) rotate(0deg);
+    }
+    100% {
+      transform: translate(-50%, -50%) rotate(-360deg);
+    }
   }
-  
-  .css-ampel span {
-      top: 62px;
-      background-color: green;
-      background-color: dimgrey;
-  }    
-  
-  .ampelrot:before {
-      background-color: red;
-      box-shadow: 0 0 20px red;
-  }
-  
-  .ampelgelb:after {
-      background-color: yellow;
-      box-shadow: 0 0 20px yellow;
-  }
-  
-  .ampelgruen span {
-      background-color: limegreen;
-      box-shadow: 0 0 20px limegreen;
+
+  @keyframes spin {
+    0%,
+    100% {
+      box-shadow: .2em 0px 0 0px currentcolor;
+    }
+    12% {
+      box-shadow: .2em .2em 0 0 currentcolor;
+    }
+    25% {
+      box-shadow: 0 .2em 0 0px currentcolor;
+    }
+    37% {
+      box-shadow: -.2em .2em 0 0 currentcolor;
+    }
+    50% {
+      box-shadow: -.2em 0 0 0 currentcolor;
+    }
+    62% {
+      box-shadow: -.2em -.2em 0 0 currentcolor;
+    }
+    75% {
+      box-shadow: 0px -.2em 0 0 currentcolor;
+    }
+    87% {
+      box-shadow: .2em -.2em 0 0 currentcolor;
+    }
   }

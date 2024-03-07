@@ -1,40 +1,53 @@
 <!DOCTYPE html>
 <html lang="de">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Titel</title>
-  </head>
-  <body>
-      <button id="wm-an">
-        Wartungsmodus AN
-      </button>
-      <button id="wm-aus">
-        Wartungsmodus AUS
-      </button>
-      <div>
-        <h2>Status</h2>
-        <div>
-          <div>          
-          </div>
-        </div>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Titel</title>
+  <script src="index.js" defer></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div id="load">
+    <span class="loader"></span>
+  </div>
+  <div class="nav">
+    <button id="wm-an">
+      Wartungsmodus AN
+    </button>
+    <button id="wm-aus">
+      Wartungsmodus AUS
+    </button>
+    <div class="status">
+      <h2>Status:</h2>
+      <div class="ampel">
+        <div class="ampel-punkt rot"></div>
+        <div class="ampel-punkt gelb gray"></div>
+        <div class="ampel-punkt gruen gray"></div>
       </div>
-      
+    </div>
+  </div>
+  <div class="table">
+    <table>
+      <tr>
+        <th>Company</th>
+        <th>Contact</th>
+        <th>Country</th>
+      </tr>
+      <tr>
+        <td>Alfreds Futterkiste</td>
+        <td>Maria Anders</td>
+        <td>Germany</td>
+      </tr>
+      <tr>
+        <td>Centro comercial Moctezuma</td>
+        <td>Francisco Chang</td>
+        <td>Mexico</td>
+      </tr>
+    </table>
+  </div>
+</body>
 
-      <span class="css-ampel ampelrot"><span></span></span>
-      <span class="css-ampel ampelgelb"><span></span></span>
-      <span class="css-ampel ampelgruen"><span></span></span>
-  </body>
-
-  <script>
-    const wmAn = document.getElementById('wm-an')
-    const wmAus = document.getElementById('wm-aus')
-
-    wmAn.addEventListener('click', (event) => toggleWartungsmodus(event, true));
-    wmAus.addEventListener('click', (event) => toggleWartungsmodus(event, false));
-    function toggleWartungsmodus(event, status)
-    {
-      console.log(status);
-    }
-  </script>
 </html>

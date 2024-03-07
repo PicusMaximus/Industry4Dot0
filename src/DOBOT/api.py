@@ -9,14 +9,18 @@ import uuid
 
 app = Flask(__name__, template_folder='./templates')
 ports = list_ports.comports()
-dobot = Dobot.Dobot(ports[0])
-thisdict = {}
+dobot = Dobot.Dobot(ports[0].device)
+posDict = {}
+orderedPositionsDict = {}
 
 # __SERVER_IP__ = request.host.split(':')[0]
 # This is is another possible way to get the server ip address... without staticly type it.
 # __SERVER_IP__ = request.environ['SERVER_NAME']
 
-monitorIp = ''
+
+#https://improved-giggle-5r4pwq4jx9349pq-3000.preview.app.github.dev/
+# monitorIp = '10.231.70.82:3000'
+monitorIp = 'http://10.5.101.129:3000'
 
 ### swagger specific ###
 SWAGGER_URL = '/api/docs'
@@ -39,11 +43,12 @@ def getServerIp():
 
 ### api endpoints
     
-@app.route("/api/device/setMonitorIp", methods=['POST'])
-def setMonitorIp():
-    monitorIp = request.args.get('ip')
-    print('The monitor with the ip of {ip} tryed to connect to this Dobot.'.format(ip=monitorIp))
-    return jsonify("Success"), 200
+
+# @app.route("/api/device/setMonitorIp", methods=['POST'])
+# def setMonitorIp():
+#     monitorIp = request.args.get('ip')
+#     print('The monitor with the ip of {ip} tryed to connect to this Dobot.'.format(ip=monitorIp))
+#     return jsonify("Success"), 200
 
 @app.route("/api/device/setJobOrder", methods=['POST'])
 def setJobOrder(orderedJobs):
@@ -56,10 +61,9 @@ def setSuctionCupStatus(suctionCupStatus):
     return jsonify("Status of suction cup was successfully set"), 200
 
 @app.route("/api/device/setPose", methods=['POST'])
-def setPose(posname):
+def setPose(posName):
     position = dobot.pose_p()
-    #thisdict.update(posname, position)
-    print(position)
+    posDict.update(posName, position)
     return jsonify("Pose was successfully set"), 200
 
 @app.route("/api/device/getPose", methods=['GET'])
@@ -78,6 +82,13 @@ def getPose():
         }
     ), 200
 
+@app.route("/api/device/setJob", methods=['POST'])
+def setJob():
+    jobName = request.json['job']
+    job = job(jobName, [])
+    orderedPositionsDict.update(jobName, positions)
+    return jsonify("Job was successfully set"), 200
+
 @app.route("/api/device/startJob", methods=['POST'])
 def startJob():
 
@@ -89,16 +100,19 @@ def startJob():
 @app.route("/api/device/notstop", methods=['Delete'])
 def notstop():
     # Add function to stop the dobot here...
-    return jsonify("Successfully stoped the running task."), 200
+    if dobot.forceStop():
+        return jsonify("Successfully stoped the running task."), 200
+    else:
+        return jsonify("Failed to stop the running task."), 400
 
 @app.route("/api/device/getJobs", methods=['GET'])
 def getJobs():
     #This is just for debugging purpose...
     return jsonify({ 
-        "deviceId": deviceId,
+        "deviceId": str(deviceId),
         "jobs": [
             {
-                "id": uuid.uuid4(),
+                "id": str(uuid.uuid4()),
                 "name": "Job 1"
             }
         ],
@@ -107,15 +121,18 @@ def getJobs():
 
 @app.route("/api/monitor/login", methods=['POST'])
 def login():
-    json = jsonify({
+    try:
+        response = requests.post(url='{base_path}/api/monitor/login'.format(base_path=monitorIp), json={
         "ip": getServerIp(),
-        "id": deviceId,
+        "id": str(deviceId),
         "type": "dobot",
         "name": "dobot 1",
     })
+        print(response.raw)
+    except Exception as e:
+        print(e)
 
-    requests.post(url='https://{ip}/api/monitor/log'.format(ip=monitorIp), json=json)
-    return jsonify("Success"), 200
+    return jsonify("response"), 200
     # return json, 200
 
 @app.route("/api/monitor/log", methods=['POST'])
@@ -128,7 +145,7 @@ def log2Monitor():
         "name": "dobot 1",
     })
 
-    requests.post(url='https://{ip}/api/monitor/log'.format(ip=monitorIp), json=json)
+    requests.post(url='http://{ip}/api/monitor/log'.format(ip=monitorIp), json=json)
     return jsonify("Success"), 200
     # return json, 200
 
@@ -138,4 +155,4 @@ def getIndexPage():
     return render_template('home.html')
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0") #host='192.168.178.95'
+    app.run(host='0.0.0.0') #host='192.168.178.95'
