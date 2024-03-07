@@ -11,7 +11,10 @@ app = Flask(__name__, template_folder='./templates')
 # This is is another possible way to get the server ip address... without staticly type it.
 # __SERVER_IP__ = request.environ['SERVER_NAME']
 
-monitorIp = ''
+
+#https://improved-giggle-5r4pwq4jx9349pq-3000.preview.app.github.dev/
+# monitorIp = '10.231.70.82:3000'
+monitorIp = 'https://improved-giggle-5r4pwq4jx9349pq-3000.preview.app.github.dev'
 
 ### swagger specific ###
 SWAGGER_URL = '/api/docs'
@@ -34,11 +37,11 @@ def getServerIp():
 
 ### api endpoints
     
-@app.route("/api/device/setMonitorIp", methods=['POST'])
-def setMonitorIp():
-    monitorIp = request.args.get('ip')
-    print('The monitor with the ip of {ip} tryed to connect to this Dobot.'.format(ip=monitorIp))
-    return jsonify("Success"), 200
+# @app.route("/api/device/setMonitorIp", methods=['POST'])
+# def setMonitorIp():
+#     monitorIp = request.args.get('ip')
+#     print('The monitor with the ip of {ip} tryed to connect to this Dobot.'.format(ip=monitorIp))
+#     return jsonify("Success"), 200
 
 @app.route("/api/device/setJobOrder", methods=['POST'])
 def setJobOrder(orderedJobs):
@@ -62,10 +65,10 @@ def notstop():
 def getJobs():
     #This is just for debugging purpose...
     return jsonify({ 
-        "deviceId": deviceId,
+        "deviceId": str(deviceId),
         "jobs": [
             {
-                "id": uuid.uuid4(),
+                "id": str(uuid.uuid4()),
                 "name": "Job 1"
             }
         ],
@@ -81,9 +84,22 @@ def login():
         "name": "dobot 1",
     })
 
-    requests.post(url='https://{ip}/api/monitor/log'.format(ip=monitorIp), json=json)
-    return jsonify("Success"), 200
-    # return json, 200
+    print('{base_path}/api/job'.format(base_path=monitorIp))
+
+    try:
+        response = requests.post(url='{base_path}/api/monitor/login'.format(base_path=monitorIp), json={
+        "ip": getServerIp(),
+        "id": str(deviceId),
+        "type": "dobot",
+        "name": "dobot 1",
+    })
+    except Exception as e:
+        print(e)
+
+    print(response.status_code)
+
+    # return jsonify(response), 200
+    return json, 200
 
 @app.route("/api/monitor/log", methods=['POST'])
 def log2Monitor():
@@ -95,7 +111,7 @@ def log2Monitor():
         "name": "dobot 1",
     })
 
-    requests.post(url='https://{ip}/api/monitor/log'.format(ip=monitorIp), json=json)
+    requests.post(url='http://{ip}/api/monitor/log'.format(ip=monitorIp), json=json)
     return jsonify("Success"), 200
     # return json, 200
 
@@ -105,4 +121,4 @@ def getIndexPage():
     return render_template('home.html')
 
 if __name__ == '__main__':
-    app.run( debug=True) #host='192.168.178.95'
+    app.run(host='0.0.0.0') #host='192.168.178.95'
