@@ -9,7 +9,8 @@ import uuid
 
 app = Flask(__name__, template_folder='./templates')
 ports = list_ports.comports()
-dobot = Dobot.Dobot(ports[0])
+dobot = Dobot.Dobot(ports[0].device)
+print(ports[0].device)
 thisdict = {}
 
 # __SERVER_IP__ = request.host.split(':')[0]
@@ -89,7 +90,10 @@ def startJob():
 @app.route("/api/device/notstop", methods=['Delete'])
 def notstop():
     # Add function to stop the dobot here...
-    return jsonify("Successfully stoped the running task."), 200
+    if dobot.forceStop():
+        return jsonify("Successfully stoped the running task."), 200
+    else:
+        return jsonify("Failed to stop the running task."), 400
 
 @app.route("/api/device/getJobs", methods=['GET'])
 def getJobs():
