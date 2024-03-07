@@ -20,7 +20,7 @@ thisdict = {}
 
 #https://improved-giggle-5r4pwq4jx9349pq-3000.preview.app.github.dev/
 # monitorIp = '10.231.70.82:3000'
-monitorIp = 'https://improved-giggle-5r4pwq4jx9349pq-3000.preview.app.github.dev'
+monitorIp = 'http://10.5.101.129:3000'
 
 ### swagger specific ###
 SWAGGER_URL = '/api/docs'
@@ -114,15 +114,6 @@ def getJobs():
 
 @app.route("/api/monitor/login", methods=['POST'])
 def login():
-    json = jsonify({
-        "ip": getServerIp(),
-        "id": deviceId,
-        "type": "dobot",
-        "name": "dobot 1",
-    })
-
-    print('{base_path}/api/job'.format(base_path=monitorIp))
-
     try:
         response = requests.post(url='{base_path}/api/monitor/login'.format(base_path=monitorIp), json={
         "ip": getServerIp(),
@@ -130,13 +121,12 @@ def login():
         "type": "dobot",
         "name": "dobot 1",
     })
+        print(response.raw)
     except Exception as e:
         print(e)
 
-    print(response.status_code)
-
-    # return jsonify(response), 200
-    return json, 200
+    return jsonify("response"), 200
+    # return json, 200
 
 @app.route("/api/monitor/log", methods=['POST'])
 def log2Monitor():
