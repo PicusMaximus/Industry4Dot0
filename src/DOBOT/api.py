@@ -11,6 +11,8 @@ app = Flask(__name__, template_folder='./templates')
 ports = list_ports.comports()
 dobot = Dobot.Dobot(ports[0].device)
 thisdict = {}
+posDict = {}
+orderedPositionsDict = {}
 
 # __SERVER_IP__ = request.host.split(':')[0]
 # This is is another possible way to get the server ip address... without staticly type it.
@@ -42,17 +44,6 @@ def getServerIp():
 
 ### api endpoints
     
-# @app.route("/api/device/setMonitorIp", methods=['POST'])
-# def setMonitorIp():
-#     monitorIp = request.args.get('ip')
-#     print('The monitor with the ip of {ip} tryed to connect to this Dobot.'.format(ip=monitorIp))
-#     return jsonify("Success"), 200
-
-@app.route("/api/device/setJobOrder", methods=['POST'])
-def setJobOrder(orderedJobs):
-    jobOrder = orderedJobs
-    return jsonify("New job order was successfully saved"), 200
-
 @app.route("/api/device/setSuctionCupStatus", methods=['POST'])
 def setSuctionCupStatus(suctionCupStatus):
     statusOfSuctionSup = suctionCupStatus
@@ -62,8 +53,7 @@ def setSuctionCupStatus(suctionCupStatus):
 def setPose(posname):
     global position
     position = dobot.pose_p()
-    #thisdict.update(posname, position)
-    print(position)
+    posDict.update(posName, position)
     return jsonify("Pose was successfully set"), 200
 
 @app.route("/api/device/getPose", methods=['GET'])
@@ -92,6 +82,12 @@ def move_to():
     
     return jsonify(position), 200
 
+@app.route("/api/device/setJob", methods=['POST'])
+def setJob():
+    jobName = request.json['job']
+    job = job(jobName, [])
+    orderedPositionsDict.update(jobName, positions)
+    return jsonify("Job was successfully set"), 200
 
 @app.route("/api/device/startJob", methods=['POST'])
 def startJob():
