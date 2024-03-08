@@ -306,9 +306,6 @@ class Dobot:
         msg.ctrl = ControlValues.ONE
         return self._send_command(msg)
 
-    def forceStop(self):
-        return self._set_queued_cmd_force_stop_exec()
-
     def _set_queued_cmd_force_stop_exec(self):
         '''
             Forcefully stop command
@@ -403,5 +400,14 @@ class Dobot:
         self._set_home_cmd()
         return
 
+    def forceStop(self):
+        return self._set_queued_cmd_force_stop_exec()
+
+    def start(self):
+        return self._set_queued_cmd_start_exec()
+
     def path_p(self, positions, wait=False, mode=PTPMode.MOVJ_XYZ):
         pass
+
+    def clear(self):
+        return self._set_queued_cmd_clear()

@@ -50,7 +50,7 @@ class StatusWebSocketHandler(WebSocket):
 class DobotServer(object):
     @cherrypy.expose
     def index(self): 
-        return helpers.loadTemplate('home')
+        return 'Hello World'
 
     @cherrypy.expose
     def ws(self):
@@ -58,7 +58,9 @@ class DobotServer(object):
         return
 
     def update(self):
+        # Start update timer here...
         threading.Timer(cherrypy.request.config['dobot.updateInterval'], self.update).start()
+        # Get the ports...
         ports = list_ports.comports()
         # ports = [p.device for p in ports]
         ports = [{'value': p.device, 'name': f'{p.device}: {p.description}'} for p in ports]
@@ -108,13 +110,13 @@ if __name__ == '__main__':
     app = cherrypy.tree.mount(root, '/', config='dobot.conf')
     app.merge(wsConfig)
 
-    # load controls
-    from Controls import Controls
-    cherrypy.tree.mount(Controls(), '/controls')
+    # # load controls
+    # from Controls import Controls
+    # cherrypy.tree.mount(Controls(), '/controls')
 
-    # load addons
-    from addons.Spoon import Spoon
-    cherrypy.tree.mount(Spoon(), '/spoon')
+    # # load addons
+    # from addons.Spoon import Spoon
+    # cherrypy.tree.mount(Spoon(), '/spoon')
 
     cherrypy.engine.start()
     root.update()

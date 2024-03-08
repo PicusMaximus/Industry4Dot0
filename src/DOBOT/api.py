@@ -1,7 +1,7 @@
 import requests
 from flask import Flask, jsonify, request, render_template
 from flask_swagger_ui import get_swaggerui_blueprint
-from jobOrders import jobOrder 
+from jobOrders import position
 from devices import deviceId
 from classes import Dobot
 from serial.tools import list_ports
@@ -10,7 +10,6 @@ import uuid
 app = Flask(__name__, template_folder='./templates')
 ports = list_ports.comports()
 dobot = Dobot.Dobot(ports[0].device)
-print(ports[0].device)
 thisdict = {}
 
 # __SERVER_IP__ = request.host.split(':')[0]
@@ -61,6 +60,7 @@ def setSuctionCupStatus(suctionCupStatus):
 
 @app.route("/api/device/setPose", methods=['POST'])
 def setPose(posname):
+    global position
     position = dobot.pose_p()
     #thisdict.update(posname, position)
     print(position)
@@ -68,6 +68,7 @@ def setPose(posname):
 
 @app.route("/api/device/getPose", methods=['GET'])
 def getPose():
+    global position
     position = dobot.pose_p()
     return jsonify({ 
         "deviceId": deviceId,
@@ -82,6 +83,16 @@ def getPose():
         }
     ), 200
 
+@app.route("/api/device/move", methods=['POST'])
+def move_to():
+    global position
+
+    if position != None: 
+        dobot.move_to_p(position)
+    
+    return jsonify(position), 200
+
+
 @app.route("/api/device/startJob", methods=['POST'])
 def startJob():
 
@@ -92,8 +103,27 @@ def startJob():
 
 @app.route("/api/device/notstop", methods=['Delete'])
 def notstop():
-    # Add function to stop the dobot here...
+    # Force stop the queue from executing
     if dobot.forceStop():
+        # Clear the queue
+        # This makes the behavior more calculatable...
+        dobot.clear()
+        return jsonify("Successfully stoped the running task."), 200
+    else:
+        return jsonify("Failed to stop the running task."), 400
+
+@app.route("/api/device/start", methods=['POST'])
+def start():
+    # Add function to start the dobot here...
+    if dobot.start():
+        return jsonify("Successfully stoped the running task."), 200
+    else:
+        return jsonify("Failed to stop the running task."), 400
+
+@app.route("/api/device/home", methods=['POST'])
+def home():
+    # Add function to start the dobot here...
+    if dobot.home():
         return jsonify("Successfully stoped the running task."), 200
     else:
         return jsonify("Failed to stop the running task."), 400
@@ -148,4 +178,4 @@ def getIndexPage():
     return render_template('home.html')
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0') #host='192.168.178.95'
+    app.run(host='0.0.0.0', port="3000") #host='192.168.178.95'

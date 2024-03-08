@@ -1,2 +1,3 @@
 jobOrder = None
 
+position = None
