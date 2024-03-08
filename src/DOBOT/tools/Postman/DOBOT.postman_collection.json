@@ -1,0 +1,202 @@
+{
+	"info": {
+		"_postman_id": "84233430-c17e-4744-9cee-75c89140c606",
+		"name": "DOBOT",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20928227"
+	},
+	"item": [
+		{
+			"name": "POST",
+			"item": [
+				{
+					"name": "START",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}:{{port}}/api/device/start",
+							"host": [
+								"{{baseURL}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"device",
+								"start"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "STOP",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}:{{port}}/stop",
+							"host": [
+								"{{baseURL}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"stop"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "HOME",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}:{{port}}/api/device/home",
+							"host": [
+								"{{baseURL}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"device",
+								"home"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "MOVE",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}:{{port}}/api/device/move",
+							"host": [
+								"{{baseURL}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"device",
+								"move"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POSE",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}:{{port}}/api/device/setPose",
+							"host": [
+								"{{baseURL}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"device",
+								"setPose"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "DELETE",
+			"item": [
+				{
+					"name": "FORCE STOP",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}:{{port}}/api/device/notstop",
+							"host": [
+								"{{baseURL}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"device",
+								"notstop"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "GET",
+			"item": [
+				{
+					"name": "POSE",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "{{baseURL}}:{{port}}/api/device/getPose",
+							"host": [
+								"{{baseURL}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"device",
+								"getPose"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseURL",
+			"value": "http://192.168.20.88",
+			"type": "string"
+		},
+		{
+			"key": "port",
+			"value": "3000",
+			"type": "string"
+		}
+	]
+}
