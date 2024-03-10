@@ -2,47 +2,43 @@
 <html lang="en">
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <link rel="stylesheet" href="/static/css/output.css">
-        {% block styles %}{% endblock styles %}
         <title>{% block title %} Dobot Arm {% endblock title %}</title>
+
+        <!-- ### Styles ### -->
+
+        <link rel="stylesheet" href="/static/css/output.css">
+        <link rel="stylesheet" href="/static/css/main.css">
+        {% block styles %}{% endblock styles %}
+
+        <!-- ### Scripts ### -->
+        <script
+          src="https://code.jquery.com/jquery-3.7.1.min.js"
+          integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+          crossorigin="anonymous" defer>
+        </script>
+
+        <!-- ### Dont forget to set the defer attr ### -->
+        <script src="{{url_for('static', filename='/node_modules/preline/preline.js')}}" defer></script>
+        {% block scripts %}{% endblock scripts %}
+
     </head>
-    <body class="bg-white dark:bg-slate-800 text-black dark:text-white">
+    <body class="bg-gray-50 dark:bg-slate-900">
+        <!-- ========== HEADER ========== -->
         {% include "navbar.html" %}
 
-        {% if device and device.ser and device.state == Enums.ConnectState.CONNECTED %}
-            <div id="connected-alert" class="alert alert-success show-connected">
-        {% else %}
-            <div id="connected-alert" class="alert alert-success show-connected d-none">
-        {% endif %}
-                Dobot is connected! 
-                <button id="disconnect-btn" name="disconnect-btn" class="btn btn-primary" data-use-ws="true">Disonnect</button>
-                <div class="form-check form-switch">
-                    <label class="form-check-label" for="hotkeys">Enable Hotkeys</label>
-                    <input class="form-check-input" type="checkbox" id="hotkeys">
-                </div>
-                <span id="disconnecting" class="d-none">Attempting to disconnect!</span>
-            </div>
-        {% if not device or not device.ser or device.state == Enums.ConnectState.NOT_CONNECTED %}
-            <div id="disconnected-alert" class="w-100 show-disconnected">
-        {% else %}
-            <div id="disconnected-alert" class="w-100 show-disconnected d-none">
-        {% endif %}
-                <div class="alert alert-warning">Dobot not connected!</div>
-                <div class="connect-form">
-                    <label for="port">Port</label>
-                    <select id="port" name="port">
-                        {% for p in ports %}
-                            <option value="{{ p.device }}">{{ p.device }}: {{ p.description }}</option>
-                        {% endfor %}
-                    </select>
-                    <button id="connect-btn" name="connect-btn" class="btn btn-primary" data-use-ws="true">Connect</button>
-                    <span id="connecting" class="d-none">Attempting to connect!</span>
-                </div>
-            </div>
+        <!-- ========== END HEADER ========== -->
+      
+        <!-- ========== MAIN CONTENT ========== -->
 
-        <div id="content" class="container">{% block content %}{% endblock %}</div>
+        {% block page_sidebar %}  {% endblock page_sidebar %}
+        
+        <!-- Content -->
+          <!-- Page Heading -->
+          {% block page_heading %} {% endblock page_heading %}
+          <!-- End Page Heading -->
 
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-        <script src="/static/js/index.js"></script>
-    </body>
+          {% block page_content %} {% endblock page_content %}
+        <!-- End Content -->
+        <!-- ========== END MAIN CONTENT ========== -->
+      </body>
 </html>

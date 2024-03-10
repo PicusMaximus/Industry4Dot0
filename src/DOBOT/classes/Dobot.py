@@ -3,7 +3,6 @@ import struct
 import time
 import threading
 import warnings
-import cherrypy
 
 from .Position import Position
 from .Message import Message

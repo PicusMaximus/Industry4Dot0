@@ -2,27 +2,120 @@
 {% block title %}
 Dobot Home
 {% endblock title %}
-{% block content %}
-    {% if device and device.ser and device.state == Enums.ConnectState.CONNECTED %}
-        <div class="w-100 show-connected">
-    {% else %}
-        <div class="w-100 show-connected d-none">
-    {% endif %}
-            <div class="row">
-                <div class="col-12 text-center">
-                    <a class="btn btn-lg btn-primary btn-fill btn-operation" href="#" data-url="/controls/home">Home</a>
-                </div>
+{% block breadcrumb %}
+<!-- 
+    Example:
+    <li class="flex items-center text-sm font-semibold text-gray-800 truncate dark:text-gray-400" aria-current="page">
+    <svg class="flex-shrink-0 mx-3 overflow-visible size-2.5 text-gray-400 dark:text-gray-600" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M5 1L10.6869 7.16086C10.8637 7.35239 10.8637 7.64761 10.6869 7.83914L5 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+    </svg>
+    Dobot Arm
+</li>
+ -->
+{% endblock breadcrumb %}
+{% block page_content %}
+<div class="w-full mt-8">
+  <div class="grid content-layout">
+
+    <div class="inner-content">
+      <div
+        class="flex flex-col bg-white border shadow-sm rounded-xl dark:bg-slate-900 dark:border-gray-700 dark:shadow-slate-700/[.7]">
+        <div class="flex justify-between items-center border-b rounded-t-xl py-3 px-4 md:px-5 dark:border-gray-700">
+          <h3 class="text-lg font-bold text-gray-800 dark:text-white">
+            Task name
+          </h3>
+
+          <div class="flex items-center gap-x-1">
+            <div class="hs-dropdown relative inline-flex">
+              <div class="hs-tooltip inline-block [--placement:left]">
+                <button id="hs-dropdown-custom-icon-trigger" type="button"
+                  class="hs-dropdown-toggle flex justify-center items-center size-9 text-sm font-semibold rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
+                  <svg class="flex-none size-4 text-gray-600" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="1" />
+                    <circle cx="12" cy="5" r="1" />
+                    <circle cx="12" cy="19" r="1" />
+                  </svg>
+                  <span
+                    class="hs-tooltip-content hs-tooltip-shown:opacity-100 hs-tooltip-shown:visible opacity-0 transition-opacity inline-block absolute invisible z-10 py-1 px-2 bg-gray-900 text-xs font-medium text-white rounded shadow-sm dark:bg-slate-700"
+                    role="tooltip">
+                    Options
+                  </span>
+                </button>
+              </div>
+
+              <div
+                class="hs-dropdown-menu transition-[opacity,margin] duration hs-dropdown-open:opacity-100 opacity-0 hidden min-w-60 bg-white shadow-md rounded-lg p-2 mt-2 dark:bg-gray-800 dark:border dark:border-gray-700"
+                aria-labelledby="hs-dropdown-custom-icon-trigger">
+                <a class="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-green-500 hover:text-green-600 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-green-400 dark:hover:text-green-500 dark:hover:bg-gray-700 dark:focus:bg-gray-700"
+                  href="#">
+                  <svg class="flex-shrink-0 size-5" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  Run task
+                </a>
+                <a class="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300 dark:focus:bg-gray-700"
+                  href="#">
+                  <svg class="flex-shrink-0 size-5" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                  </svg>
+                  Edit
+                </a>
+                <a class="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-red-500 hover:text-red-600 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-red-400 dark:hover:text-red-500 dark:hover:bg-gray-700 dark:focus:bg-gray-700"
+                  href="#">
+                  <svg class="flex-shrink-0 size-5" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                  </svg>
+                  Delete
+                </a>
+              </div>
             </div>
+          </div>
         </div>
-    {% if device and device.ser and device.state == Enums.ConnectState.NOT_CONNECTED %}
-        <div class="w-100 show-disconnected">
-    {% else %}
-        <div class="w-100 show-disconnected d-none">
-    {% endif %}
-            <div class="row">
-                <div class="col-12 text-center">
-                    Please connect to a Dobot to continue.
-                </div>
-            </div>
+        <div class="p-4 md:p-5">
+          <p class="mt-2 text-gray-500 dark:text-gray-400">
+            With supporting text below as a natural lead-in to additional content.
+          </p>
         </div>
-{% endblock content %}
+      </div>
+    </div>
+  </div>
+</div>
+<!-- ### Floating button ### -->
+
+<div class="flex fixed right-4 bottom-2 isolate z-50 flex-col-reverse items-center gap-2">
+  <div class="hs-tooltip inline-block [--placement:left]">
+    <button class="grid place-content-center h-16 aspect-square p-0 rounded-full border-none shadow-sm z-20 bg-blue-500 hover:bg-blue-600 text-blue-100 hover:text-blue-200 focus:outline-none focus:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700">
+      <svg class="flex-shrink-0 size-5 h-7 w-7" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+      </svg>
+        <span
+        class="hs-tooltip-content hs-tooltip-shown:opacity-100 hs-tooltip-shown:visible opacity-0 transition-opacity inline-block absolute invisible z-10 py-1 px-2 bg-gray-900 text-xs font-medium text-white rounded shadow-sm dark:bg-slate-700"
+        role="tooltip">
+        Create Task
+      </span>
+    </button>
+  </div>
+  <div class="hs-tooltip inline-block [--placement:left]">
+    <button class="grid place-content-center h-16 aspect-square p-0 rounded-full border-none shadow-sm z-20  bg-red-500 hover:bg-red-600 text-red-100 hover:text-red-200 focus:outline-none focus:bg-red-700 dark:bg-red-600 dark:hover:bg-red-700">
+      <svg class="flex-shrink-0 size-5 h-7 w-7" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+      </svg>
+        <span
+        class="hs-tooltip-content hs-tooltip-shown:opacity-100 hs-tooltip-shown:visible opacity-0 transition-opacity inline-block absolute invisible z-10 py-1 px-2 bg-gray-900 text-xs font-medium text-white rounded shadow-sm dark:bg-slate-700"
+        role="tooltip">
+        Emergency Stop
+      </span>
+    </button>
+  </div>
+</div>
+
+{% endblock page_content %}

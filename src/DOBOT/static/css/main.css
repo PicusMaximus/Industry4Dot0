@@ -2,3 +2,103 @@
     width: 100%;
     margin: 5px 0;
 }
+
+.content-layout {
+    grid-template-columns: [layout-start left-outer-content-start] 20% [left-outer-content-end inner-content-start] 60% [inner-content-end right-outer-content-start] 20% [right-outer-content-end layout-end];
+}
+
+.left-outer-content {
+    grid-column: left-outer-content-start / left-outer-content-end;
+}
+
+.right-outer-content {
+    grid-column: right-outer-content-start / right-outer-content-end;
+}
+
+.inner-content {
+    grid-column: inner-content-start / inner-content-end;
+}
+
+
+:where(.fbtn-group.rendering)
+{
+    --fbtn-rendering: none;
+}
+
+.calc-pane {
+    height: calc(100dvh - 8rem);
+}
+
+.top-content {
+    grid-column: top-outer-content-start / top-outer-content-end;
+}
+
+.bottom-content {
+    grid-column: bottom-outer-content-start / bottom-outer-content-end;
+}
+
+.middle-content {
+    grid-column: middle-content-start / middle-content-end;
+}
+
+.min-panel-size-one-1\/2 {
+    min-width: calc(50% - 0.25rem / 2);
+}
+
+.grid-row-45-10-45 {
+    grid-template-rows: [layout-start top-outer-content-start] 1fr [top-outer-content-end middle-content-start] 0.01fr [middle-content-end bottom-outer-content-start] 1fr [bottom-outer-content-end layout-end];
+}
+
+.calced-h {
+    height: calc(100dvh -  (4.5rem + 3.3rem + 1.5rem + 1.5rem));
+}
+
+
+@media (min-width: 640px) { 
+    /* Example */
+    /*
+        .sm\:something {}
+    */
+
+    .sm\:min-panel-size-one-1\/2 {
+        min-width: 50%;
+    }
+
+    .sm\:min-panel-size-one-2\/5 {
+        min-width: 40%;
+    }
+}
+
+@media (min-width: 768px) {
+    [class^="sm:"] {
+        min-width: initial,
+    }
+    
+    /* Example */
+    /*
+        .md\:something {}
+    */
+}
+
+@media (min-width: 1024px) {
+    [class^="md:"] {
+        min-width: initial,
+    }
+
+    /* Example */
+    /* 
+    .lg\:something {} 
+    */
+
+    .lg\:min-panel-size-one-1\/4 {
+        min-width: 25%;
+    }
+    
+    .lg\:min-panel-size-one-1\/15 {
+        min-width: 15%;
+    }
+
+    .lg\:calced-h {
+        height: calc(100dvh -  (4.5rem + 3.3rem));
+    }
+}

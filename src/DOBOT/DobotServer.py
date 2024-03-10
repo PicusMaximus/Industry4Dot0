@@ -10,7 +10,6 @@ import json
 from classes.Dobot import Dobot
 from classes.Enums import ConnectState
 import devices
-import helpers
 
 class StatusWebSocketHandler(WebSocket):
     def received_message(self, m):

@@ -9,7 +9,8 @@ import uuid
 
 app = Flask(__name__, template_folder='./templates')
 ports = list_ports.comports()
-dobot = Dobot.Dobot(ports[0].device)
+if len(ports) > 0:
+    dobot = Dobot.Dobot(ports[0].device)
 thisdict = {}
 posDict = {}
 orderedPositionsDict = {}
@@ -168,10 +169,15 @@ def log2Monitor():
     return jsonify("Success"), 200
     # return json, 200
 
+#### HTML SECTION ####
 
 @app.route('/', methods=['GET'])
 def getIndexPage():
     return render_template('home.html')
+
+@app.route('/task', methods=['GET'])
+def getTaskPage():
+    return render_template('task.html')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port="3000") #host='192.168.178.95'
