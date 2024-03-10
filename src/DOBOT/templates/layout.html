@@ -32,6 +32,11 @@
                 appendTo: '.sortable-list--draggable',
                 constrainDimensions: true,
               },
+              delay: {
+                mouse: 100,
+                drag: 100,
+                touch: 100,
+              },
             });            
           }
 
@@ -48,7 +53,14 @@
                 appendTo: selector,
                 constrainDimensions: true,
               },
-            });            
+              delay: {
+                mouse: 100,
+                drag: 100,
+                touch: 100,
+              },
+            });
+            
+            sortable.on('click', () => console.log("hello"));
           }
         </script>
 
