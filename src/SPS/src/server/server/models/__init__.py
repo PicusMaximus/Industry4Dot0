@@ -6,3 +6,4 @@ from server.server.models.login import Login
 from server.server.models.set_jobs import SetJobs
 from server.server.models.start_job import StartJob
 from server.server.models.status_changed import StatusChanged
+from server.server.models.job import Job
