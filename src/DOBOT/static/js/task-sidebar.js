@@ -52,10 +52,31 @@ $addMoveBtn.on('click', () => {
     collapse.show();
 
     const a = document.getElementById('something-random-1231231536815368');
-    $(a).on('click', () => {
-        debugger
-        console.log('Hello World');
-    })
+    a.addEventListener('click', async () => {
+        const res = await fetch('/movement-card', {method: "GET"})
+        const content = await res.text();
+
+        const contentHTML = $.parseHTML(content)
+
+        document.getElementById('task-card-content').replaceChildren(contentHTML[0]);
+
+        document.getElementById('free-drive-btn').addEventListener('click', () => {
+            document.getElementById('movement-dialog').showModal();;
+
+            // const showButton = document.querySelector("dialog + button");
+            // const closeButton = document.querySelector("dialog button");
+
+            // // "Show the dialog" button opens the dialog modally
+            // showButton.addEventListener("click", () => {
+            // dialog.showModal();
+            // });
+
+            // // "Close" button closes the dialog
+            // closeButton.addEventListener("click", () => {
+            // dialog.close();
+            // });
+        })
+    });
 
     specificSortableTable(`#collapse-content-${moveCount} .move-list--draggable`, '.move-list-item--draggable')
 });
@@ -68,12 +89,10 @@ $addPointBtn.on('click', () => {
 
     pointCount++;
 
-    let containerList = [];
-
     let container = document.querySelector('.collapse-content-container.marked');
 
     if (!container) {
-        containers = [...document.querySelectorAll('.collapse-content-container')]
+        const containers = [...document.querySelectorAll('.collapse-content-container')]
         container = containers[containers.length - 1];
     };
 
@@ -99,12 +118,10 @@ $addWaitBtn.on('click', () => {
         return;
     }
 
-    let containerList = [];
-
     let container = document.querySelector('.collapse-content-container.marked');
 
     if (!container) {
-        containers = [...document.querySelectorAll('.collapse-content-container')]
+        const containers = [...document.querySelectorAll('.collapse-content-container')]
         container = containers[containers.length - 1];
     };
 
@@ -129,12 +146,10 @@ $addSettingsBtn.on('click', () => {
         return;
     }
 
-    let containerList = [];
-
     let container = document.querySelector('.collapse-content-container.marked');
 
     if (!container) {
-        containers = [...document.querySelectorAll('.collapse-content-container')]
+        const containers = [...document.querySelectorAll('.collapse-content-container')]
         container = containers[containers.length - 1];
     };
 
@@ -159,12 +174,10 @@ $addNotificationBtn.on('click', () => {
         return;
     }
 
-    let containerList = [];
-
     let container = document.querySelector('.collapse-content-container.marked');
 
     if (!container) {
-        containers = [...document.querySelectorAll('.collapse-content-container')]
+        const containers = [...document.querySelectorAll('.collapse-content-container')]
         container = containers[containers.length - 1];
     };
 
@@ -217,3 +230,15 @@ document.addEventListener('click', (e) => {
     target.classList.add('marked', 'border-dashed', 'border-2', 'border-sky-500');
 });
 
+
+document.addEventListener('click', (e) => {
+    if (e.target.classList.contains('close-dialog-btn')) {
+        e.target.closest('dialog').close();
+        return;
+    }
+
+    if (e.target.closest('.close-dialog-btn')) {
+        e.target.closest('dialog').close();
+        return;
+    }
+}); 

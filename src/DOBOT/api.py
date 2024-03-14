@@ -2,18 +2,30 @@ import requests
 from flask import Flask, jsonify, request, render_template
 from flask_swagger_ui import get_swaggerui_blueprint
 from jobOrders import position
-from devices import deviceId
-from classes import Dobot
-from serial.tools import list_ports
+from devices import deviceId, ws_url
+from classes.Enums import PTPMode
 import uuid
+from serial.tools import list_ports
+from classes import Dobot
 
 app = Flask(__name__, template_folder='./templates')
-ports = list_ports.comports()
-if len(ports) > 0:
-    dobot = Dobot.Dobot(ports[0].device)
 thisdict = {}
 posDict = {}
 orderedPositionsDict = {}
+
+def connect2Dobot():
+    if len(list_ports.comports()) > 0:
+        return Dobot.Dobot(list_ports.comports()[0].device)
+
+def connect2Dobot2():
+    if len(list_ports.comports()) > 0:
+        global dobot
+        dobot = Dobot.Dobot(list_ports.comports()[0].device)
+
+dobot = connect2Dobot()
+
+if dobot == None:
+    dobot = connect2Dobot2()
 
 # __SERVER_IP__ = request.host.split(':')[0]
 # This is is another possible way to get the server ip address... without staticly type it.
@@ -53,6 +65,7 @@ def setSuctionCupStatus(suctionCupStatus):
 @app.route("/api/device/setPose", methods=['POST'])
 def setPose(posname):
     global position
+
     position = dobot.pose_p()
     posDict.update(posName, position)
     return jsonify("Pose was successfully set"), 200
@@ -60,6 +73,11 @@ def setPose(posname):
 @app.route("/api/device/getPose", methods=['GET'])
 def getPose():
     global position
+
+
+    if dobot is None:
+        return "hello world"
+
     position = dobot.pose_p()
     return jsonify({ 
         "deviceId": deviceId,
@@ -77,6 +95,7 @@ def getPose():
 @app.route("/api/device/move", methods=['POST'])
 def move_to():
     global position
+
 
     if position != None: 
         dobot.move_to_p(position)
@@ -100,6 +119,7 @@ def startJob():
 
 @app.route("/api/device/notstop", methods=['Delete'])
 def notstop():
+
     # Force stop the queue from executing
     if dobot.forceStop():
         # Clear the queue
@@ -111,6 +131,7 @@ def notstop():
 
 @app.route("/api/device/start", methods=['POST'])
 def start():
+
     # Add function to start the dobot here...
     if dobot.start():
         return jsonify("Successfully stoped the running task."), 200
@@ -119,6 +140,7 @@ def start():
 
 @app.route("/api/device/home", methods=['POST'])
 def home():
+
     # Add function to start the dobot here...
     if dobot.home():
         return jsonify("Successfully stoped the running task."), 200
@@ -167,17 +189,61 @@ def log2Monitor():
 
     requests.post(url='http://{ip}/api/monitor/log'.format(ip=monitorIp), json=json)
     return jsonify("Success"), 200
-    # return json, 200
+
+@app.route("/api/device/move-step", methods=['POST'])
+def moveDobot():
+    mode = request.args.get('mode')
+    direction = request.args.get('direction')
+    steps = 20
+
+    pos = dobot.pose_p()
+
+    if mode == 'XYZ':
+        if direction == 'xp': pos.x += float(steps)
+        elif direction == 'xn': pos.x -= float(steps)
+        elif direction == 'yp': pos.y += float(steps)
+        elif direction == 'yn': pos.y -= float(steps)
+        elif direction == 'zp': pos.z += float(steps)
+        elif direction == 'zn': pos.z -= float(steps)
+        elif direction == 'rp': pos.r += float(steps)
+        elif direction == 'rn': pos.r -= float(steps)
+        dobot.move_to_p(pos)
+    elif mode == 'ANGLE': 
+        if direction == 'j1p': pos.j1 += float(steps)
+        elif direction == 'j1n': pos.j1 -= float(steps)
+        elif direction == 'j2p': pos.j2 += float(steps)
+        elif direction == 'j2n': pos.j2 -= float(steps)
+        elif direction == 'j3p': pos.j3 += float(steps)
+        elif direction == 'j3n': pos.j3 -= float(steps)
+        elif direction == 'j4p': pos.j4 += float(steps)
+        elif direction == 'j4n': pos.j4 -= float(steps)
+        dobot.move_to_p(pos, mode=PTPMode.MOVJ_ANGLE)
+    return jsonify("Success"), 200
+
+@app.route("/api/device/reconnect", methods=['POST'])
+def reconnectDevice():
+    global dobot
+    if len(list_ports.comports()) > 0:
+        dobot = Dobot.Dobot(list_ports.comports()[0].device)
+        return "Success", 200
+    else:
+        return "Bad Request", 500
 
 #### HTML SECTION ####
 
 @app.route('/', methods=['GET'])
 def getIndexPage():
-    return render_template('home.html')
+    print(ws_url)
+    return render_template('home.html', data = { "wsUrl": ws_url })
 
 @app.route('/task', methods=['GET'])
 def getTaskPage():
-    return render_template('task.html')
+    print(ws_url)
+    return render_template('task.html', data = { "wsUrl": ws_url })
+
+@app.route('/movement-card', methods=['GET'])
+def getMovementCardPartial():
+    return render_template('movement-card.html')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port="3000") #host='192.168.178.95'
