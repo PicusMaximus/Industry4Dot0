@@ -5,10 +5,6 @@ from serial.tools import list_ports
 from jobOrders import position
 from classes.Enums import PTPMode
 
-def connect2Dobot():
-    if len(list_ports.comports()) > 0:
-        return Dobot.Dobot(list_ports.comports()[0].device)
-
 def getServerIp():
     return request.host.split(':')[0]
 

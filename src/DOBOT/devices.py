@@ -2,7 +2,12 @@ import uuid
 import cherrypy
 from serial.tools import list_ports
 from classes import Dobot
-from manager import connect2Dobot
+from serial.tools import list_ports
+
+
+def connect2Dobot():
+    if len(list_ports.comports()) > 0:
+        return Dobot.Dobot(list_ports.comports()[0].device)
 
 deviceId = uuid.uuid4()
 
