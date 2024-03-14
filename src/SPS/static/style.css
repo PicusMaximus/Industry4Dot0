@@ -23,11 +23,11 @@ button:active {
     background-color: aqua;
 }
 
-.table {
+.table-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 1em;
+    margin: 1em;
 }
 
 table {

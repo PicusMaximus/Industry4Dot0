@@ -27,13 +27,7 @@ dobot = connect2Dobot()
 if dobot == None:
     dobot = connect2Dobot2()
 
-# __SERVER_IP__ = request.host.split(':')[0]
-# This is is another possible way to get the server ip address... without staticly type it.
-# __SERVER_IP__ = request.environ['SERVER_NAME']
 
-
-#https://improved-giggle-5r4pwq4jx9349pq-3000.preview.app.github.dev/
-# monitorIp = '10.231.70.82:3000'
 monitorIp = 'http://10.5.101.129:3000'
 
 ### swagger specific ###
@@ -52,16 +46,8 @@ app.register_blueprint(SWAGGERUI_BLUEPRINT, url_prefix=SWAGGER_URL)
 #helper function
 def getServerIp():
     return request.host.split(':')[0]
-    # return request.environ['SERVER_NAME']Bin
-
 
 ### api endpoints
-    
-@app.route("/api/device/setSuctionCupStatus", methods=['POST'])
-def setSuctionCupStatus(suctionCupStatus):
-    statusOfSuctionSup = suctionCupStatus
-    return jsonify("Status of suction cup was successfully set"), 200
-
 @app.route("/api/device/setPose", methods=['POST'])
 def setPose(posname):
     global position
@@ -74,9 +60,8 @@ def setPose(posname):
 def getPose():
     global position
 
-
     if dobot is None:
-        return "hello world"
+        return "Missing Dobot."
 
     position = dobot.pose_p()
     return jsonify({ 
@@ -96,7 +81,6 @@ def getPose():
 def move_to():
     global position
 
-
     if position != None: 
         dobot.move_to_p(position)
     
@@ -107,7 +91,7 @@ def setJob():
     jobName = request.json['job']
     job = job(jobName, [])
     orderedPositionsDict.update(jobName, positions)
-    return jsonify("Job was successfully set"), 200
+    return jsonify("Job was successfully set."), 200
 
 @app.route("/api/device/startJob", methods=['POST'])
 def startJob():
@@ -131,25 +115,42 @@ def notstop():
 
 @app.route("/api/device/start", methods=['POST'])
 def start():
-
-    # Add function to start the dobot here...
     if dobot.start():
-        return jsonify("Successfully stoped the running task."), 200
+        return jsonify("Successfully started the Dobot."), 200
     else:
-        return jsonify("Failed to stop the running task."), 400
+        return jsonify("Failed to start the Dobot."), 400
 
 @app.route("/api/device/home", methods=['POST'])
 def home():
-
-    # Add function to start the dobot here...
     if dobot.home():
-        return jsonify("Successfully stoped the running task."), 200
+        return jsonify("Successfully moved to home position."), 200
     else:
-        return jsonify("Failed to stop the running task."), 400
+        return jsonify("Failed to move to home position."), 400
+
+
+@app.route("/api/device/setSuctionCupStatus", methods=["POST"])
+def setSuctionCupStatus():
+    #This enables or disables the Suction-Cup
+    suctionStatus = request.json['status']
+    if dobot.suck(suctionStatus):
+        return jsonify("Successfuly set the suction cup status."), 200
+    else:
+        return jsonify("Failed to set the suction cup status."), 400
+
+
+@app.route("/api/device/setGripperStatus", methods=["POST"])
+def setGripperStatus():
+    #This enables or disables the Gripper
+    gripperStatus = request.json['status']
+    if dobot.grip(suctionStatus):
+        return jsonify("Successfully set the gripper status."), 200
+    else:
+        return jsonify("Failed to set the gripper status."), 400
+
 
 @app.route("/api/device/getJobs", methods=['GET'])
 def getJobs():
-    #This is just for debugging purpose...
+    #This is just for debugging purposeses...
     return jsonify({ 
         "deviceId": str(deviceId),
         "jobs": [
@@ -174,7 +175,7 @@ def login():
     except Exception as e:
         print(e)
 
-    return jsonify("response"), 200
+    return jsonify("Login successful."), 200
     # return json, 200
 
 @app.route("/api/monitor/log", methods=['POST'])
@@ -188,7 +189,7 @@ def log2Monitor():
     })
 
     requests.post(url='http://{ip}/api/monitor/log'.format(ip=monitorIp), json=json)
-    return jsonify("Success"), 200
+    return jsonify("Log successful."), 200
 
 @app.route("/api/device/move-step", methods=['POST'])
 def moveDobot():
@@ -218,16 +219,16 @@ def moveDobot():
         elif direction == 'j4p': pos.j4 += float(steps)
         elif direction == 'j4n': pos.j4 -= float(steps)
         dobot.move_to_p(pos, mode=PTPMode.MOVJ_ANGLE)
-    return jsonify("Success"), 200
+    return jsonify("Successfully moved."), 200
 
 @app.route("/api/device/reconnect", methods=['POST'])
 def reconnectDevice():
     global dobot
     if len(list_ports.comports()) > 0:
         dobot = Dobot.Dobot(list_ports.comports()[0].device)
-        return "Success", 200
+        return "Successfully reconnected.", 200
     else:
-        return "Bad Request", 500
+        return "Bad Request.", 500
 
 #### HTML SECTION ####
 
@@ -244,6 +245,10 @@ def getTaskPage():
 @app.route('/movement-card', methods=['GET'])
 def getMovementCardPartial():
     return render_template('movement-card.html')
+
+@app.route('/about', methods=['GET'])
+def getAboutPage():
+    return render_template('about.html', data = { "wsUrl": ws_url })
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port="3000") #host='192.168.178.95'
