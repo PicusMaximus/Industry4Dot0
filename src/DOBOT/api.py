@@ -9,7 +9,6 @@ from serial.tools import list_ports
 from classes import Dobot
 
 app = Flask(__name__, template_folder='./templates')
-thisdict = {}
 posDict = {}
 orderedPositionsDict = {}
 
@@ -26,6 +25,36 @@ dobot = connect2Dobot()
 
 if dobot == None:
     dobot = connect2Dobot2()
+
+def listen(movements):
+        for movement in movements:
+            #if step['command'] == 'move_to': manager.move_to(step['options'])
+            if movement['movement_type'] == 'move_to_p':
+                for step in movement['steps']:
+                    #elif step['command'] == 'wait': manager.back(step['options'])
+                    if step['command'] == 'settings': manager.down(step['options'])
+                    elif step['command'] == 'notification': manager.scoopPosition()
+            elif movement['movement_type'] == 'move_to':
+                for step in movement['steps']:
+                    #elif step['command'] == 'wait': manager.back(step['options'])
+                    if step['command'] == 'settings': manager.down(step['options'])
+                    elif step['command'] == 'notification': manager.scoopPosition()
+
+
+    a = {
+        "jobid": "id",
+        'movements': [
+            {
+                "movement_type": "move_to_p",
+                "steps": [
+                    {
+                        "command_id": "id",
+                        "options": "any",
+                    },
+                ], 
+            },
+        ],
+    }
 
 # __SERVER_IP__ = request.host.split(':')[0]
 # This is is another possible way to get the server ip address... without staticly type it.
@@ -74,10 +103,6 @@ def setPose(posname):
 def getPose():
     global position
 
-
-    if dobot is None:
-        return "hello world"
-
     position = dobot.pose_p()
     return jsonify({ 
         "deviceId": deviceId,
@@ -96,15 +121,25 @@ def getPose():
 def move_to():
     global position
 
-
     if position != None: 
         dobot.move_to_p(position)
     
     return jsonify(position), 200
 
-@app.route("/api/device/setJob", methods=['POST'])
-def setJob():
+@app.route("/api/device/setJobOrder", methods=['POST'])
+def setJobOrder():
     jobName = request.json['job']
+    nextHop = request.json['nextHop']
+    {
+        "jobs": {
+            "jobid": 22414
+        },
+        "next": {
+            "ip": "wafuwafh",
+            "id": "2222",
+        },
+    }
+
     job = job(jobName, [])
     orderedPositionsDict.update(jobName, positions)
     return jsonify("Job was successfully set"), 200
@@ -112,8 +147,12 @@ def setJob():
 @app.route("/api/device/startJob", methods=['POST'])
 def startJob():
 
-    id = request.args.get('ip')
-    # Start job with given ip
+    id = request.args.get('id')
+
+    # Start Job here
+
+
+    response = requests.post(url='{base_path}/api/monitor/login'.format(base_path=job.next.ip), json={"id": job.next.id})
 
     return jsonify("Success"), 200
 
@@ -168,14 +207,13 @@ def login():
         "ip": getServerIp(),
         "id": str(deviceId),
         "type": "dobot",
-        "name": "dobot 1",
+        "name": "dobot 3",
     })
         print(response.raw)
     except Exception as e:
         print(e)
 
     return jsonify("response"), 200
-    # return json, 200
 
 @app.route("/api/monitor/log", methods=['POST'])
 def log2Monitor():
