@@ -7,7 +7,8 @@ from server.server.models.jobs_vom_geraet import JobsVomGeraet  # noqa: E501
 from server.server.models.set_jobs import SetJobs  # noqa: E501
 from server.server.models.start_job import StartJob  # noqa: E501
 from server.server import util
-
+import jobConfig
+from sps.sps import triggerJob
 
 def api_device_notstop_delete():  # noqa: E501
     """stops the jobs
@@ -45,7 +46,7 @@ def api_device_set_monitor_ip_post(ip):  # noqa: E501
 
     :rtype: Union[None, Tuple[None, int], Tuple[None, int, Dict[str, str]]
     """
-    return 'do some magic!'
+    return 'Dont think we need this'
 
 
 def api_device_start_job_post(start_job):  # noqa: E501
@@ -60,7 +61,8 @@ def api_device_start_job_post(start_job):  # noqa: E501
     """
     if connexion.request.is_json:
         start_job = StartJob.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+        triggerJob(start_job.id)
+    return "das hat bestimmt funktioniert"
 
 
 def get_monitor_jobs():  # noqa: E501
@@ -72,4 +74,4 @@ def get_monitor_jobs():  # noqa: E501
     :rtype: Union[JobsVomGeraet, Tuple[JobsVomGeraet, int], Tuple[JobsVomGeraet, int, Dict[str, str]]
     """
     
-    return JobsVomGeraet()
+    return JobsVomGeraet(jobs=map(lambda j: j.job,jobConfig.jobList))
