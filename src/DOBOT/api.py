@@ -57,11 +57,6 @@ def getServerIp():
 
 ### api endpoints
     
-@app.route("/api/device/setSuctionCupStatus", methods=['POST'])
-def setSuctionCupStatus(suctionCupStatus):
-    statusOfSuctionSup = suctionCupStatus
-    return jsonify("Status of suction cup was successfully set"), 200
-
 @app.route("/api/device/setPose", methods=['POST'])
 def setPose(posname):
     global position
@@ -131,8 +126,6 @@ def notstop():
 
 @app.route("/api/device/start", methods=['POST'])
 def start():
-
-    # Add function to start the dobot here...
     if dobot.start():
         return jsonify("Successfully stoped the running task."), 200
     else:
@@ -140,12 +133,31 @@ def start():
 
 @app.route("/api/device/home", methods=['POST'])
 def home():
-
-    # Add function to start the dobot here...
     if dobot.home():
         return jsonify("Successfully stoped the running task."), 200
     else:
         return jsonify("Failed to stop the running task."), 400
+
+
+@app.route("/api/device/setSuctionCupStatus", methods=["POST"])
+def setSuctionCupStatus():
+    #This enables or disables the Suction-Cup
+    suctionStatus = request.json['status']
+    if dobot.suck(suctionStatus):
+        return jsonify("Setting suction cup status successful."), 200
+    else:
+        return jsonify("Setting suction cup status unsuccessful."), 400
+
+
+@app.route("/api/device/setGripperStatus", methods=["POST"])
+def setGripperStatus():
+    #This enables or disables the Gripper
+    gripperStatus = request.json['status']
+    if dobot.grip(suctionStatus):
+        return jsonify("Setting Gripper status successful."), 200
+    else:
+        return jsonify("Setting Gripper status unsuccessful."), 400
+
 
 @app.route("/api/device/getJobs", methods=['GET'])
 def getJobs():
