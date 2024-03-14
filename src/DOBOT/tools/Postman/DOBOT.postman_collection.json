@@ -106,6 +106,61 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "MOVE-STEP",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}:{{port}}/api/device/move-step?mode=XYZ&direction=xn",
+							"host": [
+								"{{baseURL}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"device",
+								"move-step"
+							],
+							"query": [
+								{
+									"key": "mode",
+									"value": "XYZ"
+								},
+								{
+									"key": "direction",
+									"value": "xn"
+								},
+								{
+									"key": "",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "RECONNECT",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}:{{port}}/api/device/reconnect",
+							"host": [
+								"{{baseURL}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"device",
+								"reconnect"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -190,7 +245,7 @@
 	"variable": [
 		{
 			"key": "baseURL",
-			"value": "http://192.168.20.88",
+			"value": "http://192.168.178.148",
 			"type": "string"
 		},
 		{
