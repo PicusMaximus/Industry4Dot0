@@ -8,8 +8,8 @@ Type=simple
 Restart=always
 RestartSec=1
 User=dobot
-WorkingDirectory=/home/dobot/DobotMagicianServer
-ExecStart=/usr/bin/python3 DobotServer.py
+WorkingDirectory=/home/dobot/DOBOT
+ExecStart=/usr/bin/python3 api.py
 
 [Install]
 WantedBy=multi-user.target
