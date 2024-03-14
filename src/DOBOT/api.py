@@ -245,5 +245,9 @@ def getTaskPage():
 def getMovementCardPartial():
     return render_template('movement-card.html')
 
+@app.route('/about', methods=['GET'])
+def getAboutPage():
+    return render_template('about.html', data = { "wsUrl": ws_url })
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port="3000") #host='192.168.178.95'
