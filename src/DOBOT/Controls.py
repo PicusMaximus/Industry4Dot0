@@ -4,7 +4,7 @@ from serial.tools import list_ports
 from classes.Dobot import Dobot
 from classes.Enums import ConnectState, PTPMode
 
-import devices
+from devices import device
 import helpers
 
 class Controls(object):
@@ -31,11 +31,11 @@ class Controls(object):
     def connect(self, port, **args): 
         ports = list_ports.comports()
         ports = [p.device for p in ports]
-        if not devices.device or not devices.device.ser or not devices.device.ser.isOpen():
-            devices.device = Dobot(port, verbose=False)
+        # if not device or not device.ser or not device.ser.isOpen():
+        #     device = Dobot(port, verbose=False)
         m = None
-        if devices.device.state == ConnectState.CONNECTED:
-            pos = devices.device.pose_p()
+        if device.state == ConnectState.CONNECTED:
+            pos = device.pose_p()
             m = json.dumps({
                 'type': 'update',
                 'status': 'connected',
@@ -50,29 +50,30 @@ class Controls(object):
         ports = list_ports.comports()
         ports = [p.device for p in ports]
         m = None
-        devices.device.close()
-        if devices.device.state == ConnectState.NOT_CONNECTED:
+        device.close()
+        if device.state == ConnectState.NOT_CONNECTED:
             m = json.dumps({
                 'type': 'update',
                 'status': 'disconnected',
                 'ports': ports,
+                'hello': "Hello world",
             })
             cherrypy.engine.publish('websocket-broadcast', m)
         return m
 
     @cherrypy.expose
     def home(self, **args): 
-        devices.device.home()
+        device.home()
         return 'home'
 
     @cherrypy.expose
     def setSpeed(self, velocity, acceleration, **args): 
-        devices.device.set_speed(float(velocity), float(acceleration))
+        device.set_speed(float(velocity), float(acceleration))
         return 'setSpeed'
 
     @cherrypy.expose
     def pose(self, steps=10, **args): 
-        pos = devices.device.pose_p()
+        pos = device.pose_p()
         m = json.dumps({
             'type': 'pose',
             'position': pos
@@ -84,7 +85,7 @@ class Controls(object):
     @cherrypy.expose
     def jog(self, direction='xn', steps=10, mode='XYZ', **args): 
         try:
-            pos = devices.device.pose_p()
+            pos = device.pose_p()
             if mode == 'XYZ':
                 if direction == 'xp': pos.x += float(steps)
                 elif direction == 'xn': pos.x -= float(steps)
@@ -94,7 +95,7 @@ class Controls(object):
                 elif direction == 'zn': pos.z -= float(steps)
                 elif direction == 'rp': pos.r += float(steps)
                 elif direction == 'rn': pos.r -= float(steps)
-                devices.device.move_to_p(pos)
+                device.move_to_p(pos)
             elif mode == 'ANGLE': 
                 if direction == 'j1p': pos.j1 += float(steps)
                 elif direction == 'j1n': pos.j1 -= float(steps)
@@ -104,7 +105,7 @@ class Controls(object):
                 elif direction == 'j3n': pos.j3 -= float(steps)
                 elif direction == 'j4p': pos.j4 += float(steps)
                 elif direction == 'j4n': pos.j4 -= float(steps)
-                devices.device.move_to_p(pos, mode=PTPMode.MOVJ_ANGLE)
+                device.move_to_p(pos, mode=PTPMode.MOVJ_ANGLE)
             return 'jog'
         except Exception as e:
             print(e)

@@ -67,10 +67,12 @@
         <!-- ### Dont forget to set the defer attr ### -->
         <script src="{{url_for('static', filename='/node_modules/preline/preline.js')}}" defer></script>
         <script src="{{url_for('static', filename='/js/toast.js')}}" defer></script>
+        <script src="{{url_for('static', filename='/js/index.js')}}" defer></script>
         {% block scripts %}{% endblock scripts %}
 
     </head>
     <body class="bg-gray-50 dark:bg-slate-900">
+        <div id="ws-url-ip" class="opacity-0 w-0 h-0 absolute top-0 left-0" data-ws-url="{{data.wsUrl}}"></div>
         <!-- ========== HEADER ========== -->
         {% include "navbar.html" %}
 
@@ -88,5 +90,7 @@
           {% block page_content %} {% endblock page_content %}
         <!-- End Content -->
         <!-- ========== END MAIN CONTENT ========== -->
+        {% block dialog_section%}
+        {% endblock dialog_section%}
       </body>
 </html>
