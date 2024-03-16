@@ -1,3 +1,0 @@
-jobOrder = None
-
-position = None

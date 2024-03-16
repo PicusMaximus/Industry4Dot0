@@ -1,31 +1,26 @@
-import cherrypy, os, sys, threading, traceback
-from cherrypy._cpdispatch import Dispatcher
+from time import sleep
+import cherrypy, os, threading, traceback
 
 from ws4py.server.cherrypyserver import WebSocketPlugin, WebSocketTool
 from ws4py.websocket import WebSocket
 # from ws4py.messaging import TextMessage
 
-from serial.tools import list_ports
 import json
-from classes.Dobot import Dobot
-from classes.Enums import ConnectState
-import devices
+import manager
 
 class StatusWebSocketHandler(WebSocket):
     def received_message(self, m):
-        # print("Message received: %s" % m)
+        print("Message received: %s" % m)
         if m == 'connected' or m == 'disconnected': return
         try:
             if m.is_text: 
                 m = json.loads(m.data)
             if m['type'] == 'control-command':
                 cherrypy.engine.publish('control-broadcast', m)
-            elif m['type'] == 'addon-command':
-                cherrypy.engine.publish('addon-broadcast', m)
         except Exception as e:
             print(e)
             traceback.print_exc()
-        # cherrypy.engine.publish('websocket-broadcast', m)
+
         fsize = os.path.getsize('app.log')
         if fsize > 20000: 
             f = open('app.log', 'r')
@@ -39,12 +34,12 @@ class StatusWebSocketHandler(WebSocket):
 
     def closed(self, code, reason="A client left the room without a proper explanation."):
         if type(reason) == bytes: reason = reason.decode('utf-8')
-        m = json.dumps({
+        message = json.dumps({
             'type': 'connection closed',
             'code': code,
             'reason': reason
         })
-        cherrypy.engine.publish('websocket-broadcast', m)
+        cherrypy.engine.publish('websocket-broadcast', message)
         
 class DobotServer(object):
     @cherrypy.expose
@@ -56,40 +51,68 @@ class DobotServer(object):
         cherrypy.log("Handler created: %s" % repr(cherrypy.request.ws_handler))
         return
 
-    def update(self):
+    def update_pose(self):
         # Start update timer here...
-        threading.Timer(cherrypy.request.config['dobot.updateInterval'], self.update).start()
-        # Get the ports...
-        ports = list_ports.comports()
-        # ports = [p.device for p in ports]
-        ports = [{'value': p.device, 'name': f'{p.device}: {p.description}'} for p in ports]
-        # print(ports)
-        if devices.device and devices.device.ser and devices.device.state == ConnectState.CONNECTED:
-            try:
-                pos = devices.device.pose_p()
-            except:
-                m = json.dumps({
-                    'type': 'update',
-                    'status': 'disconnected',
-                    'ports': ports.__dict__
-                })
-                cherrypy.engine.publish('websocket-broadcast', m)
-                return
-            m = json.dumps({
-                'type': 'update',
-                'status': 'connected',
-                'ports': [] if devices.device else ports.__dict__,
-                'position': pos.__dict__
+        threading.Thread(target=get_pose_at_interval, args=(cherrypy.request.config['dobot.updatePoseInterval'],), daemon=True).start()
+        return
+    
+    def update_connection_state(self):
+        # Start update timer here...
+        threading.Thread(target=connection_state, args=(cherrypy.request.config['dobot.updateConnectionDetailsInterval'],), daemon=True).start()
+        return
+    
+
+def connection_state(time):
+    while(True):
+        if manager.check_connection_status():
+            message = json.dumps({
+                'type': 'connected',
+                'status': 'success',
+                'error': '',
+                'message': 'The dobot is connected.',
             })
-            cherrypy.engine.publish('websocket-broadcast', m)
-        else:
-            m = json.dumps({
-                'type': 'update',
-                'status': 'disconnected',
-                'ports': ports,
-            })
-            cherrypy.engine.publish('websocket-broadcast', m)
-        return 
+
+            cherrypy.engine.publish('websocket-broadcast', message)
+
+            sleep(time)
+
+            continue
+
+        message = json.dumps({
+            'type': 'disconnected',
+            'status': 'error',
+            'error': 'The dobot is no longer connected',
+            'message': '',
+        })
+
+        cherrypy.engine.publish('websocket-broadcast', message)
+
+        sleep(time)
+    
+def get_pose_at_interval(time):
+    while(True):
+        if get_pose() is True:
+            sleep(time)
+            continue
+
+        sleep(time)
+
+def get_pose():
+    try:
+        pos = manager.get_pose()
+    except:
+        return False
+
+    message = json.dumps({
+        'type': 'pose',
+        'status': 'success',
+        'error': '',
+        'data': pos.__dict__,
+    })
+
+    cherrypy.engine.publish('websocket-broadcast', message)
+
+    return True
         
 if __name__ == '__main__':
     WebSocketPlugin(cherrypy.engine).subscribe()
@@ -110,13 +133,12 @@ if __name__ == '__main__':
     app.merge(wsConfig)
 
     # # load controls
-    # from Controls import Controls
-    # cherrypy.tree.mount(Controls(), '/controls')
-
-    # # load addons
-    # from addons.Spoon import Spoon
-    # cherrypy.tree.mount(Spoon(), '/spoon')
+    from webSocketManager import SocketManager
+    cherrypy.tree.mount(SocketManager(), '/handler')
 
     cherrypy.engine.start()
-    root.update()
+
+    root.update_pose()
+    root.update_connection_state()
+
     cherrypy.engine.block()

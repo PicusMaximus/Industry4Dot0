@@ -2,107 +2,22 @@ let ws
 
 let openNotConnected = false;
 
-let moveCooldown = false;
+$('.btn-jog-operation').on('click', (e) => {
+    e.preventDefault();
 
-// $('#connect-btn').on('click', (e) => {
-//     e.preventDefault();
-//     $('.btn').prop("disabled",true);
-//     $('#connecting').removeClass('d-none');
+    if (!ws || ws.readyState !== WebSocket.OPEN) throw new Error('The client could not connected to the socket.');
 
-//     const d = {
-//         type: 'control-command',
-//         command: 'connect',
-//         port: $('#port').val(),
-//     }
-
-//     for (const f in e.currentTarget.dataset) {
-//         d[f] = e.currentTarget.dataset[f];
-//     }
-
-//     if (e.currentTarget.dataset['useWs'] && ws && ws.readyState === WebSocket.OPEN) {
-//         ws.send(JSON.stringify(d))
-//         return;
-//     }
-
-//     $.get('/controls/connect', d, (data) => {
-//         console.log(data);
-//         $('#connecting').addClass('d-none');
-//         $('.btn').prop("disabled",false);
-//     })
-// })
-
-
-// $('.btn-operation').on('click', (e) => {
-//     e.preventDefault()
-//     const d = { type: 'command' }
-
-//     for (const f in e.currentTarget.dataset) {
-//         d[f] = e.currentTarget.dataset[f]
-//     }
-
-//     if (e.currentTarget.dataset['useWs'] && ws && ws.readyState === WebSocket.OPEN) {
-//         ws.send(JSON.stringify(d))
-//         return;
-//     }
-
-//     $.get(e.currentTarget.dataset['url'], d, (data) => {
-//         console.log(data)
-//     })
-// })
-
-$('.btn-jog-operation').on('click', async (e) => {
-    if (moveCooldown) return;
-
-    e.preventDefault()
     const d = {
         type: 'control-command',
-        command: 'jog',
-        steps: 10
-    }
+        command: 'move',
+        mode: e.currentTarget.getAttribute('data-mode') || 'XYZ',
+        direction: e.currentTarget.id || 'xn',
+        steps: 15,
+    };
 
-    for (const f in e.currentTarget.dataset) {
-        d[f] = e.currentTarget.dataset[f]
-    }
-
-    // console.log(d)
-    //e.currentTarget.dataset['useWs'] && 
-
-    // if (ws && ws.readyState === WebSocket.OPEN) {
-    //     ws.send(JSON.stringify(d))
-    //     return;
-    // }
-
-    // $.get(e.currentTarget.dataset['url'], d, (data) => {
-    //     console.log(data)
-    // })
-    moveCooldown = true
-    await fetch(`/api/device/move-step?mode=${e.currentTarget.getAttribute('data-mode')}&direction=${e.currentTarget.id}`, {method: 'POST'})
-    moveCooldown = false;
-})
-
-// $('#set-speed').on('click', (e) => {
-//     e.preventDefault()
-
-//     const d = {
-//         type: 'control-command',
-//         command: 'set-speed',
-//         velocity: $('#velocity').val(),
-//         acceleration: $('#acceleration').val()
-//     }
-
-//     for (const f in e.currentTarget.dataset) {
-//         d[f] = e.currentTarget.dataset[f]
-//     }
-
-//     if (e.currentTarget.dataset['useWs'] && ws && ws.readyState === WebSocket.OPEN) {
-//         ws.send(JSON.stringify(d));
-//         return;
-//     }
-
-//     $.get(e.currentTarget.dataset['url'], d, data => {
-//         console.log(data)
-//     })
-// })
+    ws.send(JSON.stringify(d));
+    return;
+});
 
 // keypress actions
 $(document).on('keypress', (e) => {
@@ -129,57 +44,41 @@ $(document).on('keypress', (e) => {
 })
 
 function startWebsocket() {
-    const wsURL = document.getElementById('ws-url-ip').getAttribute('data-ws-url');
-
     ws = new WebSocket(`ws://${window.location.hostname}:8080/ws`)
 
-    ws.onopen = (e) => {
-        console.log("[open] Connection established");
+    ws.onopen = () => {
         openNotConnected = true;
     };
 
     ws.onmessage = (e) => {
         const data = JSON.parse(e.data)
-        if (data.type !== 'update') return;
 
-        // const selectedPort = $('#port').find(":selected").text()
-        // let portOptions = ''
-        // for (const p in data.ports) {
-        //     if (data.ports[p] === selectedPort) {
-        //         portOptions += `<option value="${data.ports[p].value}" selected>${data.ports[p].name}</option>`;
-        //         continue;
-        //     }
+        if (data.type === 'disconnected') {
+            const dobotConnection = document.getElementById('dobot-connection');
+            dobotConnection.className = '';
+            dobotConnection.classList.add('text-red-500', 'hover:text-red-600', 'focus:outline-none', 'focus:text-red-700')
 
-        //     portOptions += `<option value="${data.ports[p].value}">${data.ports[p].name}</option>`;
-        // }
-
-        // $('#port').html(portOptions)
-
-        if (data.status === 'disconnected')
-        showToast('The Dobot disconnected from the Pi, please check the connection', 'danger')
-
-
-        if (openNotConnected && data.status === 'disconnected') {
-            const dd = {
-                type: 'control-command',
-                command: 'connect',
-                port: data.ports[0].name,
-            }
-        
-            if (ws && ws.readyState === WebSocket.OPEN) {
-                ws.send(JSON.stringify(dd))
-                openNotConnected = false;
-                return;
-            }
+            showToast('The Dobot disconnected from the Pi, please check the connection', 'danger');
         }
 
-        if (data.status === 'connected') {
+        if (data.type === 'connected') {
+            const dobotConnection = document.getElementById('dobot-connection');
+            dobotConnection.className = '';
+            dobotConnection.classList.add('text-green-500', 'hover:text-green-600', 'focus:outline-none', 'focus:text-green-700');
+            // showToast('The Dobot disconnected from the Pi, please check the connection', 'success');
+
+            // bg-green-500 hover:bg-green-600 text-green-100 hover:text-green-200 focus:outline-none focus:bg-green-700 dark:bg-green-600 dark:hover:bg-green-700
+        }
+
+        if (data.type === 'pose') {
             const elem = document.getElementById('current-position');
-
             if (!elem) return;
-
-            $(elem).text(`X: ${data.position.x.toFixed(3)}, Y: ${data.position.y.toFixed(3)}, Z: ${data.position.z.toFixed(3)}, R: ${data.position.r.toFixed(3)}<br>J1: ${data.position.j1.toFixed(3)}, J2: ${data.position.j2.toFixed(3)}, J3: ${data.position.j3.toFixed(3)}, J4: ${data.position.j4.toFixed(3)}`);
-
+    
+            const $elem = $(elem);
+            $elem.empty();
+            $elem.append($(`<span class="text-gray-800 dark:text-white" ></span>`).text(`X: ${data.data.x.toFixed(3)}, Y: ${data.data.y.toFixed(3)}, Z: ${data.data.z.toFixed(3)}, R: ${data.data.r.toFixed(3)}`));
+            $elem.append($(`<span class="text-gray-800 dark:text-white"></span>`).text(`J1: ${data.data.j1.toFixed(3)}, J2: ${data.data.j2.toFixed(3)}, J3: ${data.data.j3.toFixed(3)}, J4: ${data.data.j4.toFixed(3)}`));
+            
             return;
         }
     };

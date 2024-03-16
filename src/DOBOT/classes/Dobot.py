@@ -56,6 +56,7 @@ class Dobot:
         msg = Message()
         msg.id = CommunicationProtocolIDs.GET_POSE
         response = self._send_command(msg)
+
         if response:
             self.x = struct.unpack_from('f', response.params, 0)[0]
             self.y = struct.unpack_from('f', response.params, 4)[0]

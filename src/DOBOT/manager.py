@@ -1,130 +1,124 @@
+import uuid
 import requests
 from classes import Dobot
-from devices import deviceId, posDict, orderedPositionsDict, monitorIp
+import devices
 from serial.tools import list_ports
-from jobOrders import position
-from classes.Enums import PTPMode
+from classes.Enums import ConnectState, PTPMode
 
-def getServerIp():
-    return request.host.split(':')[0]
+dobot = None
 
-def getPose2():
-    global position
+def connect():
+    if len(list_ports.comports()) > 0:
+        return Dobot.Dobot(list_ports.comports()[0].device)
+
+def reconnect():
+    connect()
+
+def get_dobot():
+    global dobot
 
     if dobot is None:
-        return "Missing Dobot."
-
-    position = dobot.pose_p()
-    return jsonify({ 
-        "deviceId": deviceId,
-        "pose": [
-            {
-                "xCoordinate": position.x,
-                "yCoordinate": position.y,
-                "zCoordinate": position.z,
-                "rCoordinate": position.r
-            }
-        ],
-        }
-    ), 200
-
-def move_to_p():
-    global position
-
-    if position != None: 
-        dobot.move_to_p(position)
+        dobot = connect()
+        if dobot is None: return None
     
-    return jsonify(position), 200
+    if dobot.ser.isOpen() == False:
+        dobot = connect()
 
-def setJobs2():
-    job = job(jobName, [])
-    orderedPositionsDict.update(jobName, positions)
-    return jsonify("Job was successfully set."), 200
+    return dobot
+    
 
-def startJob2():
+
+def get_pose():
+    d = get_dobot()
+
+    pos = d.pose_p()
+
+    return pos
+
+def move_to_p(pos):
+    d = get_dobot()
+
+    d.move_to_p(pos)
+    
+    return
+
+def start_job():
     # Start job with given ip
+    return "Success"
 
-    return jsonify("Success"), 200
-
-def notStop2():
+def emergency_stop():
+    d = get_dobot()
     # Force stop the queue from executing
-    if dobot.forceStop():
+    if d.forceStop():
         # Clear the queue
         # This makes the behavior more calculatable...
-        dobot.clear()
-        return jsonify("Successfully stoped the running task."), 200
-    else:
-        return jsonify("Failed to stop the running task."), 400
+        d.clear()
+    return
 
-def start2():
-    if dobot.start():
-        return jsonify("Successfully started the Dobot."), 200
-    else:
-        return jsonify("Failed to start the Dobot."), 400
+def start():
+    d = get_dobot()
+    d.start()
 
-def home2():
-    if dobot.home():
-        return jsonify("Successfully moved to home position."), 200
-    else:
-        return jsonify("Failed to move to home position."), 400
+    return
 
-def setSuctionCupStatus2():
+def home():
+    d = get_dobot()
+    d.home()
+
+    return
+
+def update_suction_cup_status(state):
+    d = get_dobot()
     #This enables or disables the Suction-Cup
-    if dobot.suck(suctionStatus):
-        return jsonify("Successfuly set the suction cup status."), 200
-    else:
-        return jsonify("Failed to set the suction cup status."), 400
+    d.suck(state)
 
-def setGripperStatus2():
+    return
+
+
+def update_gripper_status(state):
+    d = get_dobot()
     #This enables or disables the Gripper
-    if dobot.grip(suctionStatus):
-        return jsonify("Successfully set the gripper status."), 200
-    else:
-        return jsonify("Failed to set the gripper status."), 400
+    d.grip(state)
 
-def getJobs2():
+def get_jobs():
     #This is just for debugging purposeses...
-    return jsonify({ 
-        "deviceId": str(deviceId),
+    return { 
+        "deviceId": str(devices.deviceId),
         "jobs": [
             {
                 "id": str(uuid.uuid4()),
                 "name": "Job 1"
             }
         ],
-        }
-    ), 200
+    }
 
-def login2():
-    try:
-        response = requests.post(url='{base_path}/api/monitor/login'.format(base_path=monitorIp), json={
-        "ip": getServerIp(),
-        "id": str(deviceId),
+def login():
+    response = requests.post(url='{base_path}/api/monitor/login'.format(base_path=monitorIp), json={
+        "ip": devices.getServerIp(),
+        "id": str(devices.deviceId),
         "type": "dobot",
         "name": "dobot 1",
     })
-        print(response.raw)
-    except Exception as e:
-        print(e)
 
-    return jsonify("Login successful."), 200
+    return
     # return json, 200
 
-def log2Monitor2():
-    json = jsonify({
-        "ip": getServerIp(),
-        "id": deviceId,
+def send_log():
+    json = {
+        "ip": devices.getServerIp(),
+        "id": devices.deviceId,
         "type": "dobot",
         "name": "dobot 1",
-    })
+    }
 
-    requests.post(url='http://{ip}/api/monitor/log'.format(ip=monitorIp), json=json)
-    return jsonify("Log successful."), 200
+    requests.post(url='http://{ip}/api/monitor/log'.format(ip=devices.monitorIp), json=json)
 
-def moveDobot2():
-    steps = 20
+    return
 
-    pos = dobot.pose_p()
+def move_step(mode, direction, steps):
+    d = get_dobot()
+
+    pos = d.pose_p()
 
     if mode == 'XYZ':
         if direction == 'xp': pos.x += float(steps)
@@ -135,7 +129,7 @@ def moveDobot2():
         elif direction == 'zn': pos.z -= float(steps)
         elif direction == 'rp': pos.r += float(steps)
         elif direction == 'rn': pos.r -= float(steps)
-        dobot.move_to_p(pos)
+        d.move_to_p(pos)
     elif mode == 'ANGLE': 
         if direction == 'j1p': pos.j1 += float(steps)
         elif direction == 'j1n': pos.j1 -= float(steps)
@@ -145,13 +139,22 @@ def moveDobot2():
         elif direction == 'j3n': pos.j3 -= float(steps)
         elif direction == 'j4p': pos.j4 += float(steps)
         elif direction == 'j4n': pos.j4 -= float(steps)
-        dobot.move_to_p(pos, mode=PTPMode.MOVJ_ANGLE)
-    return jsonify("Successfully moved."), 200
+        d.move_to_p(pos, mode=PTPMode.MOVJ_ANGLE)
+    return
 
-def reconnectDevice2():
-    global dobot
+def check_connection_status():
     if len(list_ports.comports()) > 0:
-        dobot = Dobot.Dobot(list_ports.comports()[0].device)
-        return "Successfully reconnected.", 200
-    else:
-        return "Bad Request.", 500
+        try:
+            d = get_dobot()
+        except:
+            return False
+
+        if d and d.ser and d.state == ConnectState.CONNECTED:
+            return True
+
+    return False
+
+def god_speed(velocity, acceleration):
+    d = get_dobot()
+    d.set_speed(float(velocity), float(acceleration))
+    return

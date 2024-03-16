@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template
+from flask import Flask, jsonify, request, render_template
 from flask_swagger_ui import get_swaggerui_blueprint
 from devices import ws_url
 import manager
@@ -36,7 +36,8 @@ app.register_blueprint(SWAGGERUI_BLUEPRINT, url_prefix=SWAGGER_URL)
 
 @app.route("/api/device/getJobs", methods=['GET'])
 def getJobs():
-    return manager.get_jobs()
+    res = manager.get_jobs()
+    return jsonify(res), 200
 
 ### END GET ###
 
@@ -44,27 +45,31 @@ def getJobs():
 
 ### POST ###
 
-@app.route("/api/device/setJobOrder", methods=['POST'])
-def setJobOrder():
-    jobName = request.json['job']
-    return manager.set_jobs(jobName)
+# @app.route("/api/device/setJobOrder", methods=['POST'])
+# def setJobOrder():
+#     jobName = request.json['job']
+#     return
 
 @app.route("/api/device/startJob", methods=['POST'])
 def startJob():
     id = request.args.get('ip')
-    return manager.start_job()
+    res = manager.start_job()
+    return jsonify(res), 200        
 
 @app.route("/api/device/start", methods=['POST'])
 def start():
-    return manager.start()
+    manager.start()
+    return jsonify("Successfully started the Dobot."), 200
 
 @app.route("/api/monitor/login", methods=['POST'])
 def login():
-    return manager.login()
+    manager.login()
+    return jsonify("Login successful."), 200
 
 @app.route("/api/monitor/log", methods=['POST'])
 def log2Monitor():
-    return manager.send_log()
+    manager.send_log()
+    return jsonify("Log successful."), 200
 
 ### END POST ###
 
@@ -74,7 +79,8 @@ def log2Monitor():
 
 @app.route("/api/device/notstop", methods=['Delete'])
 def notstop():
-    return manager.emergency_stop()
+    manager.emergency_stop()
+    return jsonify("Successfully stoped the running task."), 200
 
 ### END DELETE ###
 
@@ -88,8 +94,9 @@ def notstop():
 
 @app.route("/api/device/pose", methods=['GET'])
 def getPose():
-    return manager.get_pose()
+    pos = manager.get_pose()
 
+    return jsonify(pos), 200
 
 ### END GET ###
 
@@ -99,21 +106,25 @@ def getPose():
 
 @app.route("/api/device/home", methods=['POST'])
 def home():
-    return manager.home()
+    manager.home()
+    return jsonify("Successfully moved to home position."), 200
 
 @app.route("/api/device/move", methods=['POST'])
 def move_to():
-    return manager.move_to_p()
+    manager.move_to_p()
+    return jsonify("Successfully moved to position"), 200
 
 @app.route("/api/device/suction-cup/status", methods=["POST"])
 def setSuctionCupStatus():
     status = request.json['status']
-    return manager.update_suction_cup_status(status)
+    manager.update_suction_cup_status(status)
+    return jsonify("Successfuly set the suction cup status."), 200
 
 @app.route("/api/device/gripper/status", methods=["POST"])
 def setGripperStatus():
     status = request.json['status']
-    return manager.update_gripper_status(status)
+    manager.update_gripper_status(status)
+    return jsonify("Successfully set the gripper status."), 200
 
 
 @app.route("/api/device/move-step", methods=['POST'])
@@ -122,11 +133,14 @@ def moveDobot():
     direction = request.args.get('direction')
     steps = request.args.get('steps')
 
-    return manager.move_step(mode, direction, steps)
+    manager.move_step(mode, direction, steps)
+
+    return jsonify("Success"), 200
 
 @app.route("/api/device/reconnect", methods=['POST'])
 def reconnectDevice():
-    return manager.reconnect()
+    manager.reconnect()
+    return jsonify("Successfully reconnected"), 200
 
 ### END POST ###
 
@@ -145,6 +159,10 @@ def getIndexPage():
 @app.route('/task', methods=['GET'])
 def getTaskPage():
     return render_template('task.html', data = { "wsUrl": ws_url })
+
+@app.route('/movement-card', methods=['GET'])
+def getMovementCardPartial():
+    return render_template('movement-card.html')
 
 @app.route('/movement-card', methods=['GET'])
 def getMovementCardPartial():

@@ -1,0 +1,15 @@
+[Unit]
+Description=Dobot Magacian Websocket Server
+After=network.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+User=dobot
+WorkingDirectory=/home/dobot/DOBOT
+ExecStart=/usr/bin/python3 DobotServer.py
+
+[Install]
+WantedBy=multi-user.target
