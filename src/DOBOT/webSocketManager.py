@@ -1,5 +1,4 @@
-import traceback
-import cherrypy, os, sys, json
+import cherrypy, json
 import manager
 
 class SocketManager(object):
@@ -11,8 +10,9 @@ class SocketManager(object):
         if m['type'] == 'control-command':
             if 'command' in m.keys():
                 if m['command'] == 'home': self.home(**m)
-                # elif m['command'] == 'pose': self.pose(**m)
+                elif m['command'] == 'pose': self.pose(**m)
                 elif m['command'] == 'move': self.move(**m)
+                elif m['command'] == 'speed': self.setSpeed(**m)
         return
     
     @cherrypy.expose
@@ -33,9 +33,12 @@ class SocketManager(object):
     @cherrypy.expose
     def pose(self, **args): 
         pos = manager.get_pose()
+
         message = json.dumps({
             'type': 'pose',
-            'position': pos
+            'status': 'success',
+            'error': '',
+            'data': pos.__dict__,
         })
 
         cherrypy.engine.publish('websocket-broadcast', message)

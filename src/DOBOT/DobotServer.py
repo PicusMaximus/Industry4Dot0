@@ -50,11 +50,6 @@ class DobotServer(object):
     def ws(self):
         cherrypy.log("Handler created: %s" % repr(cherrypy.request.ws_handler))
         return
-
-    def update_pose(self):
-        # Start update timer here...
-        threading.Thread(target=get_pose_at_interval, args=(cherrypy.request.config['dobot.updatePoseInterval'],), daemon=True).start()
-        return
     
     def update_connection_state(self):
         # Start update timer here...
@@ -88,31 +83,6 @@ def connection_state(time):
         cherrypy.engine.publish('websocket-broadcast', message)
 
         sleep(time)
-    
-def get_pose_at_interval(time):
-    while(True):
-        if get_pose() is True:
-            sleep(time)
-            continue
-
-        sleep(time)
-
-def get_pose():
-    try:
-        pos = manager.get_pose()
-    except:
-        return False
-
-    message = json.dumps({
-        'type': 'pose',
-        'status': 'success',
-        'error': '',
-        'data': pos.__dict__,
-    })
-
-    cherrypy.engine.publish('websocket-broadcast', message)
-
-    return True
         
 if __name__ == '__main__':
     WebSocketPlugin(cherrypy.engine).subscribe()

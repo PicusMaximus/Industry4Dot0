@@ -1,11 +1,15 @@
 from flask import Flask, jsonify, request, render_template
 from flask_swagger_ui import get_swaggerui_blueprint
+import json
 from devices import ws_url
 import manager
+import dbManager
 
 ### -------------------------------------------------------------------------------------------------- ###
 
 app = Flask(__name__, template_folder='./templates')
+
+dbManager.create_db()
 
 ### -------------------------------------------------------------------------------------------------- ###
 
@@ -144,6 +148,39 @@ def reconnectDevice():
 
 ### END POST ###
 
+### DB ###
+
+@app.route('/api/tasks', methods=['GET'])
+def getTasks():
+    tasks = dbManager.get_tasks()
+    return jsonify(tasks)
+
+@app.route('/api/task', methods=['GET'])
+def getTask():
+    id = request.args.get('id')
+    tasks = dbManager.get_task(id)
+    return jsonify(tasks)
+
+@app.route('/api/task', methods=['POST'])
+def createTask():
+    task = request.json
+    dbManager.create_task(task)
+    return jsonify('Success'), 200
+
+@app.route('/api/task', methods=['PUT'])
+def updateTask():
+    task = request.json
+    dbManager.update_task(task)
+    return jsonify('Success'), 200
+
+@app.route('/api/task', methods=['DELETE'])
+def updateTask():
+    id = request.args.get('id')
+    dbManager.delete_task(id)
+    return jsonify('Success'), 200
+
+### END DB ###
+
 ### -------------------------------------------------------------------------------------------------- ###
 
 ### internal api ###
@@ -164,9 +201,9 @@ def getTaskPage():
 def getMovementCardPartial():
     return render_template('movement-card.html')
 
-@app.route('/movement-card', methods=['GET'])
-def getMovementCardPartial():
-    return render_template('movement-card.html')
+# @app.route('/movement-card', methods=['GET'])
+# def getMovementCardPartial():
+#     return render_template('movement-card.html')
 
 @app.route('/about', methods=['GET'])
 def getAboutPage():
