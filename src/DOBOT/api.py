@@ -55,9 +55,12 @@ def setJobOrder():
 
 @app.route("/api/device/startJob", methods=['POST'])
 def startJob():
-    id = request.args.get('ip')
+    ip = request.args.get('ip')
+    id = request.args.get('id')
 
-    res = manager.start_job()
+    subtasks = dbManager.get_subtasks(id)
+
+    res = manager.run_task(subtasks)
     return jsonify(res), 200        
 
 @app.route("/api/device/start", methods=['POST'])
@@ -121,14 +124,14 @@ def move_to():
 @app.route("/api/device/suction-cup/status", methods=["POST"])
 def setSuctionCupStatus():
     status = request.json['status']
-    manager.update_suction_cup_status(status)
+    manager.toggle_suck(status)
     return jsonify("Successfuly set the suction cup status."), 200
 
-@app.route("/api/device/gripper/status", methods=["POST"])
-def setGripperStatus():
-    status = request.json['status']
-    manager.update_gripper_status(status)
-    return jsonify("Successfully set the gripper status."), 200
+# @app.route("/api/device/gripper/status", methods=["POST"])
+# def setGripperStatus():
+#     status = request.json['status']
+#     manager.update_gripper_status(status)
+#     return jsonify("Successfully set the gripper status."), 200
 
 @app.route("/api/device/move-step", methods=['POST'])
 def moveDobot():

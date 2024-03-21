@@ -3,6 +3,7 @@
 Task
 {% endblock title %}
 {% block scripts %}
+    <script src="{{url_for('static', filename='/js/steps-manager.js')}}" defer></script>
     <script src="{{url_for('static', filename='/js/panel.js')}}" defer></script>
     <script src="{{url_for('static', filename='/js/task-sidebar.js')}}" defer></script>
 {% endblock scripts %}

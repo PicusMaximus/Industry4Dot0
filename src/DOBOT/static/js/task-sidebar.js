@@ -1,3 +1,5 @@
+const stepManager = new StepManager();
+
 const $addMoveBtn = $(document.getElementById('add-move-btn'));
 const $addPointBtn = $(document.getElementById('add-point-btn'));
 const $addWaitBtn = $(document.getElementById('add-wait-btn'));
@@ -227,23 +229,27 @@ document.addEventListener('click', async (e) => {
 
     const target = e.target.closest('.create-movement-card--btn');
 
-    const id = target.getAttribute('data-card-id');
+    let id = target.getAttribute('data-card-id');
 
     const res = await fetch(`/movement-card${id ? `?id=${id}` : ''}`, {method: "GET"})
     const content = await res.text();
 
     const contentHTML = $.parseHTML(content)
-
+    
     if (!id) {
-        const newId = contentHTML[0].id
-        target.setAttribute('data-card-id', newId);
+        id = contentHTML[0].id
+        target.setAttribute('data-card-id', id);
     }
+
+    stepManager.listenForMovementCards(id)
 
     document.getElementById('task-card-content').replaceChildren(contentHTML[0]);
 
     document.getElementById('free-drive-btn').addEventListener('click', () => {
         document.getElementById('movement-dialog').showModal();
     })
+
+
 });
 
 document.addEventListener('click', async (e) => {

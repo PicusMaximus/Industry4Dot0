@@ -45,10 +45,6 @@ def move_to_p(pos):
     
     return
 
-def start_job():
-    # Start job with given ip
-    return "Success"
-
 def emergency_stop():
     d = get_dobot()
     # Force stop the queue from executing
@@ -72,7 +68,7 @@ def home():
 
     return
 
-def update_suction_cup_status(state):
+def toggle_suck(state):
     d = get_dobot()
     #This enables or disables the Suction-Cup
     d.suck(state)
@@ -159,18 +155,23 @@ def check_connection_status():
 
     return False
 
-def god_speed(velocity, acceleration):
+def god_speed(velocity, acceleration, **args):
     d = get_dobot()
     d.set_speed(float(velocity), float(acceleration))
     return
 
+def wait(ms, **args):
+    d = get_dobot()
+    d.wait(ms)
+    return
 
-def run_subtasks(m): 
-    for subtask in m:
-        if 'command' in subtask.keys():
-            if subtask['command'] == 'home': self.home()
-            elif subtask['command'] == 'pose': self.pose()
-            elif subtask['command'] == 'move': self.move()
-            elif subtask['command'] == 'speed': self.setSpeed()
-            elif subtask['command'] == 'emergency_stop': self.emergency_stop()
+def run_task(subtasks):
+    for subtask in subtasks:
+        for step in subtask.steps:
+            if hasattr(step, 'command'):
+                if step.command == 'speed': god_speed(**step.data)
+                elif step.command == 'move': move_to_p(**step.data)
+                elif step.command == 'suction': toggle_suck(**step.data)
+                elif step.command == 'wait': wait(**step.data)
+                # elif subtask['command'] == 'grip': 
     return

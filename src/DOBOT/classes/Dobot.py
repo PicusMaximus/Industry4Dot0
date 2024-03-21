@@ -324,6 +324,13 @@ class Dobot:
         msg.id = CommunicationProtocolIDs.SET_HOME_CMD
         msg.ctrl = ControlValues.THREE
         return self._send_command(msg, wait=True)
+    
+    def _set_wait_cmd(self, ms):
+        msg = Message()
+        msg.id = CommunicationProtocolIDs.SET_WAIT_CMD
+        msg.ctrl = ControlValues.THREE
+        msg.params = bytearray(struct.pack('I', ms))
+        return self._send_command(msg)
 
     def close(self):
         self._on = False
@@ -411,3 +418,6 @@ class Dobot:
 
     def clear(self):
         return self._set_queued_cmd_clear()
+    
+    def wait(self, ms):
+        return self._set_wait_cmd(ms)

@@ -1,5 +1,6 @@
 import sqlite3
 import json
+from types import SimpleNamespace
 
 # JSON-Struktur für Tasks
 # {
@@ -34,9 +35,9 @@ def create_db():
     # Create the task table if it not allready exists...
     cur.execute('''
                 CREATE TABLE IF NOT EXISTS task (
-                    id text PRIMARY KEY
-                    ,name text NOT NULL
-                    ,subtasks JSONB NOT NULL
+                    id TEXT PRIMARY KEY
+                    ,name TEXT NOT NULL
+                    ,subtasks TEXT NOT NULL
                 )
                 ''')
     con.commit()
@@ -64,17 +65,26 @@ def get_subtasks(id):
     # Funst noch nicht :(
         #=> mann müsste den JSON-String PArsen auf den Steps-Teil
     cur.execute('''
-                SELECT
-                (SELECT json_extract(task.subtasks, '$')), 
-                (SELECT json_extract(task.subtasks, '$.steps'))
+                SELECT json_extract(task.subtasks, '$') 
                 FROM task
                 WHERE id={id}
             '''.format(id=id))
 
-    subtasks = cur.fetchone()
+    res = cur.fetchone()
 
     con.commit()
     con.close()
+
+    subtasks = json.loads(res[0])
+
+    for h in range(len(subtasks)):
+        subtasks[h] = SimpleNamespace(**dict(subtasks[h]))   
+
+        for i in range(len(subtasks[h].steps)):
+            subtasks[h].steps[i] = SimpleNamespace(**dict(subtasks[h].steps[i]))
+            subtasks[h].steps[i].data = SimpleNamespace(**dict(subtasks[h].steps[i].data))
+            if hasattr(subtasks[h].steps[i].data, 'pos'):
+                subtasks[h].steps[i].data.pos = SimpleNamespace(**dict(subtasks[h].steps[i].data.pos))
 
     return subtasks
 
@@ -103,7 +113,7 @@ def create_task(data):
     # Create task ...
     cur.execute('''
                     INSERT INTO task (id, name, subtasks)
-                    VALUES (?, ?, ?)
+                    VALUES (?, ?, json(?))
                 ''', (data['id'], data['name'], json.dumps(data['subtasks'])))
     
     con.commit()
@@ -113,7 +123,7 @@ def update_task(data):
     con = sqlite3.connect('task.db')
     cur = con.cursor()
 
-    sql = 'UPDATE task SET name = "{name2}", subtasks = "{subtasks}" WHERE id = {id}'.format(id=data['id'], name2=data['name'], subtasks=data['subtasks'])
+    sql = 'UPDATE task SET name = "{name2}", subtasks = json({subtasks}) WHERE id = {id}'.format(id=data['id'], name2=data['name'], subtasks=data['subtasks'])
 
     # UPdate existing task
     cur.execute(sql)
@@ -127,7 +137,7 @@ def delete_task(id):
 
     # Delete existing task
     cur.execute('''
-                    DELETE task WHERE id={id}
+                    DELETE FROM task WHERE id = {id}
                 '''.format(id=id))
     
     con.commit()
