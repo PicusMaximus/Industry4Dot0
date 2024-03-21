@@ -130,7 +130,6 @@ def setGripperStatus():
     manager.update_gripper_status(status)
     return jsonify("Successfully set the gripper status."), 200
 
-
 @app.route("/api/device/move-step", methods=['POST'])
 def moveDobot():
     mode = request.args.get('mode')
@@ -159,6 +158,12 @@ def getTasks():
 def getTask():
     id = request.args.get('id')
     tasks = dbManager.get_task(id)
+    return jsonify(tasks)
+
+@app.route('/api/subtasks', methods=['GET'])
+def getSubtasks():
+    id = request.args.get('id')
+    tasks = dbManager.get_subtasks(id)
     return jsonify(tasks)
 
 @app.route('/api/task', methods=['POST'])

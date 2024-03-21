@@ -163,3 +163,14 @@ def god_speed(velocity, acceleration):
     d = get_dobot()
     d.set_speed(float(velocity), float(acceleration))
     return
+
+
+def run_subtasks(m): 
+    for subtask in m:
+        if 'command' in subtask.keys():
+            if subtask['command'] == 'home': self.home()
+            elif subtask['command'] == 'pose': self.pose()
+            elif subtask['command'] == 'move': self.move()
+            elif subtask['command'] == 'speed': self.setSpeed()
+            elif subtask['command'] == 'emergency_stop': self.emergency_stop()
+    return
