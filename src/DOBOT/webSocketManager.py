@@ -13,6 +13,7 @@ class SocketManager(object):
                 elif m['command'] == 'pose': self.pose(**m)
                 elif m['command'] == 'move': self.move(**m)
                 elif m['command'] == 'speed': self.setSpeed(**m)
+                elif m['command'] == 'emergency_stop': self.emergency_stop(**m)
         return
     
     @cherrypy.expose
@@ -42,3 +43,8 @@ class SocketManager(object):
         })
 
         cherrypy.engine.publish('websocket-broadcast', message)
+
+    @cherrypy.expose
+    def emergency_stop(self, **args):
+        manager.emergency_stop()
+        return 'emergency_stop'

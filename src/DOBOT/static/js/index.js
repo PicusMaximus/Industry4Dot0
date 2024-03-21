@@ -71,14 +71,27 @@ function startWebsocket() {
         }
 
         if (data.type === 'pose') {
-            const elem = document.getElementById('current-position');
-            if (!elem) return;
-    
-            const $elem = $(elem);
-            $elem.empty();
-            $elem.append($(`<span class="text-gray-800 dark:text-white" ></span>`).text(`X: ${data.data.x.toFixed(3)}, Y: ${data.data.y.toFixed(3)}, Z: ${data.data.z.toFixed(3)}, R: ${data.data.r.toFixed(3)}`));
-            $elem.append($(`<span class="text-gray-800 dark:text-white"></span>`).text(`J1: ${data.data.j1.toFixed(3)}, J2: ${data.data.j2.toFixed(3)}, J3: ${data.data.j3.toFixed(3)}, J4: ${data.data.j4.toFixed(3)}`));
-            
+            const elemX = document.getElementById('dobot-arm-pos-x');
+            const elemY = document.getElementById('dobot-arm-pos-y');
+            const elemZ = document.getElementById('dobot-arm-pos-z');
+            const elemR = document.getElementById('dobot-arm-pos-r');
+            const elemJ1 = document.getElementById('dobot-arm-pos-j1');
+            const elemJ2 = document.getElementById('dobot-arm-pos-j2');
+            const elemJ3 = document.getElementById('dobot-arm-pos-j3');
+            const elemJ4 = document.getElementById('dobot-arm-pos-j4');
+
+
+            if(!elemX || !elemY || !elemZ || !elemR || !elemJ1 || !elemJ2 || !elemJ3 || !elemJ4) return;
+
+            elemX.value = data.data.x;
+            elemY.value = data.data.y;
+            elemZ.value = data.data.z;
+            elemR.value = data.data.r;
+            elemJ1.value = data.data.j1;
+            elemJ2.value = data.data.j2;
+            elemJ3.value = data.data.j3;
+            elemJ4.value = data.data.j4;
+
             return;
         }
     };
@@ -99,8 +112,15 @@ function startWebsocket() {
     };
 }
 
-document.getElementById('free-drive-btn').addEventListener('click', async () => {
-    await fetch('/api/device/home', {method: 'POST'})
+document.getElementById('free-drive-btn')?.addEventListener('click', async () => {
+    ws.send(JSON.stringify({ type: 'control-command', command: 'home' }));
+});
+
+document.getElementById('emergency-stop--btn')?.addEventListener('click', async () => {
+    // Does currently not work... idky yet but api endpoint seems to work fine for now...
+    // ws.send(JSON.stringify({ type: 'control-command', command: 'emergency_stop' }));
+    await fetch('/api/device/notstop', {method: 'DELETE'});
+    await fetch('/api/device/start', {method: 'POST'});
 });
 
 startWebsocket()

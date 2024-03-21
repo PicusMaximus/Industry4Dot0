@@ -12,7 +12,10 @@ def connect():
         return Dobot.Dobot(list_ports.comports()[0].device)
 
 def reconnect():
-    connect()
+    global dobot
+    dobot = connect()
+
+    return dobot
 
 def get_dobot():
     global dobot
@@ -49,9 +52,11 @@ def start_job():
 def emergency_stop():
     d = get_dobot()
     # Force stop the queue from executing
-    if d.forceStop():
+    if d.force_stop():
         # Clear the queue
         # This makes the behavior more calculatable...
+
+        # This clears the queue, so that no more task are run, after stop - after starting the queue again!
         d.clear()
     return
 

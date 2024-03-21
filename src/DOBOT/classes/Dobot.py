@@ -400,7 +400,7 @@ class Dobot:
         self._set_home_cmd()
         return
 
-    def forceStop(self):
+    def force_stop(self):
         return self._set_queued_cmd_force_stop_exec()
 
     def start(self):

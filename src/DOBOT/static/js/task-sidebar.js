@@ -22,7 +22,7 @@ $addMoveBtn.on('click', () => {
 
     const html = `
             <div class="flex mt-4">
-                <button type="button" class="hs-collapse-toggle text-sm font-semibold rounded-lg border border-transparent dark:focus:outline-none dark:focus:ring-1 pl-1 pr-1 text-slate-700 hover:bg-gray-100 dark:hover:bg-gray-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:ring-gray-600" id="collapse-${moveCount}" data-hs-collapse="#collapse-content-${moveCount}">
+                <button type="button" data-card-id="" class="create-axis-card--btn hs-collapse-toggle text-sm font-semibold rounded-lg border border-transparent dark:focus:outline-none dark:focus:ring-1 pl-1 pr-1 text-slate-700 hover:bg-gray-100 dark:hover:bg-gray-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:ring-gray-600" id="collapse-${moveCount}" data-hs-collapse="#collapse-content-${moveCount}">
                     <svg xmlns="http://www.w3.org/2000/svg" class="hs-collapse-open:rotate-180 flex-shrink-0 size-5" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
                 </button>
                 <button type="button" class="flex gap-1 pl-1 pr-1 items-center text-sm text-slate-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
@@ -34,7 +34,7 @@ $addMoveBtn.on('click', () => {
             </div>
             <div id="collapse-content-${moveCount}" class="collapse-content-container cursor-pointer hs-collapse hidden w-full overflow-hidden transition-[height] duration-300" aria-labelledby="hs-basic-collapse">
                 <div class="flex flex-col mt-2 ml-8 command-chain-container gap-x-1 gap-y-2 move-list--draggable">
-                    <button id="something-random-1231231536815368" type="button" class="move-list-item--draggable flex gap-1 items-center pl-1 pr-1 text-sm text-slate-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
+                    <button type="button" data-card-id="" class="create-movement-card--btn move-list-item--draggable flex gap-1 items-center pl-1 pr-1 text-sm text-slate-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
                         <svg xmlns="http://www.w3.org/2000/svg" class="flex-shrink-0 size-5 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecapspic="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                             <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -50,33 +50,6 @@ $addMoveBtn.on('click', () => {
 
     const collapse = new HSCollapse(document.querySelector(`#collapse-${moveCount}`));
     collapse.show();
-
-    const a = document.getElementById('something-random-1231231536815368');
-    a.addEventListener('click', async () => {
-        const res = await fetch('/movement-card', {method: "GET"})
-        const content = await res.text();
-
-        const contentHTML = $.parseHTML(content)
-
-        document.getElementById('task-card-content').replaceChildren(contentHTML[0]);
-
-        document.getElementById('free-drive-btn').addEventListener('click', () => {
-            document.getElementById('movement-dialog').showModal();;
-
-            // const showButton = document.querySelector("dialog + button");
-            // const closeButton = document.querySelector("dialog button");
-
-            // // "Show the dialog" button opens the dialog modally
-            // showButton.addEventListener("click", () => {
-            // dialog.showModal();
-            // });
-
-            // // "Close" button closes the dialog
-            // closeButton.addEventListener("click", () => {
-            // dialog.close();
-            // });
-        })
-    });
 
     specificSortableTable(`#collapse-content-${moveCount} .move-list--draggable`, '.move-list-item--draggable')
 });
@@ -97,7 +70,7 @@ $addPointBtn.on('click', () => {
     };
 
     const html = `
-    <button type="button" class="move-list-item--draggable flex gap-1 items-center pl-1 pr-1 text-sm text-slate-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
+    <button type="button" data-card-id="" class="create-movement-card--btn move-list-item--draggable flex gap-1 items-center pl-1 pr-1 text-sm text-slate-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
         <svg xmlns="http://www.w3.org/2000/svg" class="flex-shrink-0 size-5 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
             <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -126,7 +99,7 @@ $addWaitBtn.on('click', () => {
     };
 
     const html = `
-    <button type="button" class="move-list-item--draggable flex gap-1 items-center pl-1 pr-1 text-sm text-slate-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
+    <button type="button" data-card-id="" class="create-wait-card--btn move-list-item--draggable flex gap-1 items-center pl-1 pr-1 text-sm text-slate-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
         <svg xmlns="http://www.w3.org/2000/svg" class="flex-shrink-0 mt-0.5 size-5 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
@@ -154,7 +127,7 @@ $addSettingsBtn.on('click', () => {
     };
 
     const html = `
-    <button type="button" class="move-list-item--draggable flex gap-1 items-center pl-1 pr-1 text-sm text-slate-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
+    <button type="button" data-card-id="" class="create-settings-card--btn move-list-item--draggable flex gap-1 items-center pl-1 pr-1 text-sm text-slate-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
         <svg xmlns="http://www.w3.org/2000/svg" class="flex-shrink-0 mt-0.5 size-5 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
         </svg>
@@ -182,7 +155,7 @@ $addNotificationBtn.on('click', () => {
     };
 
     const html = `
-    <button type="button" class="move-list-item--draggable flex gap-1 items-center pl-1 pr-1 text-sm text-slate-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
+    <button type="button" data-card-id="" class="create-notification-card--btn move-list-item--draggable flex gap-1 items-center pl-1 pr-1 text-sm text-slate-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
         <svg xmlns="http://www.w3.org/2000/svg" class="flex-shrink-0 mt-0.5 size-5 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
         </svg>
@@ -241,4 +214,112 @@ document.addEventListener('click', (e) => {
         e.target.closest('dialog').close();
         return;
     }
+
+    if (e.target.closest('button')?.id === 'save-position-btn') {
+        ws.send(JSON.stringify({type: 'control-command', command: 'pose'}))
+        e.target.closest('dialog').close();
+        return;
+    }
 }); 
+
+document.addEventListener('click', async (e) => {
+    if(!e.target.closest('.create-movement-card--btn')) return;
+
+    const target = e.target.closest('.create-movement-card--btn');
+
+    const id = target.getAttribute('data-card-id');
+
+    const res = await fetch(`/movement-card${id ? `?id=${id}` : ''}`, {method: "GET"})
+    const content = await res.text();
+
+    const contentHTML = $.parseHTML(content)
+
+    if (!id) {
+        const newId = contentHTML[0].id
+        target.setAttribute('data-card-id', newId);
+    }
+
+    document.getElementById('task-card-content').replaceChildren(contentHTML[0]);
+
+    document.getElementById('free-drive-btn').addEventListener('click', () => {
+        document.getElementById('movement-dialog').showModal();
+    })
+});
+
+document.addEventListener('click', async (e) => {
+    if(!e.target.closest('.create-axis-card--btn')) return;
+
+    const target = e.target.closest('.create-axis-card--btn');
+
+    const id = target.getAttribute('data-card-id');
+
+    const res = await fetch(`/axis-card${id ? `?id=${id}` : ''}`, {method: "GET"})
+    const content = await res.text();
+
+    
+    const contentHTML = $.parseHTML(content)
+    
+    if (!id) {
+        const newId = contentHTML[0].id
+        target.setAttribute('data-card-id', newId);
+    }
+
+    document.getElementById('task-card-content').replaceChildren(contentHTML[0]);
+});
+
+document.addEventListener('click', async (e) => {
+    if(!e.target.closest('.create-wait-card--btn')) return;
+
+    const target = e.target.closest('.create-wait-card--btn');
+    const id = target.getAttribute('data-card-id');
+
+    const res = await fetch(`/wait-card${id ? `?id=${id}` : ''}`, {method: "GET"})
+    const content = await res.text();
+
+    const contentHTML = $.parseHTML(content)
+
+    if (!id) {
+        const newId = contentHTML[0].id
+        target.setAttribute('data-card-id', newId);
+    }
+
+    document.getElementById('task-card-content').replaceChildren(contentHTML[0]);
+});
+
+document.addEventListener('click', async (e) => {
+    if(!e.target.closest('.create-comment-card--btn')) return;
+
+    const target = e.target.closest('.create-comment-card--btn');
+    const id = target.getAttribute('data-card-id');
+
+    const res = await fetch(`/comment-card${id ? `?id=${id}` : ''}`, {method: "GET"})
+    const content = await res.text();
+
+    const contentHTML = $.parseHTML(content)
+
+    if (!id) {
+        const newId = contentHTML[0].id
+        target.setAttribute('data-card-id', newId);
+    }
+
+    document.getElementById('task-card-content').replaceChildren(contentHTML[0]);
+});
+
+document.addEventListener('click', async (e) => {
+    if(!e.target.closest('.create-settings-card--btn')) return;
+
+    const target = e.target.closest('.create-settings-card--btn');
+    const id = target.getAttribute('data-card-id');
+
+    const res = await fetch(`/settings-card${id ? `?id=${id}` : ''}`, {method: "GET"})
+    const content = await res.text();
+
+    const contentHTML = $.parseHTML(content)
+
+    if (!id) {
+        const newId = contentHTML[0].id
+        target.setAttribute('data-card-id', newId);
+    }
+
+    document.getElementById('task-card-content').replaceChildren(contentHTML[0]);
+});

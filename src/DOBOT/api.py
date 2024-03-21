@@ -1,7 +1,6 @@
 from flask import Flask, jsonify, request, render_template
 from flask_swagger_ui import get_swaggerui_blueprint
-import json
-from devices import ws_url
+import uuid
 import manager
 import dbManager
 
@@ -49,14 +48,15 @@ def getJobs():
 
 ### POST ###
 
-# @app.route("/api/device/setJobOrder", methods=['POST'])
-# def setJobOrder():
-#     jobName = request.json['job']
-#     return
+@app.route("/api/device/setJobOrder", methods=['POST'])
+def setJobOrder():
+    order = request.json
+    return
 
 @app.route("/api/device/startJob", methods=['POST'])
 def startJob():
     id = request.args.get('ip')
+
     res = manager.start_job()
     return jsonify(res), 200        
 
@@ -174,7 +174,7 @@ def updateTask():
     return jsonify('Success'), 200
 
 @app.route('/api/task', methods=['DELETE'])
-def updateTask():
+def deleteTask():
     id = request.args.get('id')
     dbManager.delete_task(id)
     return jsonify('Success'), 200
@@ -191,23 +191,42 @@ def updateTask():
 
 @app.route('/', methods=['GET'])
 def getIndexPage():
-    return render_template('home.html', data = { "wsUrl": ws_url })
+    return render_template('home.html')
 
 @app.route('/task', methods=['GET'])
 def getTaskPage():
-    return render_template('task.html', data = { "wsUrl": ws_url })
+    return render_template('task.html')
 
 @app.route('/movement-card', methods=['GET'])
 def getMovementCardPartial():
-    return render_template('movement-card.html')
+    id = request.args.get('id')
+    if id == None: id = uuid.uuid4()
 
-# @app.route('/movement-card', methods=['GET'])
-# def getMovementCardPartial():
-#     return render_template('movement-card.html')
+    return render_template('movement-card.html', data = { 'id': id })
+
+@app.route('/wait-card', methods=['GET'])
+def getWaitCardPartial():
+    id = request.args.get('id')
+    if id == None: id = uuid.uuid4()
+    
+    return render_template('wait-card.html', data = { 'id': id })
+
+@app.route('/settings-card', methods=['GET'])
+def getSettingsCardPartial():
+    id = request.args.get('id')
+    if id == None: id = uuid.uuid4()
+
+    return render_template('settings-card.html', data = { 'id': id })
+
+@app.route('/axis-card', methods=['GET'])
+def getAxisCardPartial():
+    id = request.args.get('id')
+    if id == None: id = uuid.uuid4()
+    return render_template('axis-card.html')
 
 @app.route('/about', methods=['GET'])
 def getAboutPage():
-    return render_template('about.html', data = { "wsUrl": ws_url })
+    return render_template('about.html', data = { 'id': id })
 
 ### END HTML SECTION ###
 

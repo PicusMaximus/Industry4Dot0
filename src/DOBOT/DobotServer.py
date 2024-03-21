@@ -108,7 +108,6 @@ if __name__ == '__main__':
 
     cherrypy.engine.start()
 
-    root.update_pose()
     root.update_connection_state()
 
     cherrypy.engine.block()
