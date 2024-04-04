@@ -45,7 +45,7 @@ app.register_blueprint(SWAGGERUI_BLUEPRINT, url_prefix=SWAGGER_URL)
 
 @app.route("/api/device/getJobs", methods=['GET'])
 def getJobs():
-    res = manager.get_jobs()
+    res = dbManager.get_simple_tasks()
     return jsonify(res), 200
 
 ### END GET ###
