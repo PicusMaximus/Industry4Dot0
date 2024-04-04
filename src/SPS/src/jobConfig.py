@@ -9,7 +9,6 @@ class InternalJob:
         self.job = job
 
 jobList : list[InternalJob] = [
-    InternalJob(spsIn=0,spsOut=0, job=Job(id=uuid.uuid4(), name="0")),
-    InternalJob(spsIn=1,spsOut=1, job=Job(id=uuid.uuid4(), name="1")),
-    InternalJob(spsIn=2,spsOut=2, job=Job(id=uuid.uuid4(), name="2")),
+    InternalJob(spsIn=0,spsOut=0, job=Job(id=uuid.uuid4(), name="vor")),
+    InternalJob(spsIn=1,spsOut=1, job=Job(id=uuid.uuid4(), name="zurueck")),
 ]

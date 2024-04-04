@@ -17,7 +17,6 @@ from generated.client.openapi_client import configuration as client_config
 from generated.client.openapi_client import models as client_models
 import time
 
-
 def api_device_notstop_delete():  # noqa: E501
     """stops the jobs
 
@@ -90,4 +89,4 @@ def get_monitor_jobs():  # noqa: E501
     :rtype: Union[JobsVomGeraet, Tuple[JobsVomGeraet, int], Tuple[JobsVomGeraet, int, Dict[str, str]]
     """
     
-    return JobsVomGeraet(jobs=map(lambda j: j.job,jobConfig.jobList))
+    return JobsVomGeraet(jobs=list(map(lambda j: j.job,jobConfig.jobList)))
