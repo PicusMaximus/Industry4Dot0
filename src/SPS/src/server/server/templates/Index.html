@@ -84,16 +84,14 @@
   
   async function loadJobs() {
       const table = document.querySelector("#table");
-      const data = [
-          ["Alfreds Futterkiste", "Maria Anders", "Germany"],
-          ["Centro comercial Moctezuma", "Francisco Chang", "Mexico"]
-      ];
+
+      const data = await (await fetch('/api/device/getJobs')).json()
   
-      data.forEach((e) => {
+      data.jobs.forEach((e) => {
           const tr = document.createElement("tr");
-          const td0 = getTd(e[0]);
-          const td1 = getTd(e[1]);
-          const td2 = getTd(e[2]);
+          const td0 = getTd(e.id);
+          const td1 = getTd(e.name);
+          const td2 = getTd(e);
   
           tr.appendChild(td0);
           tr.appendChild(td1);
