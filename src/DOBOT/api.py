@@ -154,6 +154,12 @@ def moveDobot():
 
     return jsonify("Success"), 200
 
+@app.route("/api/device/stop", methods=['POST'])
+def stop():
+    manager.st
+    manager.emergency_stop()
+    return jsonify("Successfully stoped the running task."), 200
+
 @app.route("/api/device/reconnect", methods=['POST'])
 def reconnectDevice():
     manager.reconnect()
