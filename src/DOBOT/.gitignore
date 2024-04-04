@@ -1,3 +1,4 @@
 /static/node_modules
+/static/dist
 app.log
 **.db

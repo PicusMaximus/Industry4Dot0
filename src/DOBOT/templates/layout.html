@@ -17,57 +17,8 @@
           crossorigin="anonymous" defer>
         </script>
 
-        <!-- Sortable only -->
-        <script type="module">
-          import Sortable from 'https://cdn.jsdelivr.net/npm/@shopify/draggable/build/esm/Sortable/Sortable.mjs';
-        
-          const sortableTable = function () {
-            const containers = document.querySelectorAll('.sortable-list--draggable');
-
-            if (containers.length === 0) return false;
-
-            const sortable = new Sortable(containers, {
-              draggable: '.list-item--draggable',
-              mirror: {
-                appendTo: '.sortable-list--draggable',
-                constrainDimensions: true,
-              },
-              delay: {
-                mouse: 100,
-                drag: 100,
-                touch: 100,
-              },
-            });            
-          }
-
-          sortableTable();
-
-          globalThis.specificSortableTable = function (selector, draggable) {
-            const containers = document.querySelectorAll(selector);
-
-            if (containers.length === 0) return false;
-
-            const sortable = new Sortable(containers, {
-              draggable: draggable,
-              mirror: {
-                appendTo: selector,
-                constrainDimensions: true,
-              },
-              delay: {
-                mouse: 100,
-                drag: 100,
-                touch: 100,
-              },
-            });
-            
-            sortable.on('click', () => console.log("hello"));
-          }
-        </script>
-
         <!-- ### Dont forget to set the defer attr ### -->
         <script src="{{url_for('static', filename='/node_modules/preline/preline.js')}}" defer></script>
-        <script src="{{url_for('static', filename='/js/toast.js')}}" defer></script>
-        <script src="{{url_for('static', filename='/js/index.js')}}" defer></script>
         {% block scripts %}{% endblock scripts %}
 
     </head>

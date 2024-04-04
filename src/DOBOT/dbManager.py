@@ -50,12 +50,16 @@ def get_tasks():
     # Select all the tasks ...
     # Used to show all existing tasks on the Homepage 
     cur.execute('''
-                SELECT *
+                SELECT id, name, subtasks
                 FROM task
             ''')
     
+    res = cur.fetchall()
+
     con.commit()
     con.close()
+
+    return res 
 
 def get_subtasks(id):
     con = sqlite3.connect('task.db')
@@ -67,8 +71,8 @@ def get_subtasks(id):
     cur.execute('''
                 SELECT json_extract(task.subtasks, '$') 
                 FROM task
-                WHERE id={id}
-            '''.format(id=id))
+                WHERE id = ?
+            ''', (id, ))
 
     res = cur.fetchone()
 
@@ -85,7 +89,10 @@ def get_subtasks(id):
             subtasks[h].steps[i].data = SimpleNamespace(**dict(subtasks[h].steps[i].data))
             if hasattr(subtasks[h].steps[i].data, 'pos'):
                 subtasks[h].steps[i].data.pos = SimpleNamespace(**dict(subtasks[h].steps[i].data.pos))
-
+            # if hasattr(subtasks[h].steps[i].data, 'wait'):
+            #     subtasks[h].steps[i].data.settings = SimpleNamespace(**dict(subtasks[h].steps[i].data.settings))
+            # if hasattr(subtasks[h].steps[i].data, 'settings'):
+            #     subtasks[h].steps[i].data.wait = SimpleNamespace(**dict(subtasks[h].steps[i].data.wait))
     return subtasks
 
 def get_task(id):
@@ -96,8 +103,8 @@ def get_task(id):
     cur.execute('''
                 SELECT *
                 FROM task
-                WHERE id={id}
-            '''.format(id=id))
+                WHERE id = ?
+            ''', (id,))
     
     row = cur.fetchone()
 
@@ -123,10 +130,14 @@ def update_task(data):
     con = sqlite3.connect('task.db')
     cur = con.cursor()
 
-    sql = 'UPDATE task SET name = "{name2}", subtasks = json({subtasks}) WHERE id = {id}'.format(id=data['id'], name2=data['name'], subtasks=data['subtasks'])
-
     # UPdate existing task
-    cur.execute(sql)
+    cur.execute('''
+                    UPDATE task 
+                    SET name = ?,
+                        subtasks = json(?)
+                    WHERE id = ?
+                ''', (data['name'], json.dumps(data['subtasks']), data['id'], )
+                )
     
     con.commit()
     con.close()
@@ -137,8 +148,8 @@ def delete_task(id):
 
     # Delete existing task
     cur.execute('''
-                    DELETE FROM task WHERE id = {id}
-                '''.format(id=id))
+                    DELETE FROM task WHERE id = ?
+                ''', (id, ))
     
     con.commit()
     con.close()

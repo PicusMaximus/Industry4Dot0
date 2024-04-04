@@ -1,10 +1,7 @@
 {% extends "layout.html" %}
 {% block title %}
-Home
+Einstellung
 {% endblock title %}
-{% block scripts %}
-  <script type="module" src="{{url_for('static', filename='/dist/home.min.js')}}"></script>
-{% endblock scripts %}
 {% block breadcrumb %}
 <!-- 
     Example:
@@ -19,40 +16,8 @@ Home
 {% block page_content %}
 <div class="w-full mt-8">
   <div class="grid content-layout">
-
     <div class="inner-content flex gap-8 flex-col">
-      {% for task in data.tasks %}
-      <div data-task-id="{{task[0]}}" class="task flex flex-col bg-white border shadow-sm rounded-xl dark:bg-slate-900 dark:border-gray-700 dark:shadow-slate-700/[.7]">
-        <div class="flex justify-between items-center border-b rounded-t-xl py-3 px-4 md:px-5 dark:border-gray-700">
-          <h3 class="text-lg font-bold text-gray-800 dark:text-white">
-            {{ task[1] }}
-          </h3>
-          <div class="flex items-center gap-x-1">
-            <div class="hs-dropdown relative inline-flex">
-              <div class="hs-tooltip inline-block [--placement:left]">
-                <button id="hs-dropdown-custom-icon-trigger" type="button"
-                  class="hs-dropdown-toggle flex justify-center items-center size-9 text-sm font-semibold rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
-                  <svg class="flex-none size-4 text-gray-600" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                    stroke-linejoin="round">
-                    <circle cx="12" cy="12" r="1" />
-                    <circle cx="12" cy="5" r="1" />
-                    <circle cx="12" cy="19" r="1" />
-                  </svg>
-                  <span
-                    class="hs-tooltip-content hs-tooltip-shown:opacity-100 hs-tooltip-shown:visible opacity-0 transition-opacity inline-block absolute invisible z-10 py-1 px-2 bg-gray-900 text-xs font-medium text-white rounded shadow-sm dark:bg-slate-700"
-                    role="tooltip">
-                    Options
-                  </span>
-                </button>
-              </div>
-              <!-- Hier dropdown -->
-              {% include "task-dropdown.html" %}
-            </div>
-          </div>
-        </div>
-      </div>
-      {% endfor %}
+     
     </div>
   </div>
 </div>
@@ -60,8 +25,8 @@ Home
 
 <div class="flex fixed right-4 bottom-2 isolate z-50 flex-col-reverse items-center gap-2">
   <div class="hs-tooltip inline-block [--placement:left]">
-    <a
-       href="/task" class="grid place-content-center h-16 aspect-square p-0 rounded-full border-none shadow-sm z-20 bg-blue-500 hover:bg-blue-600 text-blue-100 hover:text-blue-200 focus:outline-none focus:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700">
+    <button
+       class="grid place-content-center h-16 aspect-square p-0 rounded-full border-none shadow-sm z-20 bg-blue-500 hover:bg-blue-600 text-blue-100 hover:text-blue-200 focus:outline-none focus:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700">
       <svg class="flex-shrink-0 size-5 h-7 w-7" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
         stroke="currentColor" stroke-width="2">
         <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
@@ -69,9 +34,9 @@ Home
       <span
         class="hs-tooltip-content hs-tooltip-shown:opacity-100 hs-tooltip-shown:visible opacity-0 transition-opacity inline-block absolute invisible z-10 py-1 px-2 bg-gray-900 text-xs font-medium text-white rounded shadow-sm dark:bg-slate-700"
         role="tooltip">
-        Create Task
+        Save
       </span>
-    </a>
+    </button>
   </div>
   <div class="hs-tooltip inline-block [--placement:left]">
     <button id="emergency-stop--btn"

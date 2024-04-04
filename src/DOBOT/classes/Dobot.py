@@ -358,9 +358,9 @@ class Dobot:
 
     def move_to_p(self, position, wait=False, mode=PTPMode.MOVJ_XYZ):
         if mode in [PTPMode.MOVJ_XYZ, PTPMode.MOVL_XYZ, PTPMode.JUMP_XYZ]: 
-            self._set_ptp_cmd(position.x, position.y, position.z, position.r, mode=mode, wait=wait)
+            self._set_ptp_cmd(float(position.x), float(position.y), float(position.z), float(position.r), mode=mode, wait=wait)
         elif mode in [PTPMode.MOVJ_ANGLE, PTPMode.MOVL_ANGLE, PTPMode.JUMP_ANGLE]:
-            self._set_ptp_cmd(position.j1, position.j2, position.j3, position.j4, mode=mode, wait=wait)
+            self._set_ptp_cmd(float(position.j1), float(position.j2), float(position.j3), float(position.j4), mode=mode, wait=wait)
         return
 
     def suck(self, enable):

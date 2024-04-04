@@ -1,3 +1,4 @@
+import logging
 from flask import Flask, jsonify, request, render_template
 from flask_swagger_ui import get_swaggerui_blueprint
 import uuid
@@ -9,6 +10,11 @@ import dbManager
 app = Flask(__name__, template_folder='./templates')
 
 dbManager.create_db()
+
+# Configure Flask logging
+app.logger.setLevel(logging.INFO)  # Set log level to INFO
+handler = logging.FileHandler('app.flask.log')  # Log to a file
+app.logger.addHandler(handler)
 
 ### -------------------------------------------------------------------------------------------------- ###
 
@@ -55,12 +61,17 @@ def setJobOrder():
 
 @app.route("/api/device/startJob", methods=['POST'])
 def startJob():
+    # Is this json or just query strings?
     ip = request.args.get('ip')
     id = request.args.get('id')
 
     subtasks = dbManager.get_subtasks(id)
 
     res = manager.run_task(subtasks)
+
+    if ip is not None and ip != "null":
+        ...
+
     return jsonify(res), 200        
 
 @app.route("/api/device/start", methods=['POST'])
@@ -127,11 +138,11 @@ def setSuctionCupStatus():
     manager.toggle_suck(status)
     return jsonify("Successfuly set the suction cup status."), 200
 
-# @app.route("/api/device/gripper/status", methods=["POST"])
-# def setGripperStatus():
-#     status = request.json['status']
-#     manager.update_gripper_status(status)
-#     return jsonify("Successfully set the gripper status."), 200
+@app.route("/api/device/gripper/status", methods=["POST"])
+def setGripperStatus():
+    status = request.json['status']
+    manager.update_gripper_status(status)
+    return jsonify("Successfully set the gripper status."), 200
 
 @app.route("/api/device/move-step", methods=['POST'])
 def moveDobot():
@@ -147,6 +158,18 @@ def moveDobot():
 def reconnectDevice():
     manager.reconnect()
     return jsonify("Successfully reconnected"), 200
+
+@app.route("/api/device/task", methods=['POST'])
+def runTask():
+    id = request.args.get('id')
+
+    if id is None: return 'Bad Request', 400
+
+    subtasks = dbManager.get_subtasks(id)
+
+    manager.run_task(subtasks)
+
+    return jsonify('success'), 200
 
 ### END POST ###
 
@@ -172,7 +195,10 @@ def getSubtasks():
 @app.route('/api/task', methods=['POST'])
 def createTask():
     task = request.json
+
+    if hasattr(task, 'id') == False: task['id'] = str(uuid.uuid4())
     dbManager.create_task(task)
+
     return jsonify('Success'), 200
 
 @app.route('/api/task', methods=['PUT'])
@@ -197,13 +223,32 @@ def deleteTask():
 
 ### HTML SECTION ###
 
+### PAGES ###
+
 @app.route('/', methods=['GET'])
 def getIndexPage():
-    return render_template('home.html')
+    tasks = dbManager.get_tasks()
+    return render_template('home.html', data = { 'tasks': tasks })
 
 @app.route('/task', methods=['GET'])
 def getTaskPage():
     return render_template('task.html')
+
+@app.route('/settings', methods=['GET'])
+def getSettingsPage():
+    return render_template('settings.html')
+
+@app.route('/about', methods=['GET'])
+def getAboutPage():
+    return render_template('about.html')
+
+### Card SECTION ###
+
+@app.route('/axis-card', methods=['GET'])
+def getAxisCardPartial():
+    id = request.args.get('id')
+    if id == None: id = uuid.uuid4()
+    return render_template('axis-card.html', data = {'id': id})
 
 @app.route('/movement-card', methods=['GET'])
 def getMovementCardPartial():
@@ -225,16 +270,6 @@ def getSettingsCardPartial():
     if id == None: id = uuid.uuid4()
 
     return render_template('settings-card.html', data = { 'id': id })
-
-@app.route('/axis-card', methods=['GET'])
-def getAxisCardPartial():
-    id = request.args.get('id')
-    if id == None: id = uuid.uuid4()
-    return render_template('axis-card.html')
-
-@app.route('/about', methods=['GET'])
-def getAboutPage():
-    return render_template('about.html', data = { 'id': id })
 
 ### END HTML SECTION ###
 

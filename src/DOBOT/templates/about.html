@@ -2,43 +2,45 @@
 {% block title %}
 About
 {% endblock title %}
+{% block scripts %}
+  <script type="module" src="{{url_for('static', filename='/dist/about.min.js')}}"></script>
+{% endblock scripts %}
 {% block breadcrumb %}
-<li class="flex items-center text-sm font-semibold text-gray-800 truncate dark:text-gray-400" aria-current="page">
-    <svg class="flex-shrink-0 mx-3 overflow-visible size-2.5 text-gray-400 dark:text-gray-600" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M5 1L10.6869 7.16086C10.8637 7.35239 10.8637 7.64761 10.6869 7.83914L5 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-    </svg>
-    About
-</li>
+<!-- Empty -->
 {% endblock breadcrumb %}
-
-{% block page_heading %} 
-<!-- Add header here -->
-{% endblock page_heading %}
-
 {% block page_content %}
-<!-- Add Page content here -->
-<p class="text-gray-800 dark:text-white m-4">
-    Falls die LED beim Dobot rot leuchtet, muss der Dobot einmal ausgeschaltet und wieder eingeschaltet werden.<br>
-    Wichtig dabei ist, dass der Arm zurück in den normalen Bereich bewegt wird, mithilfe des Teach-In Knopfes.<br>
-    Danach muss in der Web Oberfläche der Reconnect Knopf gedrückt werden.
-</p>
-
-
+<div class="w-full mt-8">
+  <div class="grid content-layout">
+    <div class="inner-content">
+      <h2 class="font-bold text-gray-800 dark:text-white">
+        About
+    </h2>
+      <p class="text-gray-800 dark:text-white m-4">
+        Falls die LED beim Dobot rot leuchtet, muss der Dobot einmal ausgeschaltet und wieder eingeschaltet werden.
+        Wichtig dabei ist, dass der Arm zurück in den normalen Bereich bewegt wird, mithilfe des Teach-In Knopfes.
+        Danach muss in der Web Oberfläche der Reconnect Knopf gedrückt werden.
+      </p>
+    </div>
+  </div>
+</div>
 <!-- ### Floating button ### -->
 
 <div class="flex fixed right-4 bottom-2 isolate z-50 flex-col-reverse items-center gap-2">
-    <div class="hs-tooltip inline-block [--placement:left]">
-      <button id="emergency-stop--btn" class="grid place-content-center h-16 aspect-square p-0 rounded-full border-none shadow-sm z-20  bg-red-500 hover:bg-red-600 text-red-100 hover:text-red-200 focus:outline-none focus:bg-red-700 dark:bg-red-600 dark:hover:bg-red-700">
-        <svg class="flex-shrink-0 size-5 h-7 w-7" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
-        </svg>
-          <span
-          class="hs-tooltip-content hs-tooltip-shown:opacity-100 hs-tooltip-shown:visible opacity-0 transition-opacity inline-block absolute invisible z-10 py-1 px-2 bg-gray-900 text-xs font-medium text-white rounded shadow-sm dark:bg-slate-700"
-          role="tooltip">
-          Emergency Stop
-        </span>
-      </button>
-    </div>
+  <div class="hs-tooltip inline-block [--placement:left]">
+    <button id="emergency-stop--btn"
+      class="grid place-content-center h-16 aspect-square p-0 rounded-full border-none shadow-sm z-20  bg-red-500 hover:bg-red-600 text-red-100 hover:text-red-200 focus:outline-none focus:bg-red-700 dark:bg-red-600 dark:hover:bg-red-700">
+      <svg class="flex-shrink-0 size-5 h-7 w-7" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+        stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round"
+          d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+      </svg>
+      <span
+        class="hs-tooltip-content hs-tooltip-shown:opacity-100 hs-tooltip-shown:visible opacity-0 transition-opacity inline-block absolute invisible z-10 py-1 px-2 bg-gray-900 text-xs font-medium text-white rounded shadow-sm dark:bg-slate-700"
+        role="tooltip">
+        Emergency Stop
+      </span>
+    </button>
   </div>
+</div>
 
 {% endblock page_content %}

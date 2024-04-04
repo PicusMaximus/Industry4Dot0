@@ -70,6 +70,12 @@ def home():
 
 def toggle_suck(state):
     d = get_dobot()
+
+    if state is not True or False:
+        if state == 'true':
+            state = True
+        else: state = False
+
     #This enables or disables the Suction-Cup
     d.suck(state)
 
@@ -94,7 +100,7 @@ def get_jobs():
     }
 
 def login():
-    response = requests.post(url='{base_path}/api/monitor/login'.format(base_path=monitorIp), json={
+    response = requests.post(url='{base_path}/api/monitor/login'.format(base_path="http://10.5.101.129:3000"), json={
         "ip": devices.getServerIp(),
         "id": str(devices.deviceId),
         "type": "dobot",
@@ -169,9 +175,9 @@ def run_task(subtasks):
     for subtask in subtasks:
         for step in subtask.steps:
             if hasattr(step, 'command'):
-                if step.command == 'speed': god_speed(**step.data)
-                elif step.command == 'move': move_to_p(**step.data)
-                elif step.command == 'suction': toggle_suck(**step.data)
-                elif step.command == 'wait': wait(**step.data)
+                if step.command == 'speed': god_speed(step.data.speed)
+                elif step.command == 'move': move_to_p(step.data.pos)
+                elif step.command == 'settings': toggle_suck(step.data.settings)
+                elif step.command == 'wait': wait(step.data.wait)
                 # elif subtask['command'] == 'grip': 
     return

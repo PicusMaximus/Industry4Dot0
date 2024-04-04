@@ -3,9 +3,9 @@
  * @returns {number}
  */
 function randomNumber() {
-        min = Math.ceil(10);
-        max = Math.floor(100_000);
-        return Math.floor(Math.random() * (max - min + 1)) + min;
+  const min = Math.ceil(10);
+  const max = Math.floor(100_000);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 /**
@@ -13,7 +13,7 @@ function randomNumber() {
  * @param {string} content 
  * @param {'success' | 'danger' | 'warn' | 'info'} type 
  */
-function showToast(content, type) {
+export function showToast(content, type) {
     const id = randomNumber();
 
     const toast = createToast(content, type, id);
