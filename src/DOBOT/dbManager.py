@@ -123,12 +123,17 @@ def get_simple_tasks():
                 FROM task
             ''')
     
-    row = cur.fetchall()
+    rows = cur.fetchall()
+
+    data = []
+
+    for row in rows:
+        data.append({'id':row[0], 'name':row[1]})
 
     con.commit()
     con.close()
 
-    return row
+    return {'jobs': data}
 
 def create_task(data):
     con = sqlite3.connect('task.db')
