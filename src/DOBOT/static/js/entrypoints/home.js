@@ -1,6 +1,8 @@
 import { addEmergencyStopBtn } from '../actions'
+import { addHomeBtn } from '../actions'
 
 addEmergencyStopBtn();
+addHomeBtn();
 
 // RUN TASK
 $(document).on('click', async (e) => {
