@@ -14,15 +14,26 @@ def connect():
 def login_if_needed():
     if not client.get_connected:
         connect()
-
-def triggerJob(id):
-    login_if_needed()
+        
+def get_internal_job(id):
     def filter_id(internaljob):
         return internaljob.job.id == id
     internalJob : InternalJob = filter(filter_id,jobList)[0]
-    client.db_write(int(dbnumber),internalJob.spsIn,bytearray(b'\x01'))
+    return internalJob
+
+def triggerJob(id):
+    login_if_needed()
+    client.db_write(int(dbnumber),get_internal_job(id).spsIn,bytearray(b'\x01'))
 
 
 def readJobStatus(): 
     login_if_needed()
     client.db_read(dbnumber,0,1)
+
+def stopJob():
+    print("not implemented")
+    
+def isBusy(id):
+    internalJob : InternalJob = get_internal_job(id)
+    login_if_needed()
+    client.db_read(dbnumber,internalJob.spsOut,internalJob.spsOut + 1)

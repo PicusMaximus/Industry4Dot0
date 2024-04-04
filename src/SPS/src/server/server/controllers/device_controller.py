@@ -9,6 +9,14 @@ from server.server.models.start_job import StartJob  # noqa: E501
 from server.server import util
 import jobConfig
 from sps.sps import triggerJob
+from sps.sps import stopJob
+from sps.sps import isBusy
+from generated.client.openapi_client import DeviceApi
+from generated.client.openapi_client import api_client
+from generated.client.openapi_client import configuration as client_config
+from generated.client.openapi_client import models as client_models
+import time
+
 
 def api_device_notstop_delete():  # noqa: E501
     """stops the jobs
@@ -18,7 +26,8 @@ def api_device_notstop_delete():  # noqa: E501
 
     :rtype: Union[None, Tuple[None, int], Tuple[None, int, Dict[str, str]]
     """
-    return 'do some magic!'
+    stopJob()
+    return 'Job stopped!'
 
 
 def api_device_set_job_order_post(set_jobs):  # noqa: E501
@@ -33,7 +42,14 @@ def api_device_set_job_order_post(set_jobs):  # noqa: E501
     """
     if connexion.request.is_json:
         set_jobs = SetJobs.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+        triggerJob(set_jobs.id)
+        # todo wait for job to be done
+        print("attempting to reach next device")
+        deviceApi = DeviceApi(api_client.ApiClient(client_config.Configuration(set_jobs.next_device_ip + ":3000")))
+        while (isBusy(set_jobs.job_id)):
+            time.sleep(0.25)
+        deviceApi.api_device_start_job_post(client_models.StartJob(id=set_jobs.next_job_id),10)
+    return 'job order is set!'
 
 
 def api_device_set_monitor_ip_post(ip):  # noqa: E501
@@ -46,7 +62,7 @@ def api_device_set_monitor_ip_post(ip):  # noqa: E501
 
     :rtype: Union[None, Tuple[None, int], Tuple[None, int, Dict[str, str]]
     """
-    return 'Dont think we need this'
+    return 'NOT NEEDED!'
 
 
 def api_device_start_job_post(start_job):  # noqa: E501

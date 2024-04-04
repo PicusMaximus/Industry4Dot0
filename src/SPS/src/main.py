@@ -28,7 +28,7 @@ myIP = os.getenv("MY_IP")
 
 monitorApi = MonitorApi(api_client.ApiClient(client_config.Configuration(monitorIP)))
 print("attempting registration")
-monitorApi.device_registration(client_models.Login(id="b805b5ce-43fd-4d42-b6c9-db40ce8a95d9",ip=myIP,name=registrationDevicename,type="SPS"),10)
+# monitorApi.device_registration(client_models.Login(id="b805b5ce-43fd-4d42-b6c9-db40ce8a95d9",ip=myIP,name=registrationDevicename,type="SPS"),10)
 
 print("registration done")
 print("starting server")
