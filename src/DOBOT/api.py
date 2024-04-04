@@ -45,7 +45,7 @@ app.register_blueprint(SWAGGERUI_BLUEPRINT, url_prefix=SWAGGER_URL)
 
 @app.route("/api/device/getJobs", methods=['GET'])
 def getJobs():
-    res = manager.get_jobs()
+    res = dbManager.get_simple_tasks()
     return jsonify(res), 200
 
 ### END GET ###
@@ -153,6 +153,12 @@ def moveDobot():
     manager.move_step(mode, direction, steps)
 
     return jsonify("Success"), 200
+
+@app.route("/api/device/stop", methods=['POST'])
+def stop():
+    manager.st
+    manager.emergency_stop()
+    return jsonify("Successfully stoped the running task."), 200
 
 @app.route("/api/device/reconnect", methods=['POST'])
 def reconnectDevice():

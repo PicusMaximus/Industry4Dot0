@@ -410,6 +410,9 @@ class Dobot:
     def force_stop(self):
         return self._set_queued_cmd_force_stop_exec()
 
+    def stop(self):
+        return self._set_queued_cmd_stop_exec()
+
     def start(self):
         return self._set_queued_cmd_start_exec()
 
