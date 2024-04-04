@@ -113,6 +113,23 @@ def get_task(id):
 
     return row
 
+def get_simple_tasks():
+    con = sqlite3.connect('task.db')
+    cur = con.cursor()
+
+    # Select tasks by ID
+    cur.execute('''
+                SELECT id, name
+                FROM task
+            ''')
+    
+    row = cur.fetchall()
+
+    con.commit()
+    con.close()
+
+    return row
+
 def create_task(data):
     con = sqlite3.connect('task.db')
     cur = con.cursor()
