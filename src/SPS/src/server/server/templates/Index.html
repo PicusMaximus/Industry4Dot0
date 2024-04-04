@@ -46,7 +46,11 @@
   const wmAus = document.getElementById('wm-aus')
   
   loadJobs();
-  
+  setInterval(() => {
+    loadJobs()
+
+  }, '200')
+
   wmAn.addEventListener('click', (event) => toggleWartungsmodus(event, true));
   wmAus.addEventListener('click', (event) => toggleWartungsmodus(event, false));
   
@@ -86,9 +90,15 @@
       const table = document.querySelector("#table");
 
       const data = await (await fetch('/api/device/getJobs')).json()
+      const elements = document.getElementsByClassName('TabellenReihe')
+      while(elements.length > 0)
+      {
+        elements[0].parentNode.removeChild(elements[0]);
+      }
   
       data.jobs.forEach((e) => {
           const tr = document.createElement("tr");
+          tr.classList.add('TabellenReihe')
           const td0 = getTd(e.id);
           const td1 = getTd(e.name);
           const td2 = getTd('An');
@@ -96,7 +106,8 @@
           tr.appendChild(td0);
           tr.appendChild(td1);
           tr.appendChild(td2);
-  
+          
+
           table.appendChild(tr);
       });
   }
