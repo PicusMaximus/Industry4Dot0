@@ -56,6 +56,12 @@ def emergency_stop():
         d.clear()
     return
 
+def stop():
+    d = get_dobot()
+    #Stop executing new tasks but finish current task
+    d.stop()
+    return
+
 def start():
     d = get_dobot()
     d.start()
