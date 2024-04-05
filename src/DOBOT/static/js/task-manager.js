@@ -337,6 +337,11 @@ export default class TaskManager {
                     this.#data.set(itemId, data.Notification)
                     continue;
                 }
+
+                if (command === 'remove') {
+                    this.#taskSidebar.removeStepFromTask(null, itemId);
+                    continue;
+                }
             }
         }
     }

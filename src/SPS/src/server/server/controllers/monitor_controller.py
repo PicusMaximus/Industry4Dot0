@@ -20,7 +20,7 @@ def api_log_post(status_changed=None):  # noqa: E501
     """
     if connexion.request.is_json:
         status_changed = StatusChanged.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+    return 'NOT NEEDED!'
 
 
 def device_registration(login):  # noqa: E501
@@ -35,4 +35,4 @@ def device_registration(login):  # noqa: E501
     """
     if connexion.request.is_json:
         login = Login.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+    return 'NOT NEEDED!'
