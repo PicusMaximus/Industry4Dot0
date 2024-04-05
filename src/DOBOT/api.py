@@ -57,6 +57,9 @@ def getJobs():
 @app.route("/api/device/setJobOrder", methods=['POST'])
 def setJobOrder():
     order = request.json
+
+    dbManager.create_order(order)
+
     return
 
 @app.route("/api/device/startJob", methods=['POST'])
@@ -219,6 +222,30 @@ def deleteTask():
     dbManager.delete_task(id)
     return jsonify('Success'), 200
 
+@app.route('/api/task/order', methods=['GET'])
+def get_order():
+    id = request.args.get('id')
+    res = dbManager.get_order(id)
+    return jsonify(res), 200
+
+@app.route('/api/task/order', methods=['DELETE'])
+def delete_order():
+    id = request.args.get('id')
+    res = dbManager.get_order(id)
+    return jsonify(res), 200
+
+@app.route('/api/task/order', methods=['POST'])
+def create_order():
+    data = request.json
+    res = dbManager.create_db(data)
+    return jsonify(res), 200
+
+@app.route('/api/task/order', methods=['PUT'])
+def update_order():
+    data = request.json
+    res = dbManager.update_order(data)
+    return jsonify(res), 200
+
 ### END DB ###
 
 ### -------------------------------------------------------------------------------------------------- ###
@@ -276,6 +303,13 @@ def getSettingsCardPartial():
     if id == None: id = uuid.uuid4()
 
     return render_template('settings-card.html', data = { 'id': id })
+
+@app.route('/job/name-card', methods=['GET'])
+def getJobNameCardPartial():
+    id = request.args.get('id')
+    if id == None: id = uuid.uuid4()
+
+    return render_template('job-name-card.html', data = { 'id': id })
 
 ### END HTML SECTION ###
 

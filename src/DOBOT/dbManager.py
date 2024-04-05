@@ -40,6 +40,16 @@ def create_db():
                     ,subtasks TEXT NOT NULL
                 )
                 ''')
+    
+    cur.execute('''
+        CREATE TABLE IF NOT EXISTS task_order (
+                 jobId TEXT PRIMARY KEY
+                ,name TEXT NOT NULL
+                ,nextJobId TEXT NOT NULL
+                ,nextDeviceIp TEXT NOT NULL
+        )
+    ''')
+
     con.commit()
     con.close()
 
@@ -59,7 +69,26 @@ def get_tasks():
     con.commit()
     con.close()
 
-    return res 
+    return res
+
+def get_order(id):
+    con = sqlite3.connect('task.db')
+    cur = con.cursor()
+
+    # Select all the tasks ...
+    # Used to show all existing tasks on the Homepage 
+    cur.execute('''
+                SELECT *
+                FROM task_order
+                WHERE jobId = ?
+            ''', (id,))
+    
+    res = cur.fetchone()
+
+    con.commit()
+    con.close()
+
+    return res
 
 def get_subtasks(id):
     con = sqlite3.connect('task.db')
@@ -148,6 +177,24 @@ def create_task(data):
     con.commit()
     con.close()
 
+def create_order(data):
+    con = sqlite3.connect('task.db')
+    cur = con.cursor()
+
+    # Create task ...
+    cur.execute('''
+                    INSERT INTO task_order (jobId, name, nextJobId, nextDeviceIp)
+                    VALUES (?, ?, ?, ?))
+                    ON CONFLICT(jobId) DO UPDATE SET 
+                        jobId = ?,
+                        name = ?,
+                        nextJobId = ?,
+                        nextDeviceIp = ?
+                ''', (data['jobId'], data['name'], data['nextJobId'], data['nextDeviceIp']))
+    
+    con.commit()
+    con.close()
+
 def update_task(data):
     con = sqlite3.connect('task.db')
     cur = con.cursor()
@@ -164,13 +211,42 @@ def update_task(data):
     con.commit()
     con.close()
 
-def delete_task(id):
+def update_order(data):
+    con = sqlite3.connect('task.db')
+    cur = con.cursor()
+
+    # UPdate existing task
+    cur.execute('''
+                    UPDATE task 
+                    SET name = ?,
+                        nextJobId = ?
+                        nextDeviceIp = ?
+                    WHERE jobId = ?
+                ''', (data['name'], data['nextJobId'], data['nextDeviceIp'], data['jobId'])
+                )
+    
+    con.commit()
+    con.close()
+
+def delete_order(id):
     con = sqlite3.connect('task.db')
     cur = con.cursor()
 
     # Delete existing task
     cur.execute('''
                     DELETE FROM task WHERE id = ?
+                ''', (id, ))
+    
+    con.commit()
+    con.close()
+
+def delete_task(id):
+    con = sqlite3.connect('task.db')
+    cur = con.cursor()
+
+    # Delete existing task
+    cur.execute('''
+                    DELETE FROM task_order WHERE id = ?
                 ''', (id, ))
     
     con.commit()

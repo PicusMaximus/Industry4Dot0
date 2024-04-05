@@ -110,7 +110,7 @@ def login():
         "ip": devices.getServerIp(),
         "id": str(devices.deviceId),
         "type": "dobot",
-        "name": "dobot 1",
+        "name": "last dobot standing",
     })
 
     return
