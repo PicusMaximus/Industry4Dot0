@@ -184,13 +184,13 @@ def create_order(data):
     # Create task ...
     cur.execute('''
                     INSERT INTO task_order (jobId, name, nextJobId, nextDeviceIp)
-                    VALUES (?, ?, ?, ?))
+                    VALUES (?, ?, ?, ?)
                     ON CONFLICT(jobId) DO UPDATE SET 
                         jobId = ?,
                         name = ?,
                         nextJobId = ?,
                         nextDeviceIp = ?
-                ''', (data['jobId'], data['name'], data['nextJobId'], data['nextDeviceIp']))
+                ''', (data['jobId'], data['name'], data['nextJobId'], data['nextDeviceIp'], data['jobId'], data['name'], data['nextJobId'], data['nextDeviceIp']))
     
     con.commit()
     con.close()

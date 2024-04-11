@@ -60,20 +60,19 @@ def setJobOrder():
 
     dbManager.create_order(order)
 
-    return
+    return jsonify("Success"), 200
 
 @app.route("/api/device/startJob", methods=['POST'])
 def startJob():
-    # Is this json or just query strings?
-    ip = request.args.get('ip')
     id = request.args.get('id')
+
+    order = dbManager.get_order(id)
 
     subtasks = dbManager.get_subtasks(id)
 
     res = manager.run_task(subtasks)
 
-    if ip is not None and ip != "null":
-        ...
+    request.post(order['nextDeviceIp'] + '?id=' + order['nextJobId'], )
 
     return jsonify(res), 200        
 

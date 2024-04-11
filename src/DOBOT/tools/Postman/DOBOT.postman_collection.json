@@ -10,6 +10,68 @@
 			"name": "POST",
 			"item": [
 				{
+					"name": "DB_ACTION",
+					"item": [
+						{
+							"name": "CREATE_TASK",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": \"1\",\r\n    \"name\": \"Taskname\",\r\n    \"subtasks\": [\r\n        {\r\n            \"movementType\": \"First move\",\r\n            \"steps\": [\r\n                {\r\n                    \"command\": \"move\",\r\n                    \"data\": {\r\n                        \"pos\": {\r\n                            \"j1\": -6.45132587351327e-8,\r\n                            \"j2\": 69.71759796142578,\r\n                            \"j3\": 44.94383239746094,\r\n                            \"j4\": 0,\r\n                            \"r\": -6.45132587351327e-8,\r\n                            \"x\": 290.37591552734375,\r\n                            \"y\": -3.2695425034034997e-7,\r\n                            \"z\": -57.045326232910156\r\n                        }\r\n                    }\r\n                },\r\n                {\r\n                    \"command\": \"move\",\r\n                    \"data\": {\r\n                        \"pos\": {\r\n                            \"j1\": -6.45132587351327e-8,\r\n                            \"j2\": 69.71759796142578,\r\n                            \"j3\": 44.94383239746094,\r\n                            \"j4\": 0,\r\n                            \"r\": -6.45132587351327e-8,\r\n                            \"x\": 290.37591552734375,\r\n                            \"y\": -3.2695425034034997e-7,\r\n                            \"z\": -57.045326232910156\r\n                        }\r\n                    }\r\n                }\r\n            ]\r\n        }\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}:{{port}}/api/task",
+									"host": [
+										"{{baseURL}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"api",
+										"task"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "New Request",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"jobId\":\"1231123\",\r\n    \"name\": \"Döbot3\",\r\n    \"nextJobId\": \"132\",\r\n    \"nextDeviceIp\": \"213\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}:{{port}}/api/device/setJobOrder",
+									"host": [
+										"{{baseURL}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"api",
+										"device",
+										"setJobOrder"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
 					"name": "START",
 					"request": {
 						"method": "POST",
@@ -113,7 +175,7 @@
 						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "{{baseURL}}:{{port}}/api/device/move-step?mode=XYZ&direction=xn",
+							"raw": "{{baseURL}}:{{port}}/api/device/move-step?mode=XYZ&direction=xn&steps=20",
 							"host": [
 								"{{baseURL}}"
 							],
@@ -133,9 +195,8 @@
 									"value": "xn"
 								},
 								{
-									"key": "",
-									"value": null,
-									"disabled": true
+									"key": "steps",
+									"value": "20"
 								}
 							]
 						}
@@ -157,6 +218,113 @@
 								"api",
 								"device",
 								"reconnect"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "LOGIN",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}:{{port}}/api/monitor/login",
+							"host": [
+								"{{baseURL}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"monitor",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "SUCK",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"status\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}:{{port}}/api/device/suction-cup/status",
+							"host": [
+								"{{baseURL}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"device",
+								"suction-cup",
+								"status"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GRIPPER",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"status\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}:{{port}}/api/device/gripper/status",
+							"host": [
+								"{{baseURL}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"device",
+								"gripper",
+								"status"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "START-JOB",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}:{{port}}/api/device/startJob?id=0",
+							"host": [
+								"{{baseURL}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"device",
+								"startJob"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "0",
+									"description": "ENTER_ID_HERE"
+								}
 							]
 						}
 					},
@@ -186,6 +354,31 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "DELETE-TASK",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}:{{port}}/api/task?id=1",
+							"host": [
+								"{{baseURL}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"task"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -205,7 +398,7 @@
 							"urlencoded": []
 						},
 						"url": {
-							"raw": "{{baseURL}}:{{port}}/api/device/getPose",
+							"raw": "{{baseURL}}:{{port}}/api/device/pose",
 							"host": [
 								"{{baseURL}}"
 							],
@@ -213,7 +406,92 @@
 							"path": [
 								"api",
 								"device",
-								"getPose"
+								"pose"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "JOBS",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}:{{port}}/api/device/getJobs",
+							"host": [
+								"{{baseURL}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"device",
+								"getJobs"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "TASK",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}:{{port}}/api/subtasks?id=1",
+							"host": [
+								"{{baseURL}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"subtasks"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "PUT",
+			"item": [
+				{
+					"name": "CREATE-TASK",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"1\",\r\n    \"name\": \"Peter\",\r\n    \"subtasks\": \"[{'yes': 'no}, {'no': 'yes'}]\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}:{{port}}/api/task",
+							"host": [
+								"{{baseURL}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"task"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "1",
+									"disabled": true
+								}
 							]
 						}
 					},
@@ -245,7 +523,7 @@
 	"variable": [
 		{
 			"key": "baseURL",
-			"value": "http://192.168.178.148",
+			"value": "http://10.231.7.154",
 			"type": "string"
 		},
 		{
