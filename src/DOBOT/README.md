@@ -10,6 +10,7 @@
 3. pip3 install cherrypy ws4py pyserial jinja2 requests flask flask_swagger_ui --break-system-packages
 4. Go into static folder and run:
    npm install
+   
    npm run build
 
 ## Run via terminal
