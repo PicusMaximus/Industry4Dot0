@@ -8,7 +8,6 @@ export default class TaskSidebar {
     #$addSettingsBtn = $(document.getElementById('add-settings-btn'));
     #$addNotificationBtn = $(document.getElementById('add-notification-btn'));
     #$addCommentBtn = $(document.getElementById('add-comment-btn'));
-    #$RemoveBtn = $(document.getElementById('remove-btn'))
 
     #$taskContainer = $(document.getElementById('task-container'));
 
@@ -30,7 +29,6 @@ export default class TaskSidebar {
         this.#$addSettingsBtn.on('click', this.createSettingsLi.bind(this));
         this.#$addNotificationBtn.on('click', this.createNotificationLi.bind(this));
         this.#$addCommentBtn.on('click', this.createCommentLi.bind(this));
-        this.#$RemoveBtn.on('click', this.removeStepFromTask.bind(this));
 
         $(document).on('click', this.#markSubTask.bind(this));
     }
@@ -113,17 +111,10 @@ export default class TaskSidebar {
         // Coming soon...
     }
 
-    removeStepFromTask(e, id) {
-        if (!this.#valid()) return;
-
-        const container = this.#getContainer();
-
-        $(container).find(id).remove();
-    }
 
     #valid() {
         if (this.#moveCount === 0) {
-            showToast(`Das Element konnte nicht hinzugefügt oder entfernt werden, da noch keine Bewegung erstellt wurde.`, 'danger')
+            showToast(`Das Element konnte nicht hinzugefügt werden, da noch keine Bewegung erstellt wurde.`, 'danger')
             return false;
         }
 
