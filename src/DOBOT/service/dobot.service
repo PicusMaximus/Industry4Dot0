@@ -1,5 +1,5 @@
 [Unit]
-Description=Dobot Magacian Server
+Description=Dobot Service
 After=network.target
 StartLimitIntervalSec=0
 
@@ -9,7 +9,7 @@ Restart=always
 RestartSec=1
 User=dobot
 WorkingDirectory=/home/dobot/DOBOT
-ExecStart=/usr/bin/python3 api.py
+ExecStart=/usr/bin/python3 DobotServer.py
 
 [Install]
 WantedBy=multi-user.target
