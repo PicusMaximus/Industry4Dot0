@@ -113,10 +113,10 @@ paths:
           description: Validation exception
           
   /api/device/notstop:
-    delete:
+    post:
       tags:
         - Device
-      summary: stops the jobs
+      summary: instantly stops the job chain
       responses:
         '200':
           description: Successful operation
@@ -124,6 +124,32 @@ paths:
           description: Invalid input
         '422':
           description: Validation exception
+          
+  # /api/device/stop:
+  #   post:
+  #     tags:
+  #       - Device
+  #     summary: shuts down the job chain
+  #     responses:
+  #       '200':
+  #         description: Successful operation
+  #       '400':
+  #         description: Invalid input
+  #       '422':
+  #         description: Validation exception
+          
+  # /api/device/start:
+  #   post:
+  #     tags:
+  #       - Device
+  #     summary: starts the job chain
+  #     responses:
+  #       '200':
+  #         description: Successful operation
+  #       '400':
+  #         description: Invalid input
+  #       '422':
+  #         description: Validation exception
   
   /api/device/getJobs:
     get:
@@ -220,6 +246,11 @@ components:
         status:
           type: string
           example: gestartet
+          enum: 
+            - job-gestartet
+            - job-beendet
+            - wartung-gestartet
+            - wartung-beendet
       required: 
         - deviceId
         - timestamp
@@ -238,11 +269,15 @@ components:
         nextJobId:
           type: string
           example: 'a999b5ce-43fd-4d42-b6c9-db40ce8a95d9'
+          nullable: true
         nextDeviceIp:
           type: string
           example: '128.0.0.1'
-      xml:
-        name: setJobs
+          nullable: true
+      required:
+        - jobId
+        - nextJobId
+        - nextDeviceIp
     
     JobsVomGeraet:
       type: object
@@ -280,4 +315,3 @@ components:
         application/xml:
           schema:
             $ref: '#/components/schemas/Login'
- 
