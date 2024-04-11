@@ -4,7 +4,8 @@ await esbuild.build({
   entryPoints: [
     './js/entrypoints/home.js',
     './js/entrypoints/about.js',
-    './js/entrypoints/task.js'
+    './js/entrypoints/task.js',
+    './js/entrypoints/settings.js' 
 ],
   bundle: true,
   minify: true,

@@ -234,7 +234,7 @@ def delete_order(id):
 
     # Delete existing task
     cur.execute('''
-                    DELETE FROM task WHERE id = ?
+                    DELETE FROM task_order WHERE id = ?
                 ''', (id, ))
     
     con.commit()
@@ -246,7 +246,7 @@ def delete_task(id):
 
     # Delete existing task
     cur.execute('''
-                    DELETE FROM task_order WHERE id = ?
+                    DELETE FROM task WHERE id = ?
                 ''', (id, ))
     
     con.commit()
