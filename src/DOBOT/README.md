@@ -8,7 +8,9 @@
 1. Go into the project folder
 2. sudo apt install python3 npm
 3. pip3 install cherrypy ws4py pyserial jinja2 requests flask flask_swagger_ui --break-system-packages
-4. Go into static folder and run: npm install
+4. Go into static folder and run:
+   npm install
+   npm run build
 
 ## Run via terminal
 Go into the project folder and run this command: python3 ./api.py
