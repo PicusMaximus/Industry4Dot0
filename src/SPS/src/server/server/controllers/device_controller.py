@@ -17,6 +17,8 @@ from generated.client.openapi_client import configuration as client_config
 from generated.client.openapi_client import models as client_models
 import time
 
+job_order = {}
+
 def api_device_notstop_delete():  # noqa: E501
     """stops the jobs
 
@@ -41,13 +43,7 @@ def api_device_set_job_order_post(set_jobs):  # noqa: E501
     """
     if connexion.request.is_json:
         set_jobs = SetJobs.from_dict(connexion.request.get_json())  # noqa: E501
-        triggerJob(set_jobs.id)
-        # todo wait for job to be done
-        print("attempting to reach next device")
-        deviceApi = DeviceApi(api_client.ApiClient(client_config.Configuration(set_jobs.next_device_ip + ":3000")))
-        while (isBusy(set_jobs.job_id)):
-            time.sleep(0.25)
-        deviceApi.api_device_start_job_post(client_models.StartJob(id=set_jobs.next_job_id),10)
+        job_order[set_jobs.job_id] = set_jobs
     return 'job order is set!'
 
 
@@ -77,6 +73,12 @@ def api_device_start_job_post(start_job):  # noqa: E501
     if connexion.request.is_json:
         start_job = StartJob.from_dict(connexion.request.get_json())  # noqa: E501
         triggerJob(start_job.id)
+        context : SetJobs = job_order[start_job.id]
+        while (isBusy(start_job.job_id)):
+            time.sleep(0.25)
+        deviceApi = DeviceApi(api_client.ApiClient(client_config.Configuration(context.next_device_ip + ":3000")))
+        print("attempting to reach next device")
+        deviceApi.api_device_start_job_post(client_models.StartJob(id=context.next_job_id),10)
     return "das hat bestimmt funktioniert"
 
 
