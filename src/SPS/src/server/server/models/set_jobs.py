@@ -72,6 +72,8 @@ class SetJobs(Model):
         :param job_id: The job_id of this SetJobs.
         :type job_id: str
         """
+        if job_id is None:
+            raise ValueError("Invalid value for `job_id`, must not be `None`")  # noqa: E501
 
         self._job_id = job_id
 
@@ -114,6 +116,8 @@ class SetJobs(Model):
         :param next_job_id: The next_job_id of this SetJobs.
         :type next_job_id: str
         """
+        if next_job_id is None:
+            raise ValueError("Invalid value for `next_job_id`, must not be `None`")  # noqa: E501
 
         self._next_job_id = next_job_id
 
@@ -135,5 +139,7 @@ class SetJobs(Model):
         :param next_device_ip: The next_device_ip of this SetJobs.
         :type next_device_ip: str
         """
+        if next_device_ip is None:
+            raise ValueError("Invalid value for `next_device_ip`, must not be `None`")  # noqa: E501
 
         self._next_device_ip = next_device_ip

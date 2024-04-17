@@ -19,8 +19,8 @@ import time
 
 job_order = {}
 
-def api_device_notstop_delete():  # noqa: E501
-    """stops the jobs
+def api_device_notstop_post():  # noqa: E501
+    """instantly stops the job chain
 
      # noqa: E501
 

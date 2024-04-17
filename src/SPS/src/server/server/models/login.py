@@ -72,6 +72,8 @@ class Login(Model):
         :param ip: The ip of this Login.
         :type ip: str
         """
+        if ip is None:
+            raise ValueError("Invalid value for `ip`, must not be `None`")  # noqa: E501
 
         self._ip = ip
 
@@ -93,6 +95,8 @@ class Login(Model):
         :param id: The id of this Login.
         :type id: str
         """
+        if id is None:
+            raise ValueError("Invalid value for `id`, must not be `None`")  # noqa: E501
 
         self._id = id
 
@@ -114,6 +118,8 @@ class Login(Model):
         :param type: The type of this Login.
         :type type: str
         """
+        if type is None:
+            raise ValueError("Invalid value for `type`, must not be `None`")  # noqa: E501
 
         self._type = type
 
@@ -137,5 +143,7 @@ class Login(Model):
         :param name: The name of this Login.
         :type name: str
         """
+        if name is None:
+            raise ValueError("Invalid value for `name`, must not be `None`")  # noqa: E501
 
         self._name = name

@@ -8,7 +8,7 @@ from server.server.models.status_changed import StatusChanged  # noqa: E501
 from server.server import util
 
 
-def api_log_post(status_changed=None):  # noqa: E501
+def api_monitor_log_post(status_changed=None):  # noqa: E501
     """status changed
 
      # noqa: E501

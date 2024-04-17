@@ -12,7 +12,7 @@ class StatusChanged(Model):
     Do not edit the class manually.
     """
 
-    def __init__(self, device_id=None, job_id=None, level=None, timestamp=None, message=None, status=None):  # noqa: E501
+    def __init__(self, device_id=None, job_id=None, level='info', timestamp=None, message=None, status=None):  # noqa: E501
         """StatusChanged - a model defined in OpenAPI
 
         :param device_id: The device_id of this StatusChanged.  # noqa: E501
@@ -82,6 +82,8 @@ class StatusChanged(Model):
         :param device_id: The device_id of this StatusChanged.
         :type device_id: str
         """
+        if device_id is None:
+            raise ValueError("Invalid value for `device_id`, must not be `None`")  # noqa: E501
 
         self._device_id = device_id
 
@@ -145,6 +147,8 @@ class StatusChanged(Model):
         :param timestamp: The timestamp of this StatusChanged.
         :type timestamp: str
         """
+        if timestamp is None:
+            raise ValueError("Invalid value for `timestamp`, must not be `None`")  # noqa: E501
 
         self._timestamp = timestamp
 
@@ -187,5 +191,11 @@ class StatusChanged(Model):
         :param status: The status of this StatusChanged.
         :type status: str
         """
+        allowed_values = ["job-gestartet", "job-beendet", "wartung-gestartet", "wartung-beendet"]  # noqa: E501
+        if status not in allowed_values:
+            raise ValueError(
+                "Invalid value for `status` ({0}), must be one of {1}"
+                .format(status, allowed_values)
+            )
 
         self._status = status
