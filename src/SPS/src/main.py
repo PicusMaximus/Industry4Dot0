@@ -2,6 +2,7 @@ import sys
 import os
 import runpy
 import asyncio
+from UuidGeneration import generate_uuid_with_mac_seed
 
 # python module path bullcrap cause i don't know how to do it properly
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -29,7 +30,7 @@ myIP = os.getenv("MY_IP")
 monitorApi = MonitorApi(api_client.ApiClient(client_config.Configuration(monitorIP)))
 async def registration():
     print("attempting registration")
-    # monitorApi.device_registration(client_models.Login(id="b805b5ce-43fd-4d42-b6c9-db40ce8a95d9",ip=myIP,name=registrationDevicename,type="SPS"),5)
+    monitorApi.device_registration(client_models.Login(id=str(generate_uuid_with_mac_seed(999999)),ip=myIP,name=registrationDevicename,type="SPS"),5)
     print("registration done")
 asyncio.run(registration())
 

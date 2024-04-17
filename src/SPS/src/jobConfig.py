@@ -1,5 +1,5 @@
 from server.server.models.job import Job
-import uuid
+import UuidGeneration
 
 
 class InternalJob:
@@ -9,6 +9,6 @@ class InternalJob:
         self.job = job
 
 jobList : list[InternalJob] = [
-    InternalJob(spsIn=0,spsOut=0, job=Job(id=uuid.uuid4(), name="vor")),
-    InternalJob(spsIn=1,spsOut=1, job=Job(id=uuid.uuid4(), name="zurueck")),
+    InternalJob(spsIn=0,spsOut=0, job=Job(id=UuidGeneration.generate_uuid_with_mac_seed(0), name="vor")),
+    InternalJob(spsIn=1,spsOut=1, job=Job(id=UuidGeneration.generate_uuid_with_mac_seed(1), name="zurueck")),
 ]
