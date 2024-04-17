@@ -31,7 +31,7 @@ def readJobStatus():
     client.db_read(dbnumber,0,1)
 
 def stopJob():
-    print("not implemented")
+    print("stopping of jobs not implemented")
     
 def isBusy(id):
     internalJob : InternalJob = get_internal_job(id)

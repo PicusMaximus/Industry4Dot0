@@ -16,8 +16,10 @@ from generated.client.openapi_client import api_client
 from generated.client.openapi_client import configuration as client_config
 from generated.client.openapi_client import models as client_models
 import time
+from datetime import datetime
 
 job_order = {}
+last_stop = datetime.now()
 
 def api_device_notstop_post():  # noqa: E501
     """instantly stops the job chain
@@ -27,7 +29,8 @@ def api_device_notstop_post():  # noqa: E501
 
     :rtype: Union[None, Tuple[None, int], Tuple[None, int, Dict[str, str]]
     """
-    stopJob()
+    # stopJob()
+    last_stop = datetime.now()
     return 'Job stopped!'
 
 
@@ -72,14 +75,17 @@ def api_device_start_job_post(start_job):  # noqa: E501
     """
     if connexion.request.is_json:
         start_job = StartJob.from_dict(connexion.request.get_json())  # noqa: E501
+        start_time = datetime.now()
         triggerJob(start_job.id)
         context : SetJobs = job_order[start_job.id]
-        while (isBusy(start_job.job_id)):
+        while (isBusy(start_job.id)):
             time.sleep(0.25)
         deviceApi = DeviceApi(api_client.ApiClient(client_config.Configuration(context.next_device_ip + ":3000")))
         print("attempting to reach next device")
+        if last_stop > start_time:
+            return "Not Stopp"
         deviceApi.api_device_start_job_post(client_models.StartJob(id=context.next_job_id),10)
-    return "das hat bestimmt funktioniert"
+    return "Erfolg"
 
 
 def get_monitor_jobs():  # noqa: E501
