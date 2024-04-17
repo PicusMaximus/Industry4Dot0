@@ -26,10 +26,10 @@ class SetJobs(BaseModel):
     """
     SetJobs
     """ # noqa: E501
-    job_id: Optional[StrictStr] = Field(default=None, alias="jobId")
+    job_id: StrictStr = Field(alias="jobId")
     name: Optional[StrictStr] = None
-    next_job_id: Optional[StrictStr] = Field(default=None, alias="nextJobId")
-    next_device_ip: Optional[StrictStr] = Field(default=None, alias="nextDeviceIp")
+    next_job_id: Optional[StrictStr] = Field(alias="nextJobId")
+    next_device_ip: Optional[StrictStr] = Field(alias="nextDeviceIp")
     __properties: ClassVar[List[str]] = ["jobId", "name", "nextJobId", "nextDeviceIp"]
 
     model_config = {
@@ -71,6 +71,16 @@ class SetJobs(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # set to None if next_job_id (nullable) is None
+        # and model_fields_set contains the field
+        if self.next_job_id is None and "next_job_id" in self.model_fields_set:
+            _dict['nextJobId'] = None
+
+        # set to None if next_device_ip (nullable) is None
+        # and model_fields_set contains the field
+        if self.next_device_ip is None and "next_device_ip" in self.model_fields_set:
+            _dict['nextDeviceIp'] = None
+
         return _dict
 
     @classmethod

@@ -33,6 +33,7 @@ from openapi_client.exceptions import ApiException
 
 # import models into sdk package
 from openapi_client.models.api_response import ApiResponse
+from openapi_client.models.job import Job
 from openapi_client.models.jobs_vom_geraet import JobsVomGeraet
 from openapi_client.models.login import Login
 from openapi_client.models.set_jobs import SetJobs

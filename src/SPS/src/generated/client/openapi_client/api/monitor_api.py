@@ -41,7 +41,7 @@ class MonitorApi:
 
 
     @validate_call
-    def api_log_post(
+    def api_monitor_log_post(
         self,
         status_changed: Annotated[Optional[StatusChanged], Field(description="post status changed")] = None,
         _request_timeout: Union[
@@ -84,7 +84,7 @@ class MonitorApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._api_log_post_serialize(
+        _param = self._api_monitor_log_post_serialize(
             status_changed=status_changed,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -109,7 +109,7 @@ class MonitorApi:
 
 
     @validate_call
-    def api_log_post_with_http_info(
+    def api_monitor_log_post_with_http_info(
         self,
         status_changed: Annotated[Optional[StatusChanged], Field(description="post status changed")] = None,
         _request_timeout: Union[
@@ -152,7 +152,7 @@ class MonitorApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._api_log_post_serialize(
+        _param = self._api_monitor_log_post_serialize(
             status_changed=status_changed,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -177,7 +177,7 @@ class MonitorApi:
 
 
     @validate_call
-    def api_log_post_without_preload_content(
+    def api_monitor_log_post_without_preload_content(
         self,
         status_changed: Annotated[Optional[StatusChanged], Field(description="post status changed")] = None,
         _request_timeout: Union[
@@ -220,7 +220,7 @@ class MonitorApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._api_log_post_serialize(
+        _param = self._api_monitor_log_post_serialize(
             status_changed=status_changed,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -240,7 +240,7 @@ class MonitorApi:
         return response_data.response
 
 
-    def _api_log_post_serialize(
+    def _api_monitor_log_post_serialize(
         self,
         status_changed,
         _request_auth,
@@ -291,7 +291,7 @@ class MonitorApi:
 
         return self.api_client.param_serialize(
             method='POST',
-            resource_path='/api/log/',
+            resource_path='/api/monitor/log',
             path_params=_path_params,
             query_params=_query_params,
             header_params=_header_params,

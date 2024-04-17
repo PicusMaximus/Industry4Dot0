@@ -8,6 +8,7 @@ openapi_client/configuration.py
 openapi_client/exceptions.py
 openapi_client/models/__init__.py
 openapi_client/models/api_response.py
+openapi_client/models/job.py
 openapi_client/models/jobs_vom_geraet.py
 openapi_client/models/login.py
 openapi_client/models/set_jobs.py

@@ -41,7 +41,7 @@ class DeviceApi:
 
 
     @validate_call
-    def api_device_notstop_delete(
+    def api_device_notstop_post(
         self,
         _request_timeout: Union[
             None,
@@ -56,7 +56,7 @@ class DeviceApi:
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
     ) -> None:
-        """stops the jobs
+        """instantly stops the job chain
 
 
         :param _request_timeout: timeout setting for this request. If one
@@ -81,7 +81,7 @@ class DeviceApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._api_device_notstop_delete_serialize(
+        _param = self._api_device_notstop_post_serialize(
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -105,7 +105,7 @@ class DeviceApi:
 
 
     @validate_call
-    def api_device_notstop_delete_with_http_info(
+    def api_device_notstop_post_with_http_info(
         self,
         _request_timeout: Union[
             None,
@@ -120,7 +120,7 @@ class DeviceApi:
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
     ) -> ApiResponse[None]:
-        """stops the jobs
+        """instantly stops the job chain
 
 
         :param _request_timeout: timeout setting for this request. If one
@@ -145,7 +145,7 @@ class DeviceApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._api_device_notstop_delete_serialize(
+        _param = self._api_device_notstop_post_serialize(
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -169,7 +169,7 @@ class DeviceApi:
 
 
     @validate_call
-    def api_device_notstop_delete_without_preload_content(
+    def api_device_notstop_post_without_preload_content(
         self,
         _request_timeout: Union[
             None,
@@ -184,7 +184,7 @@ class DeviceApi:
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
     ) -> RESTResponseType:
-        """stops the jobs
+        """instantly stops the job chain
 
 
         :param _request_timeout: timeout setting for this request. If one
@@ -209,7 +209,7 @@ class DeviceApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._api_device_notstop_delete_serialize(
+        _param = self._api_device_notstop_post_serialize(
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -228,7 +228,7 @@ class DeviceApi:
         return response_data.response
 
 
-    def _api_device_notstop_delete_serialize(
+    def _api_device_notstop_post_serialize(
         self,
         _request_auth,
         _content_type,
@@ -262,7 +262,7 @@ class DeviceApi:
         ]
 
         return self.api_client.param_serialize(
-            method='DELETE',
+            method='POST',
             resource_path='/api/device/notstop',
             path_params=_path_params,
             query_params=_query_params,

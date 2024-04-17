@@ -17,32 +17,19 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, Field, StrictStr, field_validator
-from typing import Any, ClassVar, Dict, List, Optional
+from pydantic import BaseModel, Field, StrictStr
+from typing import Any, ClassVar, Dict, List
+from typing_extensions import Annotated
 from typing import Optional, Set
 from typing_extensions import Self
 
-class StatusChanged(BaseModel):
+class Job(BaseModel):
     """
-    StatusChanged
+    Job
     """ # noqa: E501
-    device_id: StrictStr = Field(alias="deviceId")
-    job_id: Optional[StrictStr] = Field(default=None, alias="jobId")
-    level: Optional[StrictStr] = 'info'
-    timestamp: StrictStr
-    message: Optional[StrictStr] = None
-    status: Optional[StrictStr] = None
-    __properties: ClassVar[List[str]] = ["deviceId", "jobId", "level", "timestamp", "message", "status"]
-
-    @field_validator('status')
-    def status_validate_enum(cls, value):
-        """Validates the enum"""
-        if value is None:
-            return value
-
-        if value not in set(['job-gestartet', 'job-beendet', 'wartung-gestartet', 'wartung-beendet']):
-            raise ValueError("must be one of enum values ('job-gestartet', 'job-beendet', 'wartung-gestartet', 'wartung-beendet')")
-        return value
+    id: StrictStr
+    name: Annotated[str, Field(strict=True, max_length=20)] = Field(description="max. 20 Zeichen")
+    __properties: ClassVar[List[str]] = ["id", "name"]
 
     model_config = {
         "populate_by_name": True,
@@ -62,7 +49,7 @@ class StatusChanged(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of StatusChanged from a JSON string"""
+        """Create an instance of Job from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -87,7 +74,7 @@ class StatusChanged(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of StatusChanged from a dict"""
+        """Create an instance of Job from a dict"""
         if obj is None:
             return None
 
@@ -95,12 +82,8 @@ class StatusChanged(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "deviceId": obj.get("deviceId"),
-            "jobId": obj.get("jobId"),
-            "level": obj.get("level") if obj.get("level") is not None else 'info',
-            "timestamp": obj.get("timestamp"),
-            "message": obj.get("message"),
-            "status": obj.get("status")
+            "id": obj.get("id"),
+            "name": obj.get("name")
         })
         return _obj
 

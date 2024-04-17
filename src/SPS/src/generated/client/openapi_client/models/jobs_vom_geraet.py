@@ -18,7 +18,8 @@ import re  # noqa: F401
 import json
 
 from pydantic import BaseModel, Field, StrictStr
-from typing import Any, ClassVar, Dict, List, Optional
+from typing import Any, ClassVar, Dict, List
+from openapi_client.models.job import Job
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -26,8 +27,8 @@ class JobsVomGeraet(BaseModel):
     """
     JobsVomGeraet
     """ # noqa: E501
-    device_id: Optional[StrictStr] = Field(default=None, alias="deviceId")
-    jobs: Optional[StrictStr] = None
+    device_id: StrictStr = Field(alias="deviceId")
+    jobs: List[Job]
     __properties: ClassVar[List[str]] = ["deviceId", "jobs"]
 
     model_config = {
@@ -69,6 +70,13 @@ class JobsVomGeraet(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # override the default output from pydantic by calling `to_dict()` of each item in jobs (list)
+        _items = []
+        if self.jobs:
+            for _item in self.jobs:
+                if _item:
+                    _items.append(_item.to_dict())
+            _dict['jobs'] = _items
         return _dict
 
     @classmethod
@@ -82,7 +90,7 @@ class JobsVomGeraet(BaseModel):
 
         _obj = cls.model_validate({
             "deviceId": obj.get("deviceId"),
-            "jobs": obj.get("jobs")
+            "jobs": [Job.from_dict(_item) for _item in obj["jobs"]] if obj.get("jobs") is not None else None
         })
         return _obj
 

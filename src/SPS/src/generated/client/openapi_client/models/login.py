@@ -18,7 +18,7 @@ import re  # noqa: F401
 import json
 
 from pydantic import BaseModel, Field, StrictStr
-from typing import Any, ClassVar, Dict, List, Optional
+from typing import Any, ClassVar, Dict, List
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -26,10 +26,10 @@ class Login(BaseModel):
     """
     Login
     """ # noqa: E501
-    ip: Optional[StrictStr] = None
-    id: Optional[StrictStr] = None
-    type: Optional[StrictStr] = None
-    name: Optional[StrictStr] = Field(default=None, description="max. 20 Zeichen")
+    ip: StrictStr
+    id: StrictStr
+    type: StrictStr
+    name: StrictStr = Field(description="max. 20 Zeichen")
     __properties: ClassVar[List[str]] = ["ip", "id", "type", "name"]
 
     model_config = {
