@@ -16,6 +16,7 @@ from generated.client.openapi_client import api_client
 from generated.client.openapi_client import configuration as client_config
 from generated.client.openapi_client import models as client_models
 import time
+import threading
 from datetime import datetime
 
 job_order = {}
@@ -76,16 +77,10 @@ def api_device_start_job_post(start_job):  # noqa: E501
     if connexion.request.is_json:
         start_job = StartJob.from_dict(connexion.request.get_json())  # noqa: E501
         start_time = datetime.now()
-        triggerJob(start_job.id)
         context : SetJobs = job_order[start_job.id]
-        while (isBusy(start_job.id)):
-            time.sleep(0.25)
-        deviceApi = DeviceApi(api_client.ApiClient(client_config.Configuration(context.next_device_ip + ":3000")))
-        print("attempting to reach next device")
-        if last_stop > start_time:
-            return "Not Stopp"
-        deviceApi.api_device_start_job_post(client_models.StartJob(id=context.next_job_id),10)
-    return "Erfolg"
+        job_thread = threading.Thread(target=trigger_and_send_job, args=(start_job, context,start_time))
+        job_thread.start()
+    return "Job gestartet"
 
 
 def get_monitor_jobs():  # noqa: E501
@@ -98,3 +93,15 @@ def get_monitor_jobs():  # noqa: E501
     """
     
     return JobsVomGeraet(jobs=list(map(lambda j: j.job,jobConfig.jobList)))
+
+# service functions
+
+def trigger_and_send_job(start_job : StartJob, context : SetJobs,start_time : datetime):
+    triggerJob(start_job.id)
+    while isBusy(start_job.id):
+        time.sleep(0.25)
+    deviceApi = DeviceApi(api_client.ApiClient(client_config.Configuration(context.next_device_ip + ":3000")))
+    print("attempting to reach next device")
+    if last_stop > start_time:
+        return "Not Stopp"
+    deviceApi.api_device_start_job_post(client_models.StartJob(id=context.next_job_id), 10)
