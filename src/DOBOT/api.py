@@ -64,14 +64,14 @@ def setJobOrder():
     return jsonify("Success"), 200
 
 @app.route("/api/device/startJob", methods=['POST'])
-def startJob():
+async def startJob():
     id = request.args.get('id')
 
     order = dbManager.get_order(id)
 
     subtasks = dbManager.get_subtasks(order[0])
 
-    res = manager.run_task(subtasks)
+    res = await manager.run_task(subtasks)
 
     requests.post(order[3] + '/api/device/startJob?id=' + order[2])
 

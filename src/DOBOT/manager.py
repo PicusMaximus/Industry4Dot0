@@ -177,13 +177,30 @@ def wait(ms, **args):
     d.wait(ms)
     return
 
-def run_task(subtasks):
+
+async def run_task(subtasks):
     for subtask in subtasks:
         for step in subtask.steps:
             if hasattr(step, 'command'):
-                if step.command == 'speed': god_speed(step.data.speed)
-                elif step.command == 'move': move_to_p(step.data.pos)
-                elif step.command == 'settings': toggle_suck(step.data.settings)
-                elif step.command == 'wait': wait(step.data.wait)
-                # elif subtask['command'] == 'grip': 
-    return
+                if step.command == 'speed':
+                    await async_god_speed(step.data.speed)
+                elif step.command == 'move':
+                    await async_move_to_p(step.data.pos)
+                elif step.command == 'settings':
+                    await async_suck(step.data.settings)
+                elif step.command == 'wait':
+                    await async_wait(step.data.wait)
+                # Add implementation for other commands as needed
+    return "andere die method ein anyc"
+
+async def async_wait(wait_time):
+    await asyncio.get_event_loop().run_in_executor(executor, wait, wait_time)
+
+async def async_suck(state):
+    await asyncio.get_event_loop().run_in_executor(executor, toggle_suck, state)
+
+async def async_move_to_p(pos):
+    await asyncio.get_event_loop().run_in_executor(executor, move_to_p, pos)
+
+async def async_god_speed(speed):
+    await asyncio.get_event_loop().run_in_executor(executor, god_speed, speed)
