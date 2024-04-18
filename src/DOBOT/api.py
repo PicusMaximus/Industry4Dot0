@@ -1,9 +1,10 @@
 import logging
 from flask import Flask, jsonify, request, render_template
 from flask_swagger_ui import get_swaggerui_blueprint
-import uuid
 import manager
 import dbManager
+import requests
+import uuid
 
 ### -------------------------------------------------------------------------------------------------- ###
 
@@ -68,11 +69,11 @@ def startJob():
 
     order = dbManager.get_order(id)
 
-    subtasks = dbManager.get_subtasks(id)
+    subtasks = dbManager.get_subtasks(order[0])
 
     res = manager.run_task(subtasks)
 
-    request.post(order['nextDeviceIp'] + '?id=' + order['nextJobId'], )
+    requests.post(order[3] + '/api/device/startJob?id=' + order[2])
 
     return jsonify(res), 200        
 
@@ -90,6 +91,15 @@ def login():
 def log2Monitor():
     manager.send_log()
     return jsonify("Log successful."), 200
+
+
+@app.route("/api/device/setSettings", methods=['POST'])
+def setSettings():
+    monitorIP = request.args.get('monitorIP')
+    deviceName = request.args.get('deviceName')
+    dbManager.setMonitorIP(monitorIP, deviceName)
+
+    return jsonify("Successfully saved Settings"), 200
 
 ### END POST ###
 
