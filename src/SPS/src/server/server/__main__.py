@@ -5,7 +5,7 @@ import connexion
 from server.server import encoder
 from flask import render_template
 from flask_cors import CORS
-
+from flask import request
 
 def main():
     print("server is starting")
@@ -19,4 +19,9 @@ def main():
     def frontend_dinge():
         return render_template('index.html')
     app.run(port=3000)
+    
+    @app.app.before_request
+    def log_request_info():
+        print(request.get_data())
+    
 main()
