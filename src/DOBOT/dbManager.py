@@ -283,3 +283,17 @@ def setSettings(monitorIP, deviceName):
 
     con.commit()
     con.close()
+
+def getMonitorIP():
+    con = sqlite3.connect('task.db')
+    cur = con.cursor()
+
+    # Get Monitor-IP
+    cur.execute('''
+                SELECT TOP 1 monitorIP
+                FROM settings
+                ''')
+
+    monitorIP = cur.fetchone()
+
+    return monitorIP
