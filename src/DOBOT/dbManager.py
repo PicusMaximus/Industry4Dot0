@@ -52,7 +52,7 @@ def create_db():
 
     cur.execute('''
         CREATE TABLE IF NOT EXISTS settings (
-            settingsId INT PRIMARY KEY AUTO INCREMENT
+            settingsId INTEGER PRIMARY KEY AUTOINCREMENT
             ,monitorIp TEXT NULL
             ,deviceName TEXT NULL
         )

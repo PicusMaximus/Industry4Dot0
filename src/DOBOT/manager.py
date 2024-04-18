@@ -5,7 +5,6 @@ from classes import Dobot
 import devices
 from serial.tools import list_ports
 from classes.Enums import ConnectState, PTPMode
-import dbManager
 
 dobot = None
 
@@ -108,11 +107,6 @@ def get_jobs():
     }
 
 def login():
-
-    monitorIP = dbManager.getMonitorIP()
-
-    if monitorIP is None:
-        monitorIP = "http://10.5.101.115:3000"
 
     response = requests.post(url='{base_path}/api/monitor/login'.format(base_path=monitorIP), json={
         "ip": devices.getServerIp(),
