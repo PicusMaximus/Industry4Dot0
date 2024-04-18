@@ -1,10 +1,9 @@
 import logging
 from flask import Flask, jsonify, request, render_template
 from flask_swagger_ui import get_swaggerui_blueprint
-from UuidGeneration import generate_uuid_with_mac_seed
 import manager
 import dbManager
-import requests
+import uuid
 
 ### -------------------------------------------------------------------------------------------------- ###
 
@@ -214,7 +213,7 @@ def getSubtasks():
 def createTask():
     task = request.json
 
-    if hasattr(task, 'id') == False: task['id'] = str(generate_uuid_with_mac_seed(1))
+    if hasattr(task, 'id') == False: task['id'] = str(uuid.uuid4())
     dbManager.create_task(task)
 
     return jsonify('Success'), 200
@@ -289,34 +288,34 @@ def getAboutPage():
 @app.route('/axis-card', methods=['GET'])
 def getAxisCardPartial():
     id = request.args.get('id')
-    if id == None: id = generate_uuid_with_mac_seed(2)
+    if id == None: id = uuid.uuid4()
     return render_template('axis-card.html', data = {'id': id})
 
 @app.route('/movement-card', methods=['GET'])
 def getMovementCardPartial():
     id = request.args.get('id')
-    if id == None: id = generate_uuid_with_mac_seed(3)
+    if id == None: id = uuid.uuid4()
 
     return render_template('movement-card.html', data = { 'id': id })
 
 @app.route('/wait-card', methods=['GET'])
 def getWaitCardPartial():
     id = request.args.get('id')
-    if id == None: id = generate_uuid_with_mac_seed(4)
+    if id == None: id = uuid.uuid4()
     
     return render_template('wait-card.html', data = { 'id': id })
 
 @app.route('/settings-card', methods=['GET'])
 def getSettingsCardPartial():
     id = request.args.get('id')
-    if id == None: id = generate_uuid_with_mac_seed(5)
+    if id == None: id = uuid.uuid4()
 
     return render_template('settings-card.html', data = { 'id': id })
 
 @app.route('/job/name-card', methods=['GET'])
 def getJobNameCardPartial():
     id = request.args.get('id')
-    if id == None: id = generate_uuid_with_mac_seed(6)
+    if id == None: id = uuid.uuid4()
 
     return render_template('job-name-card.html', data = { 'id': id })
 
