@@ -5,8 +5,6 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SPS</title>
-  <script src="index.js" defer></script>
-  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
@@ -29,6 +27,17 @@
       </div>
     </div>
   </div>
+  <div id="ip">
+    <p>IP: <span id="ip-a"></span></p>
+    <button id="ip-b" class="ip-b">Ändern</button>
+  </div>
+  <div id="ip-m">
+    <div id="ip-c">
+      <input id="ip-i" placeholder="IP eingeben">
+      <button id="ip-b0" class="ip-b">Ändern</button>
+      <button id="ip-b1" class="ip-b">Abbrechen</button>
+    </div>
+  </div>
   <div class="table-container">
     <table id="table">
       <tr>
@@ -41,51 +50,62 @@
 </body>
 
 <script>
-  const ip = "http://192.168.0.1/"
+  const ipActual = '192.168.0.1'
+  const ip = `http://${ipActual}/`
   const wmAn = document.getElementById('wm-an')
   const wmAus = document.getElementById('wm-aus')
-  
+
+  const ipA = document.getElementById('ip-a')
+  const ipB = document.getElementById('ip-b')
+  const ipB0 = document.getElementById('ip-b0')
+  const ipB1 = document.getElementById('ip-b1')
+
+  ipA.innerHTML = ipActual;
+
   loadJobs();
   setInterval(() => {
     loadJobs()
 
-  }, '200')
+  }, 5000)
 
   wmAn.addEventListener('click', (event) => toggleWartungsmodus(event, true));
   wmAus.addEventListener('click', (event) => toggleWartungsmodus(event, false));
-  
+  ipB.addEventListener('click', (event) => changeIPShow(event));
+  ipB0.addEventListener('click', (event) => changeIP(event));
+  ipB1.addEventListener('click', (event) => changeIPHide(event));
+
   async function toggleWartungsmodus(event, status) {
       event.preventDefault();
       setLoad(true)
-  
+
       // const result = await postData(ip, {status: status});
-  
+
       // if (!result || result.status !== 200) {
       //     setLoad(false);
       //     return;
       // }
-  
+
       // const respone = await result.json();
-  
+
       if (status) { // response nicht status
           document.querySelectorAll(".gray").forEach((e) => {
               e.classList.remove("gray");
           })
-  
+
           document.querySelector(".gruen").classList.add("gray")
           document.querySelector(".rot").classList.add("gray")
       } else {
           document.querySelectorAll(".gray").forEach((e) => {
               e.classList.remove("gray");
           })
-  
+
           document.querySelector(".rot").classList.add("gray")
           document.querySelector(".gelb").classList.add("gray")
       }
-  
+
       setLoad(false);
   }
-  
+
   async function loadJobs() {
       const table = document.querySelector("#table");
 
@@ -95,30 +115,30 @@
       {
         elements[0].parentNode.removeChild(elements[0]);
       }
-  
+
       data.jobs.forEach((e) => {
           const tr = document.createElement("tr");
           tr.classList.add('TabellenReihe')
           const td0 = getTd(e.id);
           const td1 = getTd(e.name);
           const td2 = getTd('An');
-  
+
           tr.appendChild(td0);
           tr.appendChild(td1);
           tr.appendChild(td2);
-          
+
 
           table.appendChild(tr);
       });
   }
-  
+
   function getTd(value) {
       const td = document.createElement("td");
       td.innerHTML = value;
-  
+
       return td;
   }
-  
+
   async function postData(url = "", data = {}) {
       try {
           const response = await fetch(url, {
@@ -128,13 +148,13 @@
               },
               body: JSON.stringify(data)
           });
-  
+
           return response;
       } catch (e) {
           alert("Fehler");
       }
   }
-  
+
   function setLoad(value) {
       const load = document.querySelector("#load");
       if (value) {
@@ -142,6 +162,39 @@
       } else {
           load.style = 'display: none';
       }
+  }
+
+  async function changeIP(event) {
+    const ipA = document.querySelector("#ip-a");
+    const ipI = document.querySelector("#ip-i");
+    const ipVal = ipI.value;
+
+    const result = await postData("/api/device/setServerIP", {ip: ipVal});
+
+    if (!result || result.status !== 200) {
+        setLoad(false);
+        return;
+    }
+
+    const respone = await result.json();
+
+    console.log(respone)
+
+    ipA.innerHTML = ipVal;
+    changeIPHide(event);
+  }
+
+  function changeIPShow(event) {
+    const ipM = document.querySelector("#ip-m");
+    const ipA = document.querySelector("#ip-a");
+    const ipI = document.querySelector("#ip-i");
+
+    ipI.value = ipA.innerHTML;
+    ipM.style = 'display: flex';
+  }
+  function changeIPHide(event) {
+    const ipM = document.querySelector("#ip-m");
+    ipM.style = 'display: none';
   }
 </script>
 
@@ -321,6 +374,42 @@ td {
     87% {
       box-shadow: .2em -.2em 0 0 currentcolor;
     }
+  }
+
+  #ip {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    margin: 0.5em;
+  }
+
+  #ip-i {
+    padding: 0.3em;
+    border-radius: 20px;
+    outline: 1px solid black;
+  }
+
+  .ip-b {
+    padding: 0.5em;
+    font-size: 0.8em;
+    font-weight: 400;
+    border: 1px solid black;
+  }
+
+  #ip-m {
+    display: none;
+    position: absolute;
+    inset: 0;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5em;
+    background-color: rgba(0,0,0,0.3);
+  }
+
+  #ip-c {
+    padding: 1em;
+    background-color: white;
+    border-radius: 20px;
   }
 </style>
 
