@@ -68,11 +68,11 @@ def startJob():
 
     order = dbManager.get_order(id)
 
-    subtasks = dbManager.get_subtasks(id)
+    subtasks = dbManager.get_subtasks(order[0])
 
     res = manager.run_task(subtasks)
 
-    request.post(order['nextDeviceIp'] + '?id=' + order['nextJobId'], )
+    requests.post(order[3] + '/api/device/startJob?id=' + order[2])
 
     return jsonify(res), 200        
 
