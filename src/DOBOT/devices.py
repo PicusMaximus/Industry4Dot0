@@ -1,12 +1,11 @@
-import uuid
 import cherrypy
 from flask import request
+from UuidGeneration import generate_uuid_with_mac_seed
 
 def getServerIp():
     return request.host.split(':')[0]
 
-
-deviceId = uuid.uuid4()
+deviceId = generate_uuid_with_mac_seed(0)
 
 posDict = {}
 
