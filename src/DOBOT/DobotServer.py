@@ -1,5 +1,6 @@
 from time import sleep
 import cherrypy, os, threading, traceback
+import DoStatus
 
 from ws4py.server.cherrypyserver import WebSocketPlugin, WebSocketTool
 from ws4py.websocket import WebSocket
@@ -56,6 +57,11 @@ class DobotServer(object):
         threading.Thread(target=connection_state, args=(cherrypy.request.config['dobot.updateConnectionDetailsInterval'],), daemon=True).start()
         return
     
+    def send_status_to_server(self):
+        #start status timer
+        threading.Thread(target=DoStatus.send_status).start()
+        return
+    
 
 def connection_state(time):
     while(True):
@@ -109,5 +115,6 @@ if __name__ == '__main__':
     cherrypy.engine.start()
 
     root.update_connection_state()
+    root.send_status_to_server()
 
     cherrypy.engine.block()
