@@ -92,6 +92,14 @@ def log2Monitor():
     manager.send_log()
     return jsonify("Log successful."), 200
 
+@app.route("/api/device/setSettings", methods=['POST'])
+def setSettings():
+    monitorIP = request.args.get('monitorIP')
+    deviceName = request.args.get('deviceName')
+    dbManager.setMonitorIP(monitorIP, deviceName)
+
+    return jsonify("Successfully saved Settings"), 200
+
 ### END POST ###
 
 ### -------------------------------------------------------------------------------------------------- ###
