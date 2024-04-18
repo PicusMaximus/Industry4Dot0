@@ -1,4 +1,5 @@
 import uuid
+from UuidGeneration import generate_uuid_with_mac_seed
 import requests
 from classes import Dobot
 import devices
@@ -99,14 +100,15 @@ def get_jobs():
         "deviceId": str(devices.deviceId),
         "jobs": [
             {
-                "id": str(uuid.uuid4()),
+                "id": str(generate_uuid_with_mac_seed(devices.deviceId)),
                 "name": "Job 1"
             }
         ],
     }
 
 def login():
-    response = requests.post(url='{base_path}/api/monitor/login'.format(base_path="http://10.5.101.129:3000"), json={
+
+    response = requests.post(url='{base_path}/api/monitor/login'.format(base_path=monitorIP), json={
         "ip": devices.getServerIp(),
         "id": str(devices.deviceId),
         "type": "dobot",

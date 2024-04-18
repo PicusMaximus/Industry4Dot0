@@ -5,7 +5,7 @@ import connexion
 from server.server import encoder
 from flask import render_template, request, jsonify
 from flask_cors import CORS
-
+from flask import request
 
 def main():
     print("server is starting")
@@ -27,4 +27,9 @@ def main():
 
         return jsonify(ip), 200
     app.run(port=3000)
+    
+    @app.app.before_request
+    def log_request_info():
+        print(request.get_data())
+    
 main()
