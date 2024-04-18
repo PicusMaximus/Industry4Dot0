@@ -3,6 +3,7 @@ from flask import Flask, jsonify, request, render_template
 from flask_swagger_ui import get_swaggerui_blueprint
 import manager
 import dbManager
+import requests
 import uuid
 
 ### -------------------------------------------------------------------------------------------------- ###
