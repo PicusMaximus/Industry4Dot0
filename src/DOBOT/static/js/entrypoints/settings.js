@@ -2,8 +2,8 @@ function saveSettings() {
     const settingLeitstelle = document.getElementById('settings-leitstelle-adresse');
     const settingDobotName = document.getElementById('settings-dobot-name');
     
-    const leitstelle = settingLeitstelle.value;
-    const dobotName = settingDobotName.value;
+    const monitorIP = settingLeitstelle.value;
+    const deviceName = settingDobotName.value;
 
-    fetch('URL', { method: 'POST' })
+    fetch(`/api/device/setSettings?monitorIP=${monitorIP}?deviceName=${deviceName}`, { method: 'POST' })
 }

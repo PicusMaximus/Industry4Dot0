@@ -50,6 +50,14 @@ def create_db():
         )
     ''')
 
+    cur.execute('''
+        CREATE TABLE IF NOT EXISTS settings (
+            settingsId INT PRIMARY KEY AUTO INCREMENT
+            ,monitorIp TEXT NULL
+            ,deviceName TEXT NULL
+        )
+    ''')
+
     con.commit()
     con.close()
 
@@ -249,5 +257,29 @@ def delete_task(id):
                     DELETE FROM task WHERE id = ?
                 ''', (id, ))
     
+    con.commit()
+    con.close()
+
+def setSettings(monitorIP, deviceName):
+    con = sqlite3.connect('task.db')
+    cur = con.cursor()
+
+    # Aktuelle Daten aus der Settings-Tabelle löschen; darf immer nur einen Eintrag geben
+    cur.execute('''
+                    DELETE FROM settings
+                ''')
+
+    con.commit()
+    con.close()
+
+    # Set Monitor-IP and Device-name
+    cur.execute('''
+                    INSERT INTO settings (monitorIP, deviceName)
+                    VALUES (?, ?)
+                    SET
+                    monitorIP = ?,
+                    deviceName = ?
+                ''', (monitorIP, deviceName))
+
     con.commit()
     con.close()
