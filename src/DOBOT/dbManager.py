@@ -290,7 +290,7 @@ def getMonitorIP():
 
     # Get Monitor-IP
     cur.execute('''
-                SELECT TOP 1 monitorIP
+                SELECT monitorIP
                 FROM settings
                 ''')
 
