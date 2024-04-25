@@ -5,6 +5,7 @@ import uuid
 import manager
 import dbManager
 import requests
+import asyncio
 
 ### -------------------------------------------------------------------------------------------------- ###
 
@@ -177,14 +178,14 @@ def reconnectDevice():
     return jsonify("Successfully reconnected"), 200
 
 @app.route("/api/device/task", methods=['POST'])
-def runTask():
+async def runTask():
     id = request.args.get('id')
 
     if id is None: return 'Bad Request', 400
 
     subtasks = dbManager.get_subtasks(id)
 
-    manager.run_task(subtasks)
+    await manager.run_task(subtasks)
 
     return jsonify('success'), 200
 

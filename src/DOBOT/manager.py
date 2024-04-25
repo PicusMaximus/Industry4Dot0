@@ -4,6 +4,7 @@ from classes import Dobot
 import devices
 from serial.tools import list_ports
 from classes.Enums import ConnectState, PTPMode
+import asyncio
 
 dobot = None
 
@@ -183,7 +184,7 @@ def wait(ms, **args):
     d.wait(ms)
     return
 
-def run_task(subtasks):
+async def run_task(subtasks):
     for subtask in subtasks:
         for step in subtask.steps:
             if hasattr(step, 'command'):
