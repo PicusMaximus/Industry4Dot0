@@ -18,7 +18,8 @@ def login_if_needed():
 def get_internal_job(id):
     def filter_id(internaljob):
         return internaljob.job.id == id
-    internalJob : InternalJob = filter(filter_id,jobList)[0]
+    print("the ID is:" + id)
+    internalJob : InternalJob = list(filter(filter_id,jobList))[0]
     return internalJob
 
 def triggerJob(id):

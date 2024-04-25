@@ -35,7 +35,7 @@ def api_device_notstop_post():  # noqa: E501
     return 'Job stopped!'
 
 
-def api_device_set_job_order_post(set_jobs):  # noqa: E501
+def api_device_set_job_order_post(body):  # noqa: E501
     """sets the order of the jobs
 
      # noqa: E501
@@ -64,7 +64,7 @@ def api_device_set_monitor_ip_post(ip):  # noqa: E501
     return 'NOT NEEDED!'
 
 
-def api_device_start_job_post(start_job):  # noqa: E501
+def api_device_start_job_post(body):  # noqa: E501
     """start job
 
      # noqa: E501
@@ -77,7 +77,11 @@ def api_device_start_job_post(start_job):  # noqa: E501
     if connexion.request.is_json:
         start_job = StartJob.from_dict(connexion.request.get_json())  # noqa: E501
         start_time = datetime.now()
-        context : SetJobs = job_order[start_job.id]
+        print("starting job: " + str(start_job.id))
+        try:
+            context : SetJobs = job_order[start_job.id]
+        except KeyError:
+            return ("Failed starting the job. Wrong UUID")
         job_thread = threading.Thread(target=trigger_and_send_job, args=(start_job, context,start_time))
         job_thread.start()
     return "Job gestartet"
