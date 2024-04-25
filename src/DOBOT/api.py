@@ -76,7 +76,7 @@ def startJob():
 
     requests.post('{ip}/api/device/startJob?id={id}'.format(ip=order[3], id=order[2]))
 
-    return jsonify(res), 200        
+    return jsonify('Success'), 200        
 
 @app.route("/api/device/start", methods=['POST'])
 def start():
