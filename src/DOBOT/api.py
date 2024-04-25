@@ -74,7 +74,7 @@ def startJob():
 
     res = manager.run_task(subtasks)
 
-    requests.post('http://{ip}:3000/api/device/startJob?id={id}'.format(ip=order[3], id=order[2]))
+    requests.post('{ip}/api/device/startJob?id={id}'.format(ip=order[3], id=order[2]))
 
     return jsonify(res), 200        
 
@@ -85,7 +85,7 @@ def start():
 
 @app.route("/api/monitor/login", methods=['POST'])
 def login():
-    manager.login()
+    manager.login(dbManager.getMonitorIP())
     return jsonify("Login successful."), 200
 
 @app.route("/api/monitor/log", methods=['POST'])

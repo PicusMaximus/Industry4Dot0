@@ -106,9 +106,7 @@ def get_jobs():
         ],
     }
 
-def login():
-
-    monitorIP = dbManager.getMonitorIP()
+def login(monitorIp):
 
     if monitorIP is None:
         monitorIP = 'http://10.5.101.115:3000'
@@ -193,4 +191,4 @@ async def run_task(subtasks):
                 elif step.command == 'settings': toggle_suck(step.data.settings)
                 elif step.command == 'wait': wait(step.data.wait)
                 # elif subtask['command'] == 'grip': 
-    return
+    return ''
