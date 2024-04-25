@@ -33,9 +33,12 @@
   </div>
   <div id="ip-m">
     <div id="ip-c">
-      <input id="ip-i" placeholder="IP eingeben">
-      <button id="ip-b0" class="ip-b">Ändern</button>
-      <button id="ip-b1" class="ip-b">Abbrechen</button>
+      <h2>Serveradresse ändern:</h2>
+      <div>
+        <input id="ip-i" placeholder="IP eingeben">
+        <button id="ip-b0" class="ip-b">Ändern</button>
+        <button id="ip-b1" class="ip-b">Abbrechen</button>
+      </div>
     </div>
   </div>
   <div class="table-container">
@@ -407,6 +410,9 @@ td {
   }
 
   #ip-c {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
     padding: 1em;
     background-color: white;
     border-radius: 20px;
