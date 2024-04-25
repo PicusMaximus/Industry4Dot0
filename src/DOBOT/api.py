@@ -72,14 +72,15 @@ async def startJob():
 
     subtasks = dbManager.get_subtasks(order[0])
 
+    manager.clear()
+
     res = await manager.run_task(subtasks)
 
     idx = manager.get_index()
-    idx1 = 2
 
-    while(idx1 != 0):
-        app.logger.info('Waiting be like: {idx1}'.format(idx1 = idx1))
-        idx1 = manager.get_index()
+    while(idx != 0):
+        app.logger.info('Waiting be like: {idx}'.format(idx = idx))
+        idx = manager.get_index()
 
     requests.post('{ip}/api/device/startJob?id={id}'.format(ip=order[3], id=order[2]))
 
