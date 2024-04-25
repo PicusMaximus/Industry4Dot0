@@ -97,7 +97,7 @@ def log2Monitor():
 def setSettings():
     monitorIP = request.args.get('monitorIP')
     deviceName = request.args.get('deviceName')
-    dbManager.setMonitorIP(monitorIP, deviceName)
+    dbManager.setSettings(monitorIP, deviceName)
 
     return jsonify("Successfully saved Settings"), 200
 
