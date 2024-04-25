@@ -5,12 +5,7 @@ from flask import request
 def getServerIp():
     return request.host.split(':')[0]
 
-
 deviceId = uuid.uuid4()
-
-posDict = {}
-
-orderedPositionsDict = {}
 
 monitorIp = 'http://10.5.101.129:3000'
 

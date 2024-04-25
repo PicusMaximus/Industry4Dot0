@@ -74,7 +74,7 @@ def startJob():
 
     res = manager.run_task(subtasks)
 
-    requests.post(order[3] + '/api/device/startJob?id=' + order[2])
+    requests.post('http://{ip}:3000/api/device/startJob?id={id}'.format(ip=order[3], id=order[2]))
 
     return jsonify(res), 200        
 
