@@ -331,6 +331,13 @@ class Dobot:
         msg.ctrl = ControlValues.THREE
         msg.params = bytearray(struct.pack('I', ms))
         return self._send_command(msg)
+    
+    def _get_current_index(self):
+        msg = Message()
+        msg.id = CommunicationProtocolIDs.GET_QUEUED_CMD_CURRENT_INDEX
+        msg.ctrl = ControlValues.THREE
+        
+        return self._send_command(msg)
 
     def close(self):
         self._on = False
@@ -424,3 +431,6 @@ class Dobot:
     
     def wait(self, ms):
         return self._set_wait_cmd(ms)
+    
+    def get_current_index(self):
+        return self._get_current_index()

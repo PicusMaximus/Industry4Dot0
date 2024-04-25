@@ -74,6 +74,13 @@ async def startJob():
 
     res = await manager.run_task(subtasks)
 
+    idx = manager.get_index()
+    idx1 = 2
+
+    while(idx1 != 0):
+        app.logger.info('Waiting be like: {idx1}'.format(idx1 = idx1))
+        idx1 = manager.get_index()
+
     requests.post('{ip}/api/device/startJob?id={id}'.format(ip=order[3], id=order[2]))
 
     return jsonify(res), 200        

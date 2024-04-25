@@ -182,6 +182,10 @@ def wait(ms, **args):
     d.wait(ms)
     return
 
+def get_index():
+    d = get_dobot()
+    return d.get_current_index()
+
 async def run_task(subtasks):
     for subtask in subtasks:
         for step in subtask.steps:
