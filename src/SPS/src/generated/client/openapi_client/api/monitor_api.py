@@ -83,7 +83,7 @@ class MonitorApi:
         :type _host_index: int, optional
         :return: Returns the result object.
         """ # noqa: E501
-
+        print(self)
         _param = self._api_monitor_log_post_serialize(
             status_changed=status_changed,
             _request_auth=_request_auth,

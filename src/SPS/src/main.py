@@ -3,7 +3,9 @@ import os
 import runpy
 import asyncio
 from UuidGeneration import generate_uuid_with_mac_seed
-import Status
+import threading
+import schedule
+import time
 
 # python module path bullcrap cause i don't know how to do it properly
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -19,7 +21,7 @@ from generated.client.openapi_client import MonitorApi
 from generated.client.openapi_client import models as client_models
 from generated.client.openapi_client import api_client
 from generated.client.openapi_client import configuration as client_config
-
+from datetime import datetime
 
 # config
 load_dotenv()
@@ -35,9 +37,28 @@ async def registration():
     print("registration done")
 asyncio.run(registration())
 
-async def send_status_to_mfs():
-    Status.send_status()
-asyncio.run(send_status_to_mfs())
+def send_status():
+    print("sending status")
+    MonitorApi.api_monitor_log_post(
+        client_models.StatusChanged(
+            deviceId=str(generate_uuid_with_mac_seed(999999)),
+            timestamp=str(datetime.now().timestamp()),
+        )
+    )
+
+def schedule_task():
+    schedule.every(1).minutes.do(send_status)
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
+
+async def send_status_to_mfs(monitorApi, client_models):
+    #schedule_thread = threading.Thread(target=schedule_task)
+    #schedule_thread.daemon = True
+    #schedule_thread.start()
+    #send_status()
+    print("test")
+asyncio.run(send_status_to_mfs(monitorApi, client_models))
 
 print("starting server")
 runpy.run_path(server_dir)
