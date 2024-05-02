@@ -9,10 +9,13 @@ slot = os.getenv("SLOT")
 spsIP = os.getenv("SPS_IP")
 client = snap7.client.Client()
 def connect():
+    print("trying to connect to SPS")
     client.connect(spsIP, int(rack), int(slot))
 
 def login_if_needed():
-    if not client.get_connected:
+    print("checking connection to SPS")
+    if not client.get_connected():
+        print("SPS connection not yet established")
         connect()
         
 def get_internal_job(id):
@@ -35,6 +38,7 @@ def stopJob():
     print("stopping of jobs not implemented")
     
 def isBusy(id):
-    internalJob : InternalJob = get_internal_job(id)
     login_if_needed()
-    client.db_read(dbnumber,internalJob.spsOut,internalJob.spsOut + 1)
+    returned = client.db_read(int(dbnumber),get_internal_job(id).spsIn,1)
+    print(returned)
+    return returned == b'\x01'

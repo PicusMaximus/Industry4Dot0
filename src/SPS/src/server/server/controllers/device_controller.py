@@ -11,7 +11,7 @@ import jobConfig
 from sps.sps import triggerJob
 from sps.sps import stopJob
 from sps.sps import isBusy
-from generated.client.openapi_client import DeviceApi
+from generated.client.openapi_client.api.device_api import DeviceApi
 from generated.client.openapi_client import api_client
 from generated.client.openapi_client import configuration as client_config
 from generated.client.openapi_client import models as client_models
