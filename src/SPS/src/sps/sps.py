@@ -13,7 +13,6 @@ def connect():
     client.connect(spsIP, int(rack), int(slot))
 
 def login_if_needed():
-    print("checking connection to SPS")
     if not client.get_connected():
         print("SPS connection not yet established")
         connect()
@@ -21,7 +20,6 @@ def login_if_needed():
 def get_internal_job(id):
     def filter_id(internaljob):
         return internaljob.job.id == id
-    print("the ID is:" + id)
     internalJob : InternalJob = list(filter(filter_id,jobList))[0]
     return internalJob
 
@@ -40,5 +38,4 @@ def stopJob():
 def isBusy(id):
     login_if_needed()
     returned = client.db_read(int(dbnumber),get_internal_job(id).spsIn,1)
-    print(returned)
     return returned == b'\x01'

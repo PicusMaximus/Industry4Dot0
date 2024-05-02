@@ -102,8 +102,10 @@ def get_monitor_jobs():  # noqa: E501
 
 def trigger_and_send_job(start_job : StartJob, context : SetJobs,start_time : datetime):
     triggerJob(start_job.id)
+    print("waiting until not busy")
     while isBusy(start_job.id):
         time.sleep(0.25)
+    print("*yay* its ready")
     deviceApi = DeviceApi(api_client.ApiClient(client_config.Configuration(context.next_device_ip + ":3000")))
     print("attempting to reach next device")
     if last_stop > start_time:
