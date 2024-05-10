@@ -63,9 +63,9 @@
       ```
 4. Build the project
    #### Python
-   To start the python services you have to run to seperate commands. The first will start the API-Server and the second will run the Socket-Server which will only listen to website interactions.\
-      > [!NOTE]  
-      > This will be executed in the DOBOT directory.
+   To start the python services you have to run to seperate commands. The first will start the API-Server which runs flask and the second will run the Socket-Server using CherryPi. The Socket-Server just listens for interactions the user makes on the websites and has no other purpose.\
+> [!NOTE]
+> This will be executed in the DOBOT directory.
    ##### First
       ```bash
          $ python3 ./api.py
@@ -78,17 +78,17 @@
    #### Frontend
    Generally the frontend will be run by the api.py, but certain parts of the frontend need some extra attention to work. We have to do two things if we wont to build or update it.
    ##### First
-   The frontend uses a tool called esbuild to bundle JS Files. This allows us to use ESMs which lead to a more modular codebase. Additionally we can use it to minify or js code which should give or website a better performance. Esbuild does also support Typescript if we ever want to integrate it into the project.
-   [!NOTE]  
-   This needs to be executed in the static directory of the DOBOT project.
+   The frontend uses a tool called `esbuild` to bundle JS Files. This allows us to use `ESMs` which lead to a more modular codebase. Additionally we can use it to minify or js code which should give or website a better performance. Esbuild does also support Typescript if we ever want to integrate it into the project.
+>[!NOTE]  
+>This needs to be executed in the static directory of the DOBOT project.  
    ```bash
       $ npm run build
    ```
 
    #### Second
-   The styles of the frontend of the dobot are mostly handled by Tailwind. To update or change styles you need to run the following command which leads taildwind to check and update the current styles.
-   > [!NOTE]  
-   > You can still write CSS the normal way!
+   The styling of the dobot frontend is mostly handled by `TailwindCSS`. To update or change styles you need to run the following command which leads taildwind to all relavant files for style changes and update the current css styles.
+> [!NOTE]
+> You can still write CSS the normal way!
    ```bash
       npx tailwindcss -i ./input.css -o ./output.css --watch
    ```
