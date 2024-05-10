@@ -54,7 +54,7 @@ function createToast(content, type = 'info', id=0) {
  */
 function createSuccessToast(content, id) {
     return `
-<div id="success-toast-${id}" class="absolute bottom-4 start-1/2 -translate-x-1/2 hs-removing:translate-x-5 hs-removing:opacity-0 transition duration-300 max-w-xs bg-white border border-gray-200 rounded-xl shadow-lg dark:bg-gray-800 dark:border-gray-700 z-50 " role="alert">
+<div id="success-toast-${id}" class="absolute bottom-4 start-1/2 -translate-x-1/2 hs-removing:translate-x-5 hs-removing:opacity-0 transition duration-300 max-w-xs bg-white border border-gray-200 rounded-xl shadow-lg dark:bg-neutral-900 dark:border-neutral-700 z-50" role="alert">
     <div class="flex p-4">
       <div class="flex-shrink-0">
         <svg class="flex-shrink-0 size-4 text-teal-500 mt-0.5" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
@@ -62,7 +62,7 @@ function createSuccessToast(content, id) {
         </svg>
       </div>
       <div class="ms-3">
-        <p class="text-sm text-gray-700 dark:text-gray-400">
+        <p class="text-sm text-gray-700 dark:text-neutral-400">
           ${content}
         </p>
       </div>
@@ -83,7 +83,7 @@ function createSuccessToast(content, id) {
  */
 function createDangerToast(content, id) {
     return `
-    <div id="danger-toast-${id}" class="absolute bottom-4 start-1/2 -translate-x-1/2 hs-removing:translate-x-5 hs-removing:opacity-0 transition duration-300 max-w-xs bg-white border border-gray-200 rounded-xl shadow-lg dark:bg-gray-800 dark:border-gray-700 z-50 " role="alert">
+    <div id="danger-toast-${id}" class="absolute bottom-4 start-1/2 -translate-x-1/2 hs-removing:translate-x-5 hs-removing:opacity-0 transition duration-300 max-w-xs bg-white border border-gray-200 rounded-xl shadow-lg dark:bg-neutral-900 dark:border-neutral-700 z-50 " role="alert">
     <div class="flex p-4">
       <div class="flex-shrink-0">
         <svg class="flex-shrink-0 size-4 text-red-500 mt-0.5" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
@@ -91,7 +91,7 @@ function createDangerToast(content, id) {
         </svg>
       </div>
       <div class="ms-3">
-        <p class="text-sm text-gray-700 dark:text-gray-400">
+        <p class="text-sm text-gray-700 dark:text-neutral-400">
             ${content}
         </p>
       </div>
@@ -112,7 +112,7 @@ function createDangerToast(content, id) {
  */
 function createWarnToast(content, id) {
     return `
-    <div id="warn-toast-${id}" class="absolute bottom-4 start-1/2 -translate-x-1/2 hs-removing:translate-x-5 hs-removing:opacity-0 transition duration-300 max-w-xs bg-white border border-gray-200 rounded-xl shadow-lg dark:bg-gray-800 dark:border-gray-700 z-50 " role="alert">
+    <div id="warn-toast-${id}" class="absolute bottom-4 start-1/2 -translate-x-1/2 hs-removing:translate-x-5 hs-removing:opacity-0 transition duration-300 max-w-xs bg-white border border-gray-200 rounded-xl shadow-lg dark:bg-neutral-900 dark:border-neutral-700 z-50 " role="alert">
     <div class="flex p-4">
       <div class="flex-shrink-0">
         <svg class="flex-shrink-0 size-4 text-yellow-500 mt-0.5" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
@@ -120,7 +120,7 @@ function createWarnToast(content, id) {
         </svg>
       </div>
       <div class="ms-3">
-        <p class="text-sm text-gray-700 dark:text-gray-400">
+        <p class="text-sm text-gray-700 dark:text-neutral-400">
             ${content}
         </p>
       </div>
@@ -141,7 +141,7 @@ function createWarnToast(content, id) {
  */
 function createInfoToast(content, id) {
     return `
-    <div id="info-toast-${id}" class="absolute bottom-4 start-1/2 -translate-x-1/2 hs-removing:translate-x-5 hs-removing:opacity-0 transition duration-300 max-w-xs bg-white border border-gray-200 rounded-xl shadow-lg dark:bg-gray-800 dark:border-gray-700 z-50 " role="alert">
+    <div id="info-toast-${id}" class="absolute bottom-4 start-1/2 -translate-x-1/2 hs-removing:translate-x-5 hs-removing:opacity-0 transition duration-300 max-w-xs bg-white border border-gray-200 rounded-xl shadow-lg dark:bg-neutral-900 dark:border-neutral-700 z-50 " role="alert">
         <div class="flex p-4">
             <div class="flex-shrink-0">
                 <svg class="flex-shrink-0 size-4 text-blue-500 mt-0.5" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
@@ -149,7 +149,7 @@ function createInfoToast(content, id) {
                 </svg>
             </div>
             <div class="ms-3">
-            <p class="text-sm text-gray-700 dark:text-gray-400">
+            <p class="text-sm text-gray-700 dark:text-neutral-400">
                 ${content}
             </p>
             </div>

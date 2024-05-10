@@ -4,56 +4,207 @@
     </h3>
 
     <p class="text-gray-800 dark:text-white mt-4">Hier kannst du die Positions manuell setzen.</p>
-
     <div class="grid grid-cols-2 gap-8 mt-8">
-        <div class="relative">
-            <input type="number" id="dobot-arm-pos-x" class="peer py-3 pe-0 ps-8 block w-full bg-transparent border-t-transparent border-b-2 border-x-transparent border-b-gray-200 text-sm focus:border-t-transparent focus:border-x-transparent focus:border-b-blue-500 focus:ring-0 disabled:opacity-50 disabled:pointer-events-none dark:border-b-gray-700 dark:text-gray-400 dark:focus:ring-gray-600 dark:focus:border-b-gray-600" placeholder="X-Wert">
-            <div class="absolute bottom-[14.4px] start-0 flex items-center pointer-events-none ps-2 peer-disabled:opacity-50 peer-disabled:pointer-events-none">
-                <span>x</span>
+
+  
+      <!-- x -->
+      <div class="max-w-sm">
+        <label for="dobot-arm-pos-x" class="block text-sm font-medium mb-2 dark:text-white">X</label>
+        <div id="dobot-arm-pos-x--div" class="py-2 px-3 bg-gray-100 rounded-lg dark:bg-neutral-700" data-hs-input-number="">
+          <div class="w-full flex justify-between items-center gap-x-5">
+            <div class="grow">
+              <input id="dobot-arm-pos-x" class="w-full p-0 bg-transparent border-0 text-gray-800 focus:ring-0 dark:text-white" type="text" value="0" data-hs-input-number-input="">
+            </div>
+            <div class="flex justify-end items-center gap-x-1.5">
+              <button type="button" class="size-6 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-md border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800" data-hs-input-number-decrement="">
+                <svg class="flex-shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M5 12h14"></path>
+                </svg>
+              </button>
+              <button type="button" class="size-6 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-md border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800" data-hs-input-number-increment="">
+                <svg class="flex-shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M5 12h14"></path>
+                  <path d="M12 5v14"></path>
+                </svg>
+              </button>
             </div>
           </div>
-          <div class="relative">
-            <input type="number" id="dobot-arm-pos-y" class="peer py-3 pe-0 ps-8 block w-full bg-transparent border-t-transparent border-b-2 border-x-transparent border-b-gray-200 text-sm focus:border-t-transparent focus:border-x-transparent focus:border-b-blue-500 focus:ring-0 disabled:opacity-50 disabled:pointer-events-none dark:border-b-gray-700 dark:text-gray-400 dark:focus:ring-gray-600 dark:focus:border-b-gray-600" placeholder="Y-Wert">
-            <div class="absolute bottom-[14.4px] start-0 flex items-center pointer-events-none ps-2 peer-disabled:opacity-50 peer-disabled:pointer-events-none">
-                <span>y</span>
+        </div>
+      </div>
+
+      <!-- y -->
+      <div class="max-w-sm">
+        <label for="dobot-arm-pos-y" class="block text-sm font-medium mb-2 dark:text-white">Y</label>
+        <div id="dobot-arm-pos-y--div" class="py-2 px-3 bg-gray-100 rounded-lg dark:bg-neutral-700" data-hs-input-number="">
+          <div class="w-full flex justify-between items-center gap-x-5">
+            <div class="grow">
+              <input id="dobot-arm-pos-y" class="w-full p-0 bg-transparent border-0 text-gray-800 focus:ring-0 dark:text-white" type="text" value="0" data-hs-input-number-input="">
+            </div>
+            <div class="flex justify-end items-center gap-x-1.5">
+              <button type="button" class="size-6 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-md border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800" data-hs-input-number-decrement="">
+                <svg class="flex-shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M5 12h14"></path>
+                </svg>
+              </button>
+              <button type="button" class="size-6 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-md border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800" data-hs-input-number-increment="">
+                <svg class="flex-shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M5 12h14"></path>
+                  <path d="M12 5v14"></path>
+                </svg>
+              </button>
             </div>
           </div>
-          <div class="relative">
-            <input type="number" id="dobot-arm-pos-z" class="peer py-3 pe-0 ps-8 block w-full bg-transparent border-t-transparent border-b-2 border-x-transparent border-b-gray-200 text-sm focus:border-t-transparent focus:border-x-transparent focus:border-b-blue-500 focus:ring-0 disabled:opacity-50 disabled:pointer-events-none dark:border-b-gray-700 dark:text-gray-400 dark:focus:ring-gray-600 dark:focus:border-b-gray-600" placeholder="Z-Wert">
-            <div class="absolute bottom-[14.4px] start-0 flex items-center pointer-events-none ps-2 peer-disabled:opacity-50 peer-disabled:pointer-events-none">
-                <span>z</span>
+        </div>
+      </div>
+
+      <!-- z -->
+      <div class="max-w-sm">
+        <label for="dobot-arm-pos-z" class="block text-sm font-medium mb-2 dark:text-white">Z</label>
+        <div id="dobot-arm-pos-z--div" class="py-2 px-3 bg-gray-100 rounded-lg dark:bg-neutral-700" data-hs-input-number="">
+          <div class="w-full flex justify-between items-center gap-x-5">
+            <div class="grow">
+              <input id="dobot-arm-pos-z" class="w-full p-0 bg-transparent border-0 text-gray-800 focus:ring-0 dark:text-white" type="text" value="0" data-hs-input-number-input="">
+            </div>
+            <div class="flex justify-end items-center gap-x-1.5">
+              <button type="button" class="size-6 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-md border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800" data-hs-input-number-decrement="">
+                <svg class="flex-shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M5 12h14"></path>
+                </svg>
+              </button>
+              <button type="button" class="size-6 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-md border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800" data-hs-input-number-increment="">
+                <svg class="flex-shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M5 12h14"></path>
+                  <path d="M12 5v14"></path>
+                </svg>
+              </button>
             </div>
           </div>
-          <div class="relative">
-            <input type="number" id="dobot-arm-pos-r" class="peer py-3 pe-0 ps-8 block w-full bg-transparent border-t-transparent border-b-2 border-x-transparent border-b-gray-200 text-sm focus:border-t-transparent focus:border-x-transparent focus:border-b-blue-500 focus:ring-0 disabled:opacity-50 disabled:pointer-events-none dark:border-b-gray-700 dark:text-gray-400 dark:focus:ring-gray-600 dark:focus:border-b-gray-600" placeholder="R-Wert">
-            <div class="absolute bottom-[14.4px] start-0 flex items-center pointer-events-none ps-2 peer-disabled:opacity-50 peer-disabled:pointer-events-none">
-                <span>r</span>
+        </div>
+      </div>
+
+      <!-- r -->
+      <div class="max-w-sm">
+        <label for="dobot-arm-pos-r" class="block text-sm font-medium mb-2 dark:text-white">R</label>
+        <div id="dobot-arm-pos-r--div" class="py-2 px-3 bg-gray-100 rounded-lg dark:bg-neutral-700" data-hs-input-number="">
+          <div class="w-full flex justify-between items-center gap-x-5">
+            <div class="grow">
+              <input id="dobot-arm-pos-r" class="w-full p-0 bg-transparent border-0 text-gray-800 focus:ring-0 dark:text-white" type="text" value="0" data-hs-input-number-input="">
+            </div>
+            <div class="flex justify-end items-center gap-x-1.5">
+              <button type="button" class="size-6 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-md border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800" data-hs-input-number-decrement="">
+                <svg class="flex-shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M5 12h14"></path>
+                </svg>
+              </button>
+              <button type="button" class="size-6 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-md border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800" data-hs-input-number-increment="">
+                <svg class="flex-shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M5 12h14"></path>
+                  <path d="M12 5v14"></path>
+                </svg>
+              </button>
             </div>
           </div>
-          <div class="relative">
-            <input type="number" id="dobot-arm-pos-j1" class="peer py-3 pe-0 ps-8 block w-full bg-transparent border-t-transparent border-b-2 border-x-transparent border-b-gray-200 text-sm focus:border-t-transparent focus:border-x-transparent focus:border-b-blue-500 focus:ring-0 disabled:opacity-50 disabled:pointer-events-none dark:border-b-gray-700 dark:text-gray-400 dark:focus:ring-gray-600 dark:focus:border-b-gray-600" placeholder="X-Wert">
-            <div class="absolute bottom-[14.4px] start-0 flex items-center pointer-events-none ps-2 peer-disabled:opacity-50 peer-disabled:pointer-events-none">
-                <span>j1</span>
+        </div>
+      </div>
+      <!-- j1 -->
+      <div class="max-w-sm">
+        <label for="dobot-arm-pos-j1" class="block text-sm font-medium mb-2 dark:text-white">J1</label>
+        <div id="dobot-arm-pos-j1--div" class="py-2 px-3 bg-gray-100 rounded-lg dark:bg-neutral-700" data-hs-input-number="">
+          <div class="w-full flex justify-between items-center gap-x-5">
+            <div class="grow">
+              <input id="dobot-arm-pos-j1" class="w-full p-0 bg-transparent border-0 text-gray-800 focus:ring-0 dark:text-white" type="text" value="0" data-hs-input-number-input="">
+            </div>
+            <div class="flex justify-end items-center gap-x-1.5">
+              <button type="button" class="size-6 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-md border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800" data-hs-input-number-decrement="">
+                <svg class="flex-shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M5 12h14"></path>
+                </svg>
+              </button>
+              <button type="button" class="size-6 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-md border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800" data-hs-input-number-increment="">
+                <svg class="flex-shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M5 12h14"></path>
+                  <path d="M12 5v14"></path>
+                </svg>
+              </button>
             </div>
           </div>
-          <div class="relative">
-            <input type="number" id="dobot-arm-pos-j2" class="peer py-3 pe-0 ps-8 block w-full bg-transparent border-t-transparent border-b-2 border-x-transparent border-b-gray-200 text-sm focus:border-t-transparent focus:border-x-transparent focus:border-b-blue-500 focus:ring-0 disabled:opacity-50 disabled:pointer-events-none dark:border-b-gray-700 dark:text-gray-400 dark:focus:ring-gray-600 dark:focus:border-b-gray-600" placeholder="Y-Wert">
-            <div class="absolute bottom-[14.4px] start-0 flex items-center pointer-events-none ps-2 peer-disabled:opacity-50 peer-disabled:pointer-events-none">
-                <span>j2</span>
+        </div>
+      </div>
+
+      <!-- j2 -->
+      <div class="max-w-sm">
+        <label for="dobot-arm-pos-j2" class="block text-sm font-medium mb-2 dark:text-white">J2</label>
+        <div id="dobot-arm-pos-j2--div" class="py-2 px-3 bg-gray-100 rounded-lg dark:bg-neutral-700" data-hs-input-number="">
+          <div class="w-full flex justify-between items-center gap-x-5">
+            <div class="grow">
+              <input id="dobot-arm-pos-j2" class="w-full p-0 bg-transparent border-0 text-gray-800 focus:ring-0 dark:text-white" type="text" value="0" data-hs-input-number-input="">
+            </div>
+            <div class="flex justify-end items-center gap-x-1.5">
+              <button type="button" class="size-6 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-md border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800" data-hs-input-number-decrement="">
+                <svg class="flex-shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M5 12h14"></path>
+                </svg>
+              </button>
+              <button type="button" class="size-6 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-md border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800" data-hs-input-number-increment="">
+                <svg class="flex-shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M5 12h14"></path>
+                  <path d="M12 5v14"></path>
+                </svg>
+              </button>
             </div>
           </div>
-          <div class="relative">
-            <input type="number" id="dobot-arm-pos-j3" class="peer py-3 pe-0 ps-8 block w-full bg-transparent border-t-transparent border-b-2 border-x-transparent border-b-gray-200 text-sm focus:border-t-transparent focus:border-x-transparent focus:border-b-blue-500 focus:ring-0 disabled:opacity-50 disabled:pointer-events-none dark:border-b-gray-700 dark:text-gray-400 dark:focus:ring-gray-600 dark:focus:border-b-gray-600" placeholder="Z-Wert">
-            <div class="absolute bottom-[14.4px] start-0 flex items-center pointer-events-none ps-2 peer-disabled:opacity-50 peer-disabled:pointer-events-none">
-                <span>j3</span>
+        </div>
+      </div>
+
+      <!-- j3 -->
+      <div class="max-w-sm">
+        <label for="dobot-arm-pos-j3" class="block text-sm font-medium mb-2 dark:text-white">J3</label>
+        <div id="dobot-arm-pos-j3--div" class="py-2 px-3 bg-gray-100 rounded-lg dark:bg-neutral-700" data-hs-input-number="">
+          <div class="w-full flex justify-between items-center gap-x-5">
+            <div class="grow">
+              <input id="dobot-arm-pos-j3" class="w-full p-0 bg-transparent border-0 text-gray-800 focus:ring-0 dark:text-white" type="text" value="0" data-hs-input-number-input="">
+            </div>
+            <div class="flex justify-end items-center gap-x-1.5">
+              <button type="button" class="size-6 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-md border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800" data-hs-input-number-decrement="">
+                <svg class="flex-shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M5 12h14"></path>
+                </svg>
+              </button>
+              <button type="button" class="size-6 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-md border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800" data-hs-input-number-increment="">
+                <svg class="flex-shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M5 12h14"></path>
+                  <path d="M12 5v14"></path>
+                </svg>
+              </button>
             </div>
           </div>
-          <div class="relative">
-            <input type="number" id="dobot-arm-pos-j4" class="peer py-3 pe-0 ps-8 block w-full bg-transparent border-t-transparent border-b-2 border-x-transparent border-b-gray-200 text-sm focus:border-t-transparent focus:border-x-transparent focus:border-b-blue-500 focus:ring-0 disabled:opacity-50 disabled:pointer-events-none dark:border-b-gray-700 dark:text-gray-400 dark:focus:ring-gray-600 dark:focus:border-b-gray-600" placeholder="R-Wert">
-            <div class="absolute bottom-[14.4px] start-0 flex items-center pointer-events-none ps-2 peer-disabled:opacity-50 peer-disabled:pointer-events-none">
-                <span>j4</span>
+        </div>
+      </div>
+
+      <!-- j4 -->
+      <div class="max-w-sm">
+        <label for="dobot-arm-pos-j4" class="block text-sm font-medium mb-2 dark:text-white">J4</label>
+        <div id="dobot-arm-pos-j4--div" class="py-2 px-3 bg-gray-100 rounded-lg dark:bg-neutral-700" data-hs-input-number="">
+          <div class="w-full flex justify-between items-center gap-x-5">
+            <div class="grow">
+              <input id="dobot-arm-pos-j4" class="w-full p-0 bg-transparent border-0 text-gray-800 focus:ring-0 dark:text-white" type="text" value="0" data-hs-input-number-input="">
+            </div>
+            <div class="flex justify-end items-center gap-x-1.5">
+              <button type="button" class="size-6 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-md border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800" data-hs-input-number-decrement="">
+                <svg class="flex-shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M5 12h14"></path>
+                </svg>
+              </button>
+              <button type="button" class="size-6 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-md border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800" data-hs-input-number-increment="">
+                <svg class="flex-shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M5 12h14"></path>
+                  <path d="M12 5v14"></path>
+                </svg>
+              </button>
             </div>
           </div>
+        </div>
+      </div>
     </div>
 
     <p class="text-gray-800 dark:text-white mt-16"> Hier kannst du die Position des Dobots anhand dessen Position bestimmen</p>

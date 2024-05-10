@@ -111,20 +111,16 @@ def get_jobs():
         ],
     }
 
-def login(monitorIp):
+def login(monitorIp, deviceName):
 
-    if monitorIP is None:
-        monitorIP = 'http://10.5.101.115:3000'
-
-    response = requests.post(url='{base_path}/api/monitor/login'.format(base_path=monitorIP), json={
+    requests.post(url='{base_path}/api/monitor/login'.format(base_path=monitorIp), json={
         "ip": devices.getServerIp(),
         "id": str(devices.deviceId),
         "type": "dobot",
-        "name": "last dobot standing",
+        "name": deviceName,
     })
 
     return
-    # return json, 200
 
 def send_log():
     json = {
@@ -192,12 +188,21 @@ def get_index():
     return d.get_current_index()
 
 async def run_task(subtasks):
+    count = 0
     for subtask in subtasks:
         for step in subtask.steps:
             if hasattr(step, 'command'):
-                if step.command == 'speed': god_speed(step.data.speed)
-                elif step.command == 'move': move_to_p(step.data.pos)
-                elif step.command == 'settings': toggle_suck(step.data.settings)
-                elif step.command == 'wait': wait(step.data.wait)
+                if step.command == 'speed': 
+                    god_speed(step.data.speed)
+                    count = count + 1
+                elif step.command == 'move': 
+                    move_to_p(step.data.pos)
+                    count = count + 1
+                elif step.command == 'settings': 
+                    toggle_suck(step.data.settings)
+                    count = count + 1
+                elif step.command == 'wait': 
+                    wait(step.data.wait)
+                    count = count + 1
                 # elif subtask['command'] == 'grip': 
-    return ''
+    return count

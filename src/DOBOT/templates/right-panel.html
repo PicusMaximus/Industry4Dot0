@@ -1,4 +1,4 @@
-<div class="flex flex-col w-full bg-white border shadow-sm rounded-xl dark:bg-slate-900 dark:border-gray-700 dark:shadow-slate-700/[.7]">
+<div class="flex flex-col w-full bg-white border border-gray-200 shadow-sm rounded-xl p-4 md:p-5 dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400">
     <!-- Select (Mobile only) -->
     <div class="sm:hidden">
       <label for="hs-card-nav-tabs" class="sr-only">Select a nav</label>
@@ -12,23 +12,18 @@
   
     <!-- Nav Tabs (Device only) -->
     <div class="hidden sm:block">
-      <nav class="relative z-0 flex border-b rounded-xl divide-x divide-gray-200 dark:border-gray-700 dark:divide-gray-700" aria-label="Tabs">
-        <a class="group relative min-w-0 flex-1 bg-white py-4 px-4 border-b-2 border-b-blue-600 text-gray-900 rounded-ss-xl text-sm font-medium text-center overflow-hidden hover:bg-gray-50 focus:z-10 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-gray-300" aria-current="page" href="#">
+      <nav class="relative z-0 flex border rounded-xl overflow-hidden dark:border-neutral-700" aria-label="Tabs">
+        <button type="button" class="hs-tab-active:border-b-blue-600 hs-tab-active:text-gray-900 dark:hs-tab-active:text-white relative dark:hs-tab-active:border-b-blue-600 min-w-0 flex-1 bg-white first:border-s-0 border-s border-b-2 py-4 px-4 text-gray-500 hover:text-gray-700 text-sm font-medium text-center overflow-hidden hover:bg-gray-50 focus:z-10 focus:outline-none focus:text-blue-600 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-l-neutral-700 dark:border-b-neutral-700 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-400 active" id="bar-with-underline-item-1" data-hs-tab="#task-card-content" aria-controls="bar-with-underline-1" role="tab">
           Befehl
-        </a>
-  
-        <a class="group relative min-w-0 flex-1 bg-white py-4 px-4 text-gray-500 hover:text-gray-700 text-sm font-medium text-center overflow-hidden hover:bg-gray-50 focus:z-10 dark:bg-gray-800 dark:hover:bg-gray-700 dark:hover:text-gray-400" href="#">
-          Grafik
-        </a>
-  
-        <a class="group relative min-w-0 flex-1 bg-white py-4 px-4 text-gray-500 hover:text-gray-700 text-sm font-medium text-center overflow-hidden hover:bg-gray-50 focus:z-10 dark:bg-gray-800 dark:hover:bg-gray-700 dark:hover:text-gray-400" href="#">
-          Variablen
-        </a>
+        </button>
       </nav>
     </div>
     <!-- End Nav Tabs (Device only) -->
   
     <div id="task-card-content" class="p-4 md:py-7 md:px-5 text-gray-500 dark:text-gray-400">
-        <div>Hello World</div>
+      <p class="text-gray-500 dark:text-neutral-400">
+        Dies ist der Bereich in dem die <em class="font-semibold text-gray-800  dark:text-neutral-200">Einstellungen</em> der einzelnen Schritte bearbeitet werden kann.
+      </p>
+      <p class="text-gray-500 dark:text-neutral-400">Durch klicken auf die einzelnen Schritte kann man diese bearbeiten.</p>
     </div>
   </div>

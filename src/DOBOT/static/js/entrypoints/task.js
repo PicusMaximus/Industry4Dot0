@@ -2,6 +2,7 @@ import WebSocketHandler from "../websocket.js";
 import TaskManager from "../task-manager.js";
 import { initPanelSectionSlider } from "../panel.js";
 import { addEmergencyStopBtn } from '../actions.js'
+import { showToast } from "../toast.js";
 
 addEmergencyStopBtn();
 
@@ -71,8 +72,9 @@ new TaskManager();
 
 $(document).on('click', (e) => {
     if (!e.target.closest('#free-drive-btn')) return;
-
-    document.getElementById('movement-dialog').showModal();
+    const dialog = document.getElementById('movement-dialog');
+    dialog.showModal();
+    dialog.classList.remove('hidden');
     addKeyBoardSupport()
 
     $('.btn-jog-operation').on('click', (e) => {
@@ -100,6 +102,7 @@ $(document).on('click', (e) => {
         $(document).off('keypress');
         $('.btn-jog-operation').off('click');
         $(document.getElementById('home-point--btn')).off();
+        dialog.classList.add('hidden');
     }, {once: true});
 })
 

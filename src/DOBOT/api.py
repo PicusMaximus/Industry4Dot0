@@ -3,7 +3,7 @@ from flask import Flask, jsonify, request, render_template
 from flask_swagger_ui import get_swaggerui_blueprint
 import uuid
 import manager
-import dbManager
+import dbStore
 import requests
 import asyncio
 
@@ -11,7 +11,7 @@ import asyncio
 
 app = Flask(__name__, template_folder='./templates')
 
-dbManager.create_db()
+dbStore.create_db()
 
 # Configure Flask logging
 app.logger.setLevel(logging.INFO)  # Set log level to INFO
@@ -47,7 +47,7 @@ app.register_blueprint(SWAGGERUI_BLUEPRINT, url_prefix=SWAGGER_URL)
 
 @app.route("/api/device/getJobs", methods=['GET'])
 def getJobs():
-    res = dbManager.get_simple_tasks()
+    res = dbStore.get_simple_tasks()
     return jsonify(res), 200
 
 ### END GET ###
@@ -60,31 +60,42 @@ def getJobs():
 def setJobOrder():
     order = request.json
 
-    dbManager.create_order(order)
+    dbStore.create_order(order)
 
     return jsonify("Success"), 200
 
 @app.route("/api/device/startJob", methods=['POST'])
 async def startJob():
-    id = request.args.get('id')
+    #id = request.args.get('id')
+    id = request.json
+    order = dbStore.get_order(id['id'])
+    app.logger.info("Test 1")
 
-    order = dbManager.get_order(id)
-
-    subtasks = dbManager.get_subtasks(order[0])
+    subtasks = dbStore.get_subtasks(order[0])
 
     manager.clear()
 
-    res = await manager.run_task(subtasks)
+    oldIdx = manager.get_index()
 
-    idx = manager.get_index()
+    if oldIdx is None:
+        oldIdx = 0
 
-    while(idx != 0):
-        app.logger.info('Waiting be like: {idx}'.format(idx = idx))
-        idx = manager.get_index()
+    count = await manager.run_task(subtasks)
+    curridx = oldIdx
 
-    requests.post('{ip}/api/device/startJob?id={id}'.format(ip=order[3], id=order[2]))
+    while(curridx < int(oldIdx) + int(count)):
+        app.logger.info('Waiting be like: {idx}'.format(idx = curridx))
+        curridx = manager.get_index()
 
-    return jsonify(res), 200        
+    app.logger.info('http://{ip}:3000/api/device/startJob'.format(ip=order[3]))
+
+    app.logger.info(order[2])
+
+    headers = {'Content-type': 'application/json'}
+
+    requests.post('http://{ip}:3000/api/device/startJob'.format(ip=order[3]), headers=headers, json={"id": order[2]})
+
+    return jsonify("Success"), 200        
 
 @app.route("/api/device/start", methods=['POST'])
 def start():
@@ -93,21 +104,14 @@ def start():
 
 @app.route("/api/monitor/login", methods=['POST'])
 def login():
-    manager.login(dbManager.getMonitorIP())
+    settings = dbStore.get_settings()
+    manager.login(settings[1], settings[2])
     return jsonify("Login successful."), 200
 
 @app.route("/api/monitor/log", methods=['POST'])
 def log2Monitor():
     manager.send_log()
     return jsonify("Log successful."), 200
-
-@app.route("/api/device/setSettings", methods=['POST'])
-def setSettings():
-    monitorIP = request.args.get('monitorIP')
-    deviceName = request.args.get('deviceName')
-    dbManager.setSettings(monitorIP, deviceName)
-
-    return jsonify("Successfully saved Settings"), 200
 
 ### END POST ###
 
@@ -190,11 +194,19 @@ async def runTask():
 
     if id is None: return 'Bad Request', 400
 
-    subtasks = dbManager.get_subtasks(id)
+    subtasks = dbStore.get_subtasks(id)
 
     await manager.run_task(subtasks)
 
     return jsonify('success'), 200
+
+@app.route("/api/device/settings", methods=['POST'])
+def setSettings():
+    monitorIP = request.args.get('monitorIP')
+    deviceName = request.args.get('deviceName')
+    dbStore.set_settings(monitorIP, deviceName)
+
+    return jsonify("Successfully saved Settings"), 200
 
 ### END POST ###
 
@@ -202,19 +214,19 @@ async def runTask():
 
 @app.route('/api/tasks', methods=['GET'])
 def getTasks():
-    tasks = dbManager.get_tasks()
+    tasks = dbStore.get_tasks()
     return jsonify(tasks)
 
 @app.route('/api/task', methods=['GET'])
 def getTask():
     id = request.args.get('id')
-    tasks = dbManager.get_task(id)
+    tasks = dbStore.get_task(id)
     return jsonify(tasks)
 
 @app.route('/api/subtasks', methods=['GET'])
 def getSubtasks():
     id = request.args.get('id')
-    tasks = dbManager.get_subtasks(id)
+    tasks = dbStore.get_subtasks(id)
     return jsonify(tasks)
 
 @app.route('/api/task', methods=['POST'])
@@ -222,45 +234,54 @@ def createTask():
     task = request.json
 
     if hasattr(task, 'id') == False: task['id'] = str(uuid.uuid4())
-    dbManager.create_task(task)
+    dbStore.create_task(task)
 
     return jsonify('Success'), 200
 
 @app.route('/api/task', methods=['PUT'])
 def updateTask():
     task = request.json
-    dbManager.update_task(task)
+    dbStore.update_task(task)
     return jsonify('Success'), 200
 
 @app.route('/api/task', methods=['DELETE'])
 def deleteTask():
     id = request.args.get('id')
-    dbManager.delete_task(id)
+    dbStore.delete_task(id)
     return jsonify('Success'), 200
 
 @app.route('/api/task/order', methods=['GET'])
 def get_order():
     id = request.args.get('id')
-    res = dbManager.get_order(id)
+    res = dbStore.get_order(id)
     return jsonify(res), 200
 
 @app.route('/api/task/order', methods=['DELETE'])
 def delete_order():
     id = request.args.get('id')
-    res = dbManager.get_order(id)
+    res = dbStore.get_order(id)
     return jsonify(res), 200
 
 @app.route('/api/task/order', methods=['POST'])
 def create_order():
     data = request.json
-    res = dbManager.create_db(data)
+    res = dbStore.create_db(data)
     return jsonify(res), 200
 
 @app.route('/api/task/order', methods=['PUT'])
 def update_order():
     data = request.json
-    res = dbManager.update_order(data)
+    res = dbStore.update_order(data)
     return jsonify(res), 200
+
+@app.route('/api/device/settings', methods=['GET'])
+def get_settings():
+    settings = dbStore.get_settings()
+
+    return jsonify({
+        "monitorIp": settings[1],
+        "deviceName": settings[2],
+    }), 200
 
 ### END DB ###
 
@@ -276,7 +297,7 @@ def update_order():
 
 @app.route('/', methods=['GET'])
 def getIndexPage():
-    tasks = dbManager.get_tasks()
+    tasks = dbStore.get_tasks()
     return render_template('home.html', data = { 'tasks': tasks })
 
 @app.route('/task', methods=['GET'])

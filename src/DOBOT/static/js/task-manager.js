@@ -32,6 +32,12 @@ export default class TaskManager {
             if(!target) continue;
     
             let id = target.getAttribute('data-card-id');
+
+            const taskContainer = document.getElementById('task-container');
+
+            taskContainer.querySelector('.active-card--btn')?.classList?.remove('active-card--btn');
+
+            target.classList.add('active-card--btn')
     
             await this.loadCard(id, selector)
     
@@ -65,18 +71,90 @@ export default class TaskManager {
 
         this.#taskCardContainer.replaceChildren(contentHTML[0]);
 
-        if (!this.#data.has(this.#currentId)) return;
+        if (this.#data.has(this.#currentId)){
 
-        const data = this.#data.get(this.#currentId);
+            const data = this.#data.get(this.#currentId);
 
-        $('#dobot-arm-pos-x').val(data.x);
-        $('#dobot-arm-pos-y').val(data.y);
-        $('#dobot-arm-pos-z').val(data.z);
-        $('#dobot-arm-pos-r').val(data.r);
-        $('#dobot-arm-pos-j1').val(data.j1);
-        $('#dobot-arm-pos-j2').val(data.j2);
-        $('#dobot-arm-pos-j3').val(data.j3);
-        $('#dobot-arm-pos-j4').val(data.j4);
+            $('#dobot-arm-pos-x').val(data.x);
+            $('#dobot-arm-pos-x').attr('value', data.x);
+            $('#dobot-arm-pos-y').val(data.y);
+            $('#dobot-arm-pos-y').attr('value',data.y);
+            $('#dobot-arm-pos-z').val(data.z);
+            $('#dobot-arm-pos-z').attr('value',data.z);
+            $('#dobot-arm-pos-r').val(data.r);
+            $('#dobot-arm-pos-r').attr('value',data.r);
+            $('#dobot-arm-pos-j1').val(data.j1);
+            $('#dobot-arm-pos-j1').attr('value',data.j1);
+            $('#dobot-arm-pos-j2').val(data.j2);
+            $('#dobot-arm-pos-j2').attr('value',data.j2);
+            $('#dobot-arm-pos-j3').val(data.j3);
+            $('#dobot-arm-pos-j3').attr('value',data.j3);
+            $('#dobot-arm-pos-j4').val(data.j4);
+            $('#dobot-arm-pos-j4').attr('value',data.j4);
+        }
+
+        HSInputNumber.autoInit();
+        
+        const elX = HSInputNumber.getInstance('#dobot-arm-pos-x--div');
+
+        const func = (data) => {
+            if (this.#data.has(this.#currentId)) {
+                const oldData = this.#data.get(this.#currentId)
+    
+                const newData = Object.assign(oldData, data);
+    
+                this.#data.set(this.#currentId, newData);
+                return;
+            }
+    
+            this.#data.set(this.#currentId, data);
+        }
+
+        elX.on('change', ({ inputValue }) => {
+            func({ x: inputValue });
+        });
+
+        const elY = HSInputNumber.getInstance('#dobot-arm-pos-y--div');
+
+        elY.on('change', ({ inputValue }) => {
+            func({ y: inputValue });
+        });
+
+        const elZ = HSInputNumber.getInstance('#dobot-arm-pos-z--div');
+
+        elZ.on('change', ({ inputValue }) => {
+            func({ z: inputValue });
+        });
+
+        const eR = HSInputNumber.getInstance('#dobot-arm-pos-r--div');
+
+        eR.on('change', ({ inputValue }) => {
+            func({ r: inputValue });
+        });
+
+        const elJ1 = HSInputNumber.getInstance('#dobot-arm-pos-j1--div');
+
+        elJ1.on('change', ({ inputValue }) => {
+            func({ j1: inputValue });
+        });
+
+        const elJ2 = HSInputNumber.getInstance('#dobot-arm-pos-j2--div');
+
+        elJ2.on('change', ({ inputValue }) => {
+            func({ j2: inputValue });
+        });
+
+        const elJ3 = HSInputNumber.getInstance('#dobot-arm-pos-j3--div');
+
+        elJ3.on('change', ({ inputValue }) => {
+            func({ j3: inputValue });
+        });
+
+        const elJ4 = HSInputNumber.getInstance('#dobot-arm-pos-j4--div');
+
+        elJ4.on('change', ({ inputValue }) => {
+            func({ j4: inputValue });
+        });
     }
 
     async #loadWaitCard() {
@@ -111,7 +189,10 @@ export default class TaskManager {
     
         document.getElementById('task-card-content').replaceChildren(contentHTML[0]);
 
-        if (!this.#data.has(this.#currentId)) return;
+        if (!this.#data.has(this.#currentId)) {
+            this.#data.set(this.#currentId, 'false')
+            return;
+        }
 
         const data = this.#data.get(this.#currentId);
 
@@ -148,7 +229,7 @@ export default class TaskManager {
         const apId = target?.id;
 
         if (!this.#currentId) throw new Error('The current card has no id.');
-        
+
         if (
             apId !== 'dobot-arm-pos-x' &&
             apId !== 'dobot-arm-pos-y' &&
@@ -159,7 +240,7 @@ export default class TaskManager {
             apId !== 'dobot-arm-pos-j3' &&
             apId !== 'dobot-arm-pos-j4'
             ) return;
-        
+
         const value = target.value;
         
         const data = {}
@@ -216,7 +297,7 @@ export default class TaskManager {
         for (const elem of $('.subtask-group').toArray()) {
             const $elem = $(elem);
 
-            const axisBtn = $elem.find('.reate-axis-card--btn');
+            const axisBtn = $elem.find('.create-axis-card--btn');
             const axisId = axisBtn.attr('data-card-id') || '0';
             
             const subtask = {};
