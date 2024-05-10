@@ -79,8 +79,8 @@
    Generally the frontend will be run by the api.py, but certain parts of the frontend need some extra attention to work. We have to do two things if we wont to build or update it.
    ##### First
    The frontend uses a tool called esbuild to bundle JS Files. This allows us to use ESMs which lead to a more modular codebase. Additionally we can use it to minify or js code which should give or website a better performance. Esbuild does also support Typescript if we ever want to integrate it into the project.
-   > [!NOTE]  
-   > This needs to be executed in the static directory of the DOBOT project.
+   [!NOTE]  
+   This needs to be executed in the static directory of the DOBOT project.
    ```bash
       $ npm run build
    ```
