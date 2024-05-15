@@ -45,7 +45,7 @@
       ```bash
          # pip3 is the python package manager
          # This loads all the dependecies via the txt file.
-         $ pip3 install ./requirements.txt --break-system-packages
+         $ pip3 install -r ./requirements.txt --break-system-packages
       ```
    #### Npm
 

@@ -331,6 +331,12 @@ class Dobot:
         msg.ctrl = ControlValues.THREE
         msg.params = bytearray(struct.pack('I', ms))
         return self._send_command(msg)
+    
+    def _get_device_sn(self):
+        msg = Message()
+        msg.id = CommunicationProtocolIDs.GET_SET_DEVICE_SN
+        msg.ctrl = ControlValues.THREE
+        return self._send_command(msg, wait=True)
 
     def close(self):
         self._on = False
@@ -427,3 +433,6 @@ class Dobot:
     
     def get_current_index(self):
         return self._get_queued_cmd_current_index()
+    
+    def get_device_sn(self):
+        return self._get_device_sn()
