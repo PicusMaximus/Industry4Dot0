@@ -36,7 +36,23 @@ const wsHandler = new WebSocketHandler({
 });
 
 
-$('#save-settings-btn').on('click', async () => {
+// $('#save-settings-btn').on('click', async () => {
+//     const settingLeitstelle = document.getElementById('settings-leitstelle-adresse');
+//     const settingDobotName = document.getElementById('settings-dobot-name');
+
+//     if (!settingLeitstelle || !settingDobotName) throw new Error('The current settings could not be saved...');
+    
+//         const res = await fetch(`/api/device/settings?monitorIP=${settingLeitstelle.value}&deviceName=${settingDobotName.value}`, { method: 'POST' });
+//         if(res.status.toString().startsWith(4) || res.status.toString().startsWith(5)) {
+//             showToast('The current settings could not be saved.', 'danger');
+//             return;
+//         }
+//         showToast('The settings were successfully saved.', 'success');
+// });
+
+addEmergencyStopBtn();
+
+document.getElementById('login-monitor-btn').addEventListener('click', async () => {
     const settingLeitstelle = document.getElementById('settings-leitstelle-adresse');
     const settingDobotName = document.getElementById('settings-dobot-name');
 
@@ -49,5 +65,3 @@ $('#save-settings-btn').on('click', async () => {
         }
         showToast('The settings were successfully saved.', 'success');
 });
-
-addEmergencyStopBtn();

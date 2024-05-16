@@ -874,12 +874,24 @@ select {
   bottom: 100%;
 }
 
+.end-0 {
+  inset-inline-end: 0px;
+}
+
+.end-0\.5 {
+  inset-inline-end: 0.125rem;
+}
+
 .right-4 {
   right: 1rem;
 }
 
 .start-0 {
   inset-inline-start: 0px;
+}
+
+.start-0\.5 {
+  inset-inline-start: 0.125rem;
 }
 
 .start-1\/2 {
@@ -890,24 +902,12 @@ select {
   top: 0px;
 }
 
-.top-full {
-  top: 100%;
-}
-
-.end-0 {
-  inset-inline-end: 0px;
-}
-
-.end-0\.5 {
-  inset-inline-end: 0.125rem;
-}
-
-.start-0\.5 {
-  inset-inline-start: 0.125rem;
-}
-
 .top-0\.5 {
   top: 0.125rem;
+}
+
+.top-full {
+  top: 100%;
 }
 
 .isolate {
@@ -1140,12 +1140,12 @@ select {
   height: 1.75rem;
 }
 
-.h-\[21px\] {
-  height: 21px;
-}
-
 .h-9 {
   height: 2.25rem;
+}
+
+.w-16 {
+  width: 4rem;
 }
 
 .w-2\/4 {
@@ -1176,8 +1176,8 @@ select {
   width: 1.75rem;
 }
 
-.w-\[35px\] {
-  width: 35px;
+.w-\[4\.25rem\] {
+  width: 4.25rem;
 }
 
 .w-\[calc\(100\%-2rem\)\] {
@@ -1190,10 +1190,6 @@ select {
 
 .w-px {
   width: 1px;
-}
-
-.w-\[4\.25rem\] {
-  width: 4.25rem;
 }
 
 .min-w-0 {
@@ -1975,12 +1971,6 @@ button.active-card--btn {
   display: inline-block;
 }
 
-.before\:size-4::before {
-  content: var(--tw-content);
-  width: 1rem;
-  height: 1rem;
-}
-
 .before\:h-8::before {
   content: var(--tw-content);
   height: 2rem;
@@ -2510,11 +2500,6 @@ button.active-card--btn {
     background-color: rgb(37 99 235 / var(--tw-bg-opacity));
   }
 
-  .dark\:bg-gray-800 {
-    --tw-bg-opacity: 1;
-    background-color: rgb(31 41 55 / var(--tw-bg-opacity));
-  }
-
   .dark\:bg-green-600 {
     --tw-bg-opacity: 1;
     background-color: rgb(22 163 74 / var(--tw-bg-opacity));
@@ -2619,17 +2604,6 @@ button.active-card--btn {
     --tw-shadow: var(--tw-shadow-colored);
   }
 
-  .dark\:shadow-neutral-700\/\[\.7\] {
-    --tw-shadow-color: rgb(64 64 64 / .7);
-    --tw-shadow: var(--tw-shadow-colored);
-  }
-
-  .dark\:before\:bg-gray-400::before {
-    content: var(--tw-content);
-    --tw-bg-opacity: 1;
-    background-color: rgb(156 163 175 / var(--tw-bg-opacity));
-  }
-
   .dark\:before\:bg-neutral-400::before {
     content: var(--tw-content);
     --tw-bg-opacity: 1;
@@ -2660,11 +2634,6 @@ button.active-card--btn {
   .dark\:hover\:bg-gray-700:hover {
     --tw-bg-opacity: 1;
     background-color: rgb(55 65 81 / var(--tw-bg-opacity));
-  }
-
-  .dark\:hover\:bg-gray-800:hover {
-    --tw-bg-opacity: 1;
-    background-color: rgb(31 41 55 / var(--tw-bg-opacity));
   }
 
   .dark\:hover\:bg-gray-900:hover {
@@ -2732,29 +2701,19 @@ button.active-card--btn {
     color: rgb(255 255 255 / var(--tw-text-opacity));
   }
 
-  .dark\:hover\:text-neutral-700:hover {
-    --tw-text-opacity: 1;
-    color: rgb(64 64 64 / var(--tw-text-opacity));
-  }
-
   .dark\:focus\:border-b-gray-600:focus {
     --tw-border-opacity: 1;
     border-bottom-color: rgb(75 85 99 / var(--tw-border-opacity));
   }
 
-  .dark\:focus\:bg-gray-700:focus {
+  .dark\:focus\:bg-neutral-700:focus {
     --tw-bg-opacity: 1;
-    background-color: rgb(55 65 81 / var(--tw-bg-opacity));
+    background-color: rgb(64 64 64 / var(--tw-bg-opacity));
   }
 
   .dark\:focus\:bg-slate-800:focus {
     --tw-bg-opacity: 1;
     background-color: rgb(30 41 59 / var(--tw-bg-opacity));
-  }
-
-  .dark\:focus\:bg-neutral-700:focus {
-    --tw-bg-opacity: 1;
-    background-color: rgb(64 64 64 / var(--tw-bg-opacity));
   }
 
   .dark\:focus\:outline-none:focus {

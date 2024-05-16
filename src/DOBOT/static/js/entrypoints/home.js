@@ -72,3 +72,34 @@ $(document).on('click', async (e) => {
 
     taskContainer.remove();
 });
+
+// Dialog stuff
+
+$('task-name-dialog').on('click', (e) => {
+    if (!e.target.closest('#free-drive-btn')) return;
+    const dialog = document.getElementById('movement-dialog');
+    dialog.showModal();
+    dialog.classList.remove('hidden');
+
+    document.getElementById('task-name-dialog').addEventListener("close", () => {
+        dialog.classList.add('hidden');
+    }, {once: true});
+})
+
+$(document).on('click', (e) => {
+    if (e.target.classList.contains('close-dialog-btn')) {
+        e.target.closest('dialog').close();
+        return;
+    }
+
+    if (e.target.closest('.close-dialog-btn')) {
+        e.target.closest('dialog').close();
+        return;
+    }
+
+    if (e.target.closest('button')?.id === 'save-position-btn') {
+        wsHandler.ws.send(JSON.stringify({type: 'control-command', command: 'pose'}))
+        e.target.closest('dialog').close();
+        return;
+    }
+}); 

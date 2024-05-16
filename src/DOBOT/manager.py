@@ -1,5 +1,6 @@
 import uuid
 import requests
+from UuidGenerartor import generate_uuid_with_mac_seed
 from classes import Dobot
 import devices
 from serial.tools import list_ports
@@ -102,7 +103,7 @@ def update_gripper_status(state):
 def get_jobs():
     #This is just for debugging purposeses...
     return { 
-        "deviceId": str(devices.deviceId),
+        "deviceId": str(generate_uuid_with_mac_seed(666)),
         "jobs": [
             {
                 "id": str(uuid.uuid4()),
@@ -116,21 +117,28 @@ def login(monitorIp, deviceName):
     # TODO Check if this is still right
     requests.post(url='{address}/api/monitor/login'.format(address=monitorIp), json={
         "ip": devices.getServerIp(),
-        "id": str(devices.deviceId),
+        "id": str(generate_uuid_with_mac_seed(666)),
         "type": "dobot",
         "name": deviceName,
     })
 
     return
 
-def send_log(monitorIp, deviceName):
-    d = get_dobot()
+def send_log(monitorIp):
+    # json = {
+    #     "ip": devices.getServerIp(),
+    #     "id": d.get_device_sn(),
+    #     "type": "dobot",
+    #     "name": deviceName,
+    # }
 
     json = {
-        "ip": devices.getServerIp(),
-        "id": d.get_device_sn(),
-        "type": "dobot",
-        "name": deviceName,
+        "deviceId": generate_uuid_with_mac_seed(666),
+        "jobId": "",
+        "level": "info",
+        "timestamp": "2024-02-22T09:02:11+0000",
+        "message": "Sauger ist kaputt",
+        "status": "gestartet"
     }
 
     requests.post(url='{address}/api/monitor/log'.format(address=monitorIp), json=json)
@@ -205,7 +213,11 @@ async def run_task(subtasks):
                     toggle_suck(step.data.settings)
                     count = count + 1
                 elif step.command == 'wait': 
-                    wait(step.data.wait)
+                    wait(int(step.data.wait))
                     count = count + 1
                 # elif subtask['command'] == 'grip': 
     return count
+
+def get_sn():
+    d = get_dobot()
+    return d.get_device_sn()

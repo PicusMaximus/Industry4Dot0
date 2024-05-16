@@ -2,6 +2,7 @@ import logging
 from flask import Flask, jsonify, request, render_template
 from flask_swagger_ui import get_swaggerui_blueprint
 import uuid
+from UuidGenerartor import generate_uuid_with_mac_seed
 import manager
 import dbStore
 import requests
@@ -48,7 +49,7 @@ app.register_blueprint(SWAGGERUI_BLUEPRINT, url_prefix=SWAGGER_URL)
 @app.route("/api/device/getJobs", methods=['GET'])
 def getJobs():
     res = dbStore.get_simple_tasks()
-    return jsonify(res), 200
+    return jsonify({"deviceId": generate_uuid_with_mac_seed(666), "jobs": res}), 200
 
 ### END GET ###
 
@@ -66,10 +67,8 @@ def setJobOrder():
 
 @app.route("/api/device/startJob", methods=['POST'])
 async def startJob():
-    #id = request.args.get('id')
     id = request.json
     order = dbStore.get_order(id['id'])
-    app.logger.info("Test 1")
 
     subtasks = dbStore.get_subtasks(order[0])
 
@@ -198,6 +197,8 @@ def setSettings():
     monitorIP = request.args.get('monitorIP')
     deviceName = request.args.get('deviceName')
     dbStore.set_settings(monitorIP, deviceName)
+
+    manager.login(monitorIP, deviceName)
 
     return jsonify("Successfully saved Settings"), 200
 

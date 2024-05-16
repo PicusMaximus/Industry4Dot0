@@ -170,7 +170,7 @@ def get_simple_tasks():
     con.commit()
     con.close()
 
-    return {'jobs': data}
+    return data
 
 def create_task(data):
     con = sqlite3.connect('task.db')
