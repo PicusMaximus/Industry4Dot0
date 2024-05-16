@@ -71,29 +71,36 @@ export default class TaskManager {
 
         this.#taskCardContainer.replaceChildren(contentHTML[0]);
 
+        if (!this.#currentId?.trim?.()) this.#currentId = $('#task-card-content').find('section:first').attr('id');
+
+        HSInputNumber.autoInit();
+
         if (this.#data.has(this.#currentId)){
 
             const data = this.#data.get(this.#currentId);
 
-            $('#dobot-arm-pos-x').val(data.x);
-            $('#dobot-arm-pos-x').attr('value', data.x);
-            $('#dobot-arm-pos-y').val(data.y);
-            $('#dobot-arm-pos-y').attr('value',data.y);
-            $('#dobot-arm-pos-z').val(data.z);
-            $('#dobot-arm-pos-z').attr('value',data.z);
-            $('#dobot-arm-pos-r').val(data.r);
-            $('#dobot-arm-pos-r').attr('value',data.r);
-            $('#dobot-arm-pos-j1').val(data.j1);
-            $('#dobot-arm-pos-j1').attr('value',data.j1);
-            $('#dobot-arm-pos-j2').val(data.j2);
-            $('#dobot-arm-pos-j2').attr('value',data.j2);
-            $('#dobot-arm-pos-j3').val(data.j3);
-            $('#dobot-arm-pos-j3').attr('value',data.j3);
-            $('#dobot-arm-pos-j4').val(data.j4);
-            $('#dobot-arm-pos-j4').attr('value',data.j4);
-        }
+            $('#dobot-arm-pos-x').val(data.x).attr('value', data.x);
+            $('#dobot-arm-pos-y').val(data.y).attr('value',data.y);
+            $('#dobot-arm-pos-z').val(data.z).attr('value',data.z);
+            $('#dobot-arm-pos-r').val(data.r).attr('value',data.r);
+            $('#dobot-arm-pos-j1').val(data.j1).attr('value',data.j1);
+            $('#dobot-arm-pos-j2').val(data.j2).attr('value',data.j2);
+            $('#dobot-arm-pos-j3').val(data.j3).attr('value',data.j3);
+            $('#dobot-arm-pos-j4').val(data.j4).attr('value',data.j4);
+        } else {
+            const newTask = {
+                x: 0,
+                y: 0,
+                z: 0,
+                r: 0,
+                j1: 0,
+                j2: 0,
+                j3: 0,
+                j4: 0,
+            }
 
-        HSInputNumber.autoInit();
+            this.#data.set(this.#currentId, newTask);
+        }
         
         const elX = HSInputNumber.getInstance('#dobot-arm-pos-x--div');
 
@@ -165,11 +172,37 @@ export default class TaskManager {
     
         this.#taskCardContainer.replaceChildren(contentHTML[0]);
 
-        if (!this.#data.has(this.#currentId)) return;
+        if (!this.#currentId?.trim?.()) this.#currentId = $('#task-card-content').find('section:first').attr('id');
 
-        const data = this.#data.get(this.#currentId);
+        // Init Preline NumberInput
+        HSInputNumber.autoInit();
 
-        $('#dobot-wait-ms').val(data);
+        if (this.#data.has(this.#currentId)) {
+            const data = this.#data.get(this.#currentId);
+    
+            $('#dobot-wait-ms').val(data).attr('value', data.x);
+        } else {
+            this.#data.set(this.#currentId, 0);
+        }
+
+        const func = (data) => {
+            if (this.#data.has(this.#currentId)) {
+                const oldData = this.#data.get(this.#currentId)
+    
+                const newData = Object.assign(oldData, data);
+    
+                this.#data.set(this.#currentId, newData);
+                return;
+            }
+    
+            this.#data.set(this.#currentId, data);
+        }
+
+        const input = HSInputNumber.getInstance('#dobot-wait-ms--div');
+
+        input.on('change', ({ inputValue }) => {
+            func({ y: inputValue });
+        });
     }
 
     async #loadAxisCard() {
@@ -179,6 +212,10 @@ export default class TaskManager {
         const contentHTML = $.parseHTML(content)
     
         this.#taskCardContainer.replaceChildren(contentHTML[0]);
+
+        if (!this.#currentId?.trim?.()) this.#currentId = $('#task-card-content').find('section:first').attr('id');
+
+        //TODO: Add functionallity here - also add the card content
     }
 
     async #loadSettingsCard() {
@@ -189,8 +226,10 @@ export default class TaskManager {
     
         document.getElementById('task-card-content').replaceChildren(contentHTML[0]);
 
+        if (!this.#currentId?.trim?.()) this.#currentId = $('#task-card-content').find('section:first').attr('id');
+
         if (!this.#data.has(this.#currentId)) {
-            this.#data.set(this.#currentId, 'false')
+            this.#data.set(this.#currentId, false);
             return;
         }
 
@@ -202,12 +241,14 @@ export default class TaskManager {
     }
 
     async #loadCommentCard() {
-        const res = await fetch(`/comment-card${id ? `?id=${id}` : ''}`, { method: "GET" })
+        const res = await fetch(`/comment-card${this.#currentId ? `?id=${this.#currentId}` : ''}`, { method: "GET" })
         const content = await res.text();
     
         const contentHTML = $.parseHTML(content)
     
         document.getElementById('task-card-content').replaceChildren(contentHTML[0]);
+
+        if (!this.#currentId?.trim?.()) this.#currentId = $('#task-card-content').find('section:first').attr('id');
     }
 
     listenForCardChanges(type) {
@@ -349,7 +390,11 @@ export default class TaskManager {
             task.subtasks.push(subtask);
         }
         
-        task.name = 'test';
+        const taskName = document.getElementById('task-name');
+
+        // TODO:FIXME: This can be used to attack the side... - should be fine check it again...
+        task.name = taskName.innerText;
+
         if(this.#id) task.id = this.#id;
 
         const json = JSON.stringify(task);
@@ -375,6 +420,10 @@ export default class TaskManager {
         const res = await fetch(`/api/task?id=${this.#id}`, {method: 'GET'});
         const [id, name, subtaksJson] = await res.json();
         const subtasks = JSON.parse(subtaksJson);
+
+        const taskNameField = document.getElementById('task-name');
+
+        taskNameField.textContent = name;
 
         let counter = -1;
 

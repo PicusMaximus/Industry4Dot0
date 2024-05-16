@@ -13,7 +13,7 @@ function randomNumber() {
  * @param {string} content 
  * @param {'success' | 'danger' | 'warn' | 'info'} type 
  */
-export function showToast(content, type) {
+export function showToast(content, type='info') {
     const id = randomNumber();
 
     const toast = createToast(content, type, id);

@@ -74,32 +74,35 @@ $(document).on('click', async (e) => {
 });
 
 // Dialog stuff
+const dialog = document.getElementById('create-task--dialog');
 
-$('task-name-dialog').on('click', (e) => {
-    if (!e.target.closest('#free-drive-btn')) return;
-    const dialog = document.getElementById('movement-dialog');
+$('#create-new-task-fbtn').on('click', (e) => {
     dialog.showModal();
     dialog.classList.remove('hidden');
 
-    document.getElementById('task-name-dialog').addEventListener("close", () => {
+    dialog.addEventListener("close", () => {
         dialog.classList.add('hidden');
-    }, {once: true});
+    }, { once: true });
 })
 
-$(document).on('click', (e) => {
-    if (e.target.classList.contains('close-dialog-btn')) {
-        e.target.closest('dialog').close();
-        return;
-    }
-
+$(dialog).on('click', (e) => {
     if (e.target.closest('.close-dialog-btn')) {
         e.target.closest('dialog').close();
         return;
     }
 
-    if (e.target.closest('button')?.id === 'save-position-btn') {
-        wsHandler.ws.send(JSON.stringify({type: 'control-command', command: 'pose'}))
+    if (e.target.closest('button')?.id === 'continue-task-creation') {
+        const nameField =  dialog.querySelector('#new-task-name-field');
+
+        const fieldVal = nameField.value;
+
+        if (!fieldVal) {
+            showToast('Um einen Task erstellen zu können, muss ein Name angegeben werden.', 'info')
+            return;
+        }
+
         e.target.closest('dialog').close();
-        return;
+
+        window.location.href = `./task?name=${fieldVal}`;
     }
 }); 

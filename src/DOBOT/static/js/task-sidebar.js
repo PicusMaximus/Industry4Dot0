@@ -49,6 +49,8 @@ export default class TaskSidebar {
     
         const collapse = new HSCollapse(document.querySelector(`#collapse-${this.#moveCount}`));
         collapse.show();
+        
+        if (!id?.trim?.()) $(`#collapse-content-${this.#moveCount}`).find('.create-movement-card--btn').trigger('click');
     
         specificSortableTable(`#collapse-content-${this.#moveCount} .move-list--draggable`, '.move-list-item--draggable')
     }
@@ -63,9 +65,13 @@ export default class TaskSidebar {
         const html = this.createMovement(id)
     
         const $div = $('<div></div>');
+
+        const $container = $(container).find('.command-chain-container');
     
-        $(container).find('.command-chain-container').append($div);
+        $container.append($div);
         $div[0].outerHTML = html;
+
+        if (!id?.trim?.()) $container.find('.create-movement-card--btn:last').trigger('click');
     }
 
     createWaitLi(e, id='') {
@@ -76,9 +82,13 @@ export default class TaskSidebar {
         const html = this.createWait(id);
     
         const $div = $('<div></div>');
+
+        const $container = $(container).find('.command-chain-container');
     
-        $(container).find('.command-chain-container').append($div);
+        $container.append($div);
         $div[0].outerHTML = html;
+
+        if (!id?.trim?.()) $container.find('.create-wait-card--btn:last').trigger('click');
     }
 
     createSettingsLi(e, id='') {
@@ -89,9 +99,13 @@ export default class TaskSidebar {
         const html = this.createSettings(id);
     
         const $div = $('<div></div>');
+
+        const $container = $(container).find('.command-chain-container');
     
-        $(container).find('.command-chain-container').append($div);
+        $container.append($div);
         $div[0].outerHTML = html;
+
+        if (!id?.trim?.()) $container.find('.create-settings-card--btn:last').trigger('click');
     }
 
     createNotificationLi(e, id='') {
@@ -102,9 +116,13 @@ export default class TaskSidebar {
         const html = this.createNotification(id);
     
         const $div = $('<div></div>');
+
+        const $container = $(container).find('.command-chain-container');
     
-        $(container).find('.command-chain-container').append($div);
+        $container.append($div);
         $div[0].outerHTML = html;
+
+        if (!id?.trim?.()) $container.find('.create-notification-card--btn:last').trigger('click');
     }
 
     createCommentLi(e, id='') {
