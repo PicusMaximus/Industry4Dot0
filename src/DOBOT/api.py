@@ -113,18 +113,15 @@ def log2Monitor():
     manager.send_log()
     return jsonify("Log successful."), 200
 
-### END POST ###
-
-### -------------------------------------------------------------------------------------------------- ###
-
-### DELETE ###
-
-@app.route("/api/device/notstop", methods=['Delete'])
+@app.route("/api/device/notstop", methods=['POST'])
 def notstop():
     manager.emergency_stop()
     return jsonify("Successfully stoped the running task."), 200
 
-### END DELETE ###
+### END POST ###
+
+### -------------------------------------------------------------------------------------------------- ###
+
 
 ### -------------------------------------------------------------------------------------------------- ###
 
