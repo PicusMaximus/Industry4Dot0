@@ -21,6 +21,8 @@ from datetime import datetime
 
 job_order = {}
 last_stop = datetime.now()
+job_running = False
+last_job_id = None
 
 def api_device_notstop_post():  # noqa: E501
     """instantly stops the job chain
@@ -103,8 +105,11 @@ def get_monitor_jobs():  # noqa: E501
 def trigger_and_send_job(start_job : StartJob, context : SetJobs,start_time : datetime):
     triggerJob(start_job.id)
     print("waiting until not busy")
+    job_running = True
+    last_job_id = start_job.id
     while isBusy(start_job.id):
         time.sleep(0.25)
+    job_running = False
     print("*yay* its ready")
     deviceApi = DeviceApi(api_client.ApiClient(client_config.Configuration(context.next_device_ip + ":3000")))
     print("attempting to reach next device")
