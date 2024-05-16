@@ -47,7 +47,7 @@ def send_status():
     monitorApi.api_monitor_log_post(
         client_models.StatusChanged(
             device_id=str(generate_uuid_with_mac_seed(999999)),
-            timestamp=str(datetime.now().timestamp()),
+            timestamp=str(datetime.now()),
             message="ganz schöner status",
             status=status,
             job_id=last_job_id
@@ -55,7 +55,7 @@ def send_status():
     )
 
 def schedule_task():
-    schedule.every(1).seconds.do(send_status)
+    schedule.every(15).seconds.do(send_status)
     while True:
         schedule.run_pending()
         time.sleep(1)
