@@ -113,7 +113,8 @@ def get_jobs():
 
 def login(monitorIp, deviceName):
 
-    requests.post(url='{base_path}/api/monitor/login'.format(base_path=monitorIp), json={
+    # TODO Check if this is still right
+    requests.post(url='{address}/api/monitor/login'.format(address=monitorIp), json={
         "ip": devices.getServerIp(),
         "id": str(devices.deviceId),
         "type": "dobot",
@@ -122,15 +123,17 @@ def login(monitorIp, deviceName):
 
     return
 
-def send_log():
+def send_log(monitorIp, deviceName):
+    d = get_dobot()
+
     json = {
         "ip": devices.getServerIp(),
-        "id": devices.deviceId,
+        "id": d.get_device_sn(),
         "type": "dobot",
-        "name": "dobot 1",
+        "name": deviceName,
     }
 
-    requests.post(url='http://{ip}/api/monitor/log'.format(ip=devices.monitorIp), json=json)
+    requests.post(url='{address}/api/monitor/log'.format(address=monitorIp), json=json)
 
     return
 

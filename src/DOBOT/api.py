@@ -87,10 +87,6 @@ async def startJob():
         app.logger.info('Waiting be like: {idx}'.format(idx = curridx))
         curridx = manager.get_index()
 
-    app.logger.info('http://{ip}:3000/api/device/startJob'.format(ip=order[3]))
-
-    app.logger.info(order[2])
-
     headers = {'Content-type': 'application/json'}
 
     requests.post('http://{ip}:3000/api/device/startJob'.format(ip=order[3]), headers=headers, json={"id": order[2]})
