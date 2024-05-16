@@ -103,7 +103,7 @@ def update_gripper_status(state):
 def get_jobs():
     #This is just for debugging purposeses...
     return { 
-        "deviceId": str(generate_uuid_with_mac_seed(666)),
+        "deviceId": str(get_devices_id()),
         "jobs": [
             {
                 "id": str(uuid.uuid4()),
@@ -117,7 +117,7 @@ def login(monitorIp, deviceName):
     # TODO Check if this is still right
     requests.post(url='{address}/api/monitor/login'.format(address=monitorIp), json={
         "ip": devices.getServerIp(),
-        "id": str(generate_uuid_with_mac_seed(666)),
+        "id": str(get_devices_id()),
         "type": "dobot",
         "name": deviceName,
     })
@@ -125,15 +125,8 @@ def login(monitorIp, deviceName):
     return
 
 def send_log(monitorIp):
-    # json = {
-    #     "ip": devices.getServerIp(),
-    #     "id": d.get_device_sn(),
-    #     "type": "dobot",
-    #     "name": deviceName,
-    # }
-
     json = {
-        "deviceId": generate_uuid_with_mac_seed(666),
+        "deviceId": get_devices_id(),
         "jobId": "",
         "level": "info",
         "timestamp": "2024-02-22T09:02:11+0000",
@@ -221,3 +214,6 @@ async def run_task(subtasks):
 def get_sn():
     d = get_dobot()
     return d.get_device_sn()
+
+def get_devices_id():
+    return devices.deviceId

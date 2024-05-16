@@ -1,10 +1,9 @@
-import uuid
-import cherrypy
 from flask import request
+from UuidGenerartor import generate_uuid_with_mac_seed
 
 def getServerIp():
     return request.host.split(':')[0]
 
-deviceId = uuid.uuid4()
+seed = 666
 
-ws_url = '{socket_host}:{port}'.format(socket_host= cherrypy.server.socket_host, port = str(cherrypy.server.socket_port))
+deviceId = generate_uuid_with_mac_seed(seed)

@@ -2,7 +2,6 @@ import logging
 from flask import Flask, jsonify, request, render_template
 from flask_swagger_ui import get_swaggerui_blueprint
 import uuid
-from UuidGenerartor import generate_uuid_with_mac_seed
 import manager
 import dbStore
 import requests
@@ -49,7 +48,7 @@ app.register_blueprint(SWAGGERUI_BLUEPRINT, url_prefix=SWAGGER_URL)
 @app.route("/api/device/getJobs", methods=['GET'])
 def getJobs():
     res = dbStore.get_simple_tasks()
-    return jsonify({"deviceId": generate_uuid_with_mac_seed(666), "jobs": res}), 200
+    return jsonify({"deviceId": manager.get_devices_id(), "jobs": res}), 200
 
 ### END GET ###
 
@@ -292,19 +291,20 @@ def get_settings():
 @app.route('/', methods=['GET'])
 def getIndexPage():
     tasks = dbStore.get_tasks()
-    return render_template('home.html', data = { 'tasks': tasks })
+    return render_template('pages/homes/index.html', data = { 'tasks': tasks })
 
 @app.route('/task', methods=['GET'])
 def getTaskPage():
-    return render_template('task.html')
+    name = request.args.get('name')
+    return render_template('./pages/tasks/index.html', data = { 'name': name })
 
 @app.route('/settings', methods=['GET'])
 def getSettingsPage():
-    return render_template('settings.html')
+    return render_template('./pages/settings/index.html')
 
 @app.route('/about', methods=['GET'])
 def getAboutPage():
-    return render_template('about.html')
+    return render_template('./pages/abouts/index.html')
 
 ### Card SECTION ###
 
@@ -312,35 +312,35 @@ def getAboutPage():
 def getAxisCardPartial():
     id = request.args.get('id')
     if id == None: id = uuid.uuid4()
-    return render_template('axis-card.html', data = {'id': id})
+    return render_template('./components/cards/axis-card.html', data = {'id': id})
 
 @app.route('/movement-card', methods=['GET'])
 def getMovementCardPartial():
     id = request.args.get('id')
     if id == None: id = uuid.uuid4()
 
-    return render_template('movement-card.html', data = { 'id': id })
+    return render_template('./components/cards/movement-card.html', data = { 'id': id })
 
 @app.route('/wait-card', methods=['GET'])
 def getWaitCardPartial():
     id = request.args.get('id')
     if id == None: id = uuid.uuid4()
     
-    return render_template('wait-card.html', data = { 'id': id })
+    return render_template('./components/cards/wait-card.html', data = { 'id': id })
 
 @app.route('/settings-card', methods=['GET'])
 def getSettingsCardPartial():
     id = request.args.get('id')
     if id == None: id = uuid.uuid4()
 
-    return render_template('settings-card.html', data = { 'id': id })
+    return render_template('./components/cards/settings-card.html', data = { 'id': id })
 
 @app.route('/job/name-card', methods=['GET'])
 def getJobNameCardPartial():
     id = request.args.get('id')
     if id == None: id = uuid.uuid4()
 
-    return render_template('job-name-card.html', data = { 'id': id })
+    return render_template('./components/cards/job-name-card.html', data = { 'id': id })
 
 ### END HTML SECTION ###
 
