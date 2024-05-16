@@ -16,7 +16,7 @@ Task
 {% endblock breadcrumb %}
 
 {% block page_sidebar %}
-    {% include "sidebar.html" %}
+    {% include "./components/sidebars/sidebar.html" %}
 {% endblock page_sidebar %}
 
 {% block page_content %}
@@ -25,7 +25,7 @@ Task
 <div class="w-full pt-6 sm:px-6 md:px-8 lg:ps-72">
     <div class="flex sm:gap-1 w-100 calced-h lg:calced-h">
         <div class="w-2/4 mr-1 sm:mr-0 min-panel-size-one-1/2 sm:min-panel-size-one-2/5 lg:min-panel-size-one-1/15">
-            {% include "left-panel.html" %}
+            {% include "./components/panels/left-panel.html" %}
         </div>
 
         <div class="resizer none hidden sm:grid gap-1 isolate z-50 middle grid-row-45-10-45 .lg:grid-row-45-10-45 justify-items-center">
@@ -39,7 +39,7 @@ Task
         </div>
 
         <div class="flex flex-1 h-100 min-panel-size-one-1/2 sm:min-panel-size-one-1/2 lg:min-panel-size-one-1/4">
-            {% include "right-panel.html" %}
+            {% include "./components/panels/right-panel.html" %}
         </div>
     </div>
 </div>
@@ -74,5 +74,5 @@ Task
 {% endblock page_content %}
 
 {% block dialog_section%}
-  {% include "movement-modal.html" %}
+  {% include "./components/dialogs/movement-modal.html" %}
 {% endblock dialog_section%}
