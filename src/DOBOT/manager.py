@@ -1,11 +1,10 @@
+from datetime import datetime
 import uuid
 import requests
-from UuidGenerartor import generate_uuid_with_mac_seed
 from classes import Dobot
 import devices
 from serial.tools import list_ports
 from classes.Enums import ConnectState, PTPMode
-import asyncio
 
 dobot = None
 
@@ -124,14 +123,14 @@ def login(monitorIp, deviceName):
 
     return
 
-def send_log(monitorIp):
+def send_log(monitorIp, message, status):
     json = {
         "deviceId": get_devices_id(),
         "jobId": "",
         "level": "info",
-        "timestamp": "2024-02-22T09:02:11+0000",
-        "message": "Sauger ist kaputt",
-        "status": "gestartet"
+        "timestamp": str(datetime.now()),
+        "message": message,
+        "status": status,
     }
 
     requests.post(url='{address}/api/monitor/log'.format(address=monitorIp), json=json)
@@ -191,7 +190,7 @@ def get_index():
     d = get_dobot()
     return d.get_current_index()
 
-async def run_task(subtasks):
+async def run_task(subtasks, monitorIp):
     count = 0
     for subtask in subtasks:
         for step in subtask.steps:
@@ -208,6 +207,8 @@ async def run_task(subtasks):
                 elif step.command == 'wait': 
                     wait(int(step.data.wait))
                     count = count + 1
+                elif step.command == 'notification':
+                    send_log(monitorIp, step.data.message, step.data.status)
                 # elif subtask['command'] == 'grip': 
     return count
 

@@ -335,6 +335,20 @@ def getSettingsCardPartial():
 
     return render_template('./components/cards/settings-card.html', data = { 'id': id })
 
+@app.route('/comment-card', methods=['GET'])
+def getCommentCardPartial():
+    id = request.args.get('id')
+    if id == None: id = uuid.uuid4()
+
+    return render_template('./components/cards/comment-card.html', data = { 'id': id })
+
+@app.route('/notification-card', methods=['GET'])
+def getNotificationCardPartial():
+    id = request.args.get('id')
+    if id == None: id = uuid.uuid4()
+
+    return render_template('./components/cards/notification-card.html', data = { 'id': id })
+
 @app.route('/job/name-card', methods=['GET'])
 def getJobNameCardPartial():
     id = request.args.get('id')
