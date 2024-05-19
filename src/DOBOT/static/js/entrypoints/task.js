@@ -2,29 +2,14 @@ import WebSocketHandler from "../websocket.js";
 import TaskManager from "../task-manager.js";
 import { initPanelSectionSlider } from "../panel.js";
 import { addEmergencyStopBtn } from '../actions.js'
-import { showToast } from "../toast.js";
+import { onError, onMessage } from '../ws-events.js';
 
 addEmergencyStopBtn();
 
-function onMessage(e) {
+function onMessageCustom(e) {
     const data = JSON.parse(e.data)
 
-    if (data.type === 'disconnected') {
-        const dobotConnection = document.getElementById('dobot-connection');
-        dobotConnection.className = '';
-        dobotConnection.classList.add('text-red-500', 'hover:text-red-600', 'focus:outline-none', 'focus:text-red-700')
-
-        showToast('The Dobot disconnected from the Pi, please check the connection', 'danger');
-    }
-
-    if (data.type === 'connected') {
-        const dobotConnection = document.getElementById('dobot-connection');
-        dobotConnection.className = '';
-        dobotConnection.classList.add('text-green-500', 'hover:text-green-600', 'focus:outline-none', 'focus:text-green-700');
-        // showToast('The Dobot disconnected from the Pi, please check the connection', 'success');
-
-        // bg-green-500 hover:bg-green-600 text-green-100 hover:text-green-200 focus:outline-none focus:bg-green-700 dark:bg-green-600 dark:hover:bg-green-700
-    }
+    onMessage(e);
 
     if (data.type === 'pose') {
         const elemX = document.getElementById('dobot-arm-pos-x');
@@ -63,7 +48,8 @@ function onMessage(e) {
 
 const wsHandler = new WebSocketHandler({
     url: `ws://${window.location.hostname}:8080/ws`,
-    onMessage: onMessage,
+    onMessage: onMessageCustom,
+    onError: onError,
 });
 
 initPanelSectionSlider();

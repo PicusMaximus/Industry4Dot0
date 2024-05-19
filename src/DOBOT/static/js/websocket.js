@@ -2,10 +2,18 @@ export default class WebSocketHandler {
     url = '';
     ws = null;
 
+    /**
+     * 
+     * @param {{
+     *      onMessage: (e: MessageEvent) => void;
+     *      onError: (e: ErrorEvent) => void; 
+     * }} options 
+     */
     constructor(options) {
         this.url = options.url;
 
         this.onMessage = options.onMessage;
+        this.onError = options.onError;
 
         this.ws = this.createWs();
         this.addStandardWsMethodes()
@@ -39,7 +47,7 @@ export default class WebSocketHandler {
         }
     
         this.ws.onerror = (error) => {
-            console.error(error.message);
+            this.onError()
         };
     }
 

@@ -74,6 +74,7 @@ export default class TaskManager {
         if (!this.#currentId?.trim?.()) this.#currentId = $('#task-card-content').find('section:first').attr('id');
 
         HSInputNumber.autoInit();
+        HSTooltip.autoInit();
 
         if (this.#data.has(this.#currentId)){
 
@@ -176,6 +177,7 @@ export default class TaskManager {
 
         // Init Preline NumberInput
         HSInputNumber.autoInit();
+        HSTooltip.autoInit();
 
         if (this.#data.has(this.#currentId)) {
             const data = this.#data.get(this.#currentId);
@@ -215,6 +217,8 @@ export default class TaskManager {
 
         if (!this.#currentId?.trim?.()) this.#currentId = $('#task-card-content').find('section:first').attr('id');
 
+        HSTooltip.autoInit();
+
         //TODO: Add functionallity here - also add the card content
     }
 
@@ -227,6 +231,8 @@ export default class TaskManager {
         document.getElementById('task-card-content').replaceChildren(contentHTML[0]);
 
         if (!this.#currentId?.trim?.()) this.#currentId = $('#task-card-content').find('section:first').attr('id');
+
+        HSTooltip.autoInit();
 
         if (!this.#data.has(this.#currentId)) {
             this.#data.set(this.#currentId, false);
@@ -249,6 +255,8 @@ export default class TaskManager {
         document.getElementById('task-card-content').replaceChildren(contentHTML[0]);
 
         if (!this.#currentId?.trim?.()) this.#currentId = $('#task-card-content').find('section:first').attr('id');
+
+        HSTooltip.autoInit();
     }
 
     listenForCardChanges(type) {

@@ -126,13 +126,26 @@ export default class TaskSidebar {
     }
 
     createCommentLi(e, id='') {
-        // Coming soon...
+        if (!this.#valid()) return;
+    
+        const container = this.#getContainer();
+    
+        const html = this.createComment(id);
+    
+        const $div = $('<div></div>');
+
+        const $container = $(container).find('.command-chain-container');
+    
+        $container.append($div);
+        $div[0].outerHTML = html;
+
+        if (!id?.trim?.()) $container.find('.create-notification-card--btn:last').trigger('click');
     }
 
 
     #valid() {
         if (this.#moveCount === 0) {
-            showToast(`Das Element konnte nicht hinzugefügt werden, da noch keine Bewegung erstellt wurde.`, 'danger')
+            showToast(`Erstelle zuerst eine Bewegung, bevor du weitere Anweisungen anlegst.`, 'danger')
             return false;
         }
 
@@ -183,11 +196,11 @@ export default class TaskSidebar {
         return `
         <div class="subtask-group">
             <div class="flex mt-4">
-                <button type="button" data-card-id="" class="hs-collapse-toggle text-sm font-semibold rounded-lg border border-transparent dark:focus:outline-none dark:focus:ring-1 pl-1 pr-1 text-slate-700 hover:bg-gray-100 dark:hover:bg-gray-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:ring-gray-600" id="collapse-${this.#moveCount}" data-hs-collapse="#collapse-content-${this.#moveCount}">
+                <button type="button" class="hs-collapse-toggle text-sm font-semibold rounded-lg border border-transparent dark:focus:outline-none dark:focus:ring-1 pl-1 pr-1 text-slate-700 hover:bg-gray-100 dark:hover:bg-gray-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:ring-gray-600" id="collapse-${this.#moveCount}" data-hs-collapse="#collapse-content-${this.#moveCount}">
                     <svg xmlns="http://www.w3.org/2000/svg" class="hs-collapse-open:rotate-180 flex-shrink-0 size-5" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
                 </button>
-                <button type="button" class="create-axis-card--btn inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg text-gray-500 hover:text-blue-600 disabled:opacity-50 disabled:pointer-events-none dark:text-neutral-400 dark:hover:text-white">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="flex-shrink-0 size-4 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <button type="button" data-card-id="" class="create-axis-card--btn inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg text-gray-500 hover:text-blue-600 disabled:opacity-50 disabled:pointer-events-none dark:text-neutral-400 dark:hover:text-white w-fit">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="flex-shrink-0 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
                     </svg>
                     Fahre Achse
@@ -195,8 +208,8 @@ export default class TaskSidebar {
             </div>
             <div id="collapse-content-${this.#moveCount}" class="collapse-content-container cursor-pointer hs-collapse hidden w-full overflow-hidden transition-[height] duration-300" aria-labelledby="hs-basic-collapse">
                 <div class="flex flex-col mt-2 ml-8 command-chain-container gap-x-1 gap-y-2 move-list--draggable">
-                    <button type="button" data-card-id="" class="create-movement-card--btn move-list-item--draggable inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg text-gray-500 hover:text-blue-600 disabled:opacity-50 disabled:pointer-events-none dark:text-neutral-400 dark:hover:text-white">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="flex-shrink-0 size-5 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <button type="button" data-card-id="" class="create-movement-card--btn move-list-item--draggable inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg text-gray-500 hover:text-blue-600 disabled:opacity-50 disabled:pointer-events-none dark:text-neutral-400 dark:hover:text-white w-fit">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="flex-shrink-0 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecapspic="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                             <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                         </svg>
@@ -212,11 +225,11 @@ export default class TaskSidebar {
         return `
         <div class="subtask-group">
             <div class="flex mt-4">
-                <button type="button" data-card-id="${id}" class="hs-collapse-toggle text-sm font-semibold rounded-lg border border-transparent dark:focus:outline-none dark:focus:ring-1 pl-1 pr-1 text-slate-700 hover:bg-gray-100 dark:hover:bg-gray-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:ring-gray-600" id="collapse-${this.#moveCount}" data-hs-collapse="#collapse-content-${this.#moveCount}">
+                <button type="button" class="hs-collapse-toggle text-sm font-semibold rounded-lg border border-transparent dark:focus:outline-none dark:focus:ring-1 pl-1 pr-1 text-slate-700 hover:bg-gray-100 dark:hover:bg-gray-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:ring-gray-600" id="collapse-${this.#moveCount}" data-hs-collapse="#collapse-content-${this.#moveCount}">
                     <svg xmlns="http://www.w3.org/2000/svg" class="hs-collapse-open:rotate-180 flex-shrink-0 size-5" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
                 </button>
-                <button type="button" class="create-axis-card--btn inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg text-gray-500 hover:text-blue-600 disabled:opacity-50 disabled:pointer-events-none dark:text-neutral-400 dark:hover:text-white">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="flex-shrink-0 size-4 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <button type="button" data-card-id="${id}" class="create-axis-card--btn inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg text-gray-500 hover:text-blue-600 disabled:opacity-50 disabled:pointer-events-none dark:text-neutral-400 dark:hover:text-white w-fit">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="flex-shrink-0 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
                     </svg>
                     Fahre Achse
@@ -232,8 +245,8 @@ export default class TaskSidebar {
     
     createMovement(id) {
         return `
-        <button type="button" data-card-id="${id}" class="create-movement-card--btn move-list-item--draggable inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg text-gray-500 hover:text-blue-600 disabled:opacity-50 disabled:pointer-events-none dark:text-neutral-400 dark:hover:text-white">
-            <svg xmlns="http://www.w3.org/2000/svg" class="flex-shrink-0 size-5 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <button type="button" data-card-id="${id}" class="create-movement-card--btn move-list-item--draggable inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg text-gray-500 hover:text-blue-600 disabled:opacity-50 disabled:pointer-events-none dark:text-neutral-400 dark:hover:text-white w-fit">
+            <svg xmlns="http://www.w3.org/2000/svg" class="flex-shrink-0 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
@@ -244,8 +257,8 @@ export default class TaskSidebar {
     
     createWait(id) {
         return `
-        <button type="button" data-card-id="${id}" class="create-wait-card--btn move-list-item--draggable inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg text-gray-500 hover:text-blue-600 disabled:opacity-50 disabled:pointer-events-none dark:text-neutral-400 dark:hover:text-white">
-            <svg xmlns="http://www.w3.org/2000/svg" class="flex-shrink-0 mt-0.5 size-5 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <button type="button" data-card-id="${id}" class="create-wait-card--btn move-list-item--draggable inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg text-gray-500 hover:text-blue-600 disabled:opacity-50 disabled:pointer-events-none dark:text-neutral-400 dark:hover:text-white w-fit">
+            <svg xmlns="http://www.w3.org/2000/svg" class="flex-shrink-0 mt-0.5 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
             Wartepunkt
@@ -255,8 +268,8 @@ export default class TaskSidebar {
     
     createSettings(id) {
         return `
-        <button type="button" data-card-id="${id}" class="create-settings-card--btn move-list-item--draggable inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg text-gray-500 hover:text-blue-600 disabled:opacity-50 disabled:pointer-events-none dark:text-neutral-400 dark:hover:text-white">
-            <svg xmlns="http://www.w3.org/2000/svg" class="flex-shrink-0 mt-0.5 size-5 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <button type="button" data-card-id="${id}" class="create-settings-card--btn move-list-item--draggable inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg text-gray-500 hover:text-blue-600 disabled:opacity-50 disabled:pointer-events-none dark:text-neutral-400 dark:hover:text-white w-fit">
+            <svg xmlns="http://www.w3.org/2000/svg" class="flex-shrink-0 mt-0.5 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
             </svg>
             Einstellung
@@ -266,11 +279,22 @@ export default class TaskSidebar {
     
     createNotification(id) {
         return `
-        <button type="button" data-card-id="${id}" class="create-notification-card--btn move-list-item--draggable inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg text-gray-500 hover:text-blue-600 disabled:opacity-50 disabled:pointer-events-none dark:text-neutral-400 dark:hover:text-white">
-            <svg xmlns="http://www.w3.org/2000/svg" class="flex-shrink-0 mt-0.5 size-5 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <button type="button" data-card-id="${id}" class="create-notification-card--btn move-list-item--draggable inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg text-gray-500 hover:text-blue-600 disabled:opacity-50 disabled:pointer-events-none dark:text-neutral-400 dark:hover:text-white w-fit">
+            <svg xmlns="http://www.w3.org/2000/svg" class="flex-shrink-0 mt-0.5 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
             </svg>
             Meldung
+        </button>
+        `
+    }
+
+    createComment(id) {
+        return `
+        <button type="button" data-card-id="${id}" class="create-comment-card--btn move-list-item--draggable inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg text-gray-500 hover:text-blue-600 disabled:opacity-50 disabled:pointer-events-none dark:text-neutral-400 dark:hover:text-white w-fit">
+            <svg xmlns="http://www.w3.org/2000/svg" class="flex-shrink-0 mt-0.5 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
+            </svg>
+            Kommentar
         </button>
         `
     }

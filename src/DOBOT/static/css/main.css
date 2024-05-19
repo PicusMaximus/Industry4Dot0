@@ -101,3 +101,16 @@
         height: calc(100dvh -  (4.5rem + 3.3rem));
     }
 }
+
+.h-5\.5 {
+    height: 22px;
+}
+
+.w-5\.5 {
+    width: 22px;
+}
+
+#task-card-content:not(#task-card-content:empty) + .right-panel-default-content {
+    display: none;
+}
+
