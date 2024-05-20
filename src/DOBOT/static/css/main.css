@@ -110,7 +110,12 @@
     width: 22px;
 }
 
-#task-card-content:not(#task-card-content:empty) + .right-panel-default-content {
+#task-card-content:not(:empty) + .right-panel-default-content {
     display: none;
 }
+
+#task-container:not(:empty) + .left-panel-default-content {
+    display: none;
+}
+
 

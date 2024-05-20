@@ -1,12 +1,9 @@
 <div class="flex flex-col w-full bg-white border border-gray-200 shadow-sm rounded-xl p-4 md:p-5 dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400">
     <!-- Select (Mobile only) -->
     <div class="sm:hidden">
-      <label for="hs-card-nav-tabs" class="sr-only">Select a nav</label>
-      <select name="hs-card-nav-tabs" id="hs-card-nav-tabs" class="block w-full border-t-0 border-x-0 border-gray-300 rounded-t-xl focus:ring-blue-600 focus:border-blue-600">
-        <option selected>Befehl</option>
-        <option>Grafik</option>
-        <option>Variablen</option>
-      </select>
+      <div class="hs-tab-active:border-b-blue-600 hs-tab-active:text-gray-900 dark:hs-tab-active:text-white relative dark:hs-tab-active:border-b-blue-600 min-w-0 flex-1 bg-white first:border-s-0 border-s border-b-2 py-4 px-4 text-gray-500 hover:text-gray-700 text-sm font-medium text-center overflow-hidden focus:z-10 focus:outline-none focus:text-blue-600 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-l-neutral-700 dark:border-b-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-400 active" id="bar-with-underline-item-1" data-hs-tab="#task-card-content" aria-controls="bar-with-underline-1" role="tab">
+        Anweisung
+      </div>
     </div>
     <!-- End Select (Mobile only) -->
   
@@ -20,8 +17,7 @@
     </div>
     <!-- End Nav Tabs (Device only) -->
   
-    <div id="task-card-content">
-    </div>
+    <div id="task-card-content"></div>
     <div class="right-panel-default-content p-4 md:py-7 md:px-5 text-gray-500 dark:text-gray-400">
       <p class="text-gray-500 dark:text-neutral-400">
         Dies ist der Bereich in dem die <em class="font-semibold text-gray-800  dark:text-neutral-200">Einstellungen</em> der einzelnen Schritte bearbeitet werden kann.
