@@ -1,8 +1,8 @@
 from datetime import datetime
-import uuid
+from flask import request
 import requests
 from classes import Dobot
-import devices
+import constants
 from serial.tools import list_ports
 from classes.Enums import ConnectState, PTPMode
 
@@ -99,24 +99,12 @@ def update_gripper_status(state):
     #This enables or disables the Gripper
     d.grip(state)
 
-def get_jobs():
-    #This is just for debugging purposeses...
-    return { 
-        "deviceId": str(get_devices_id()),
-        "jobs": [
-            {
-                "id": str(uuid.uuid4()),
-                "name": "Job 1"
-            }
-        ],
-    }
-
 def login(monitorIp, deviceName):
 
     # TODO Check if this is still right
     requests.post(url='{address}/api/monitor/login'.format(address=monitorIp), json={
-        "ip": devices.getServerIp(),
-        "id": str(get_devices_id()),
+        "ip": request.host.split(':')[0],
+        "id": str(constants.DEVICE_ID),
         "type": "dobot",
         "name": deviceName,
     })
@@ -125,7 +113,7 @@ def login(monitorIp, deviceName):
 
 def send_log(monitorIp, message, status):
     json = {
-        "deviceId": get_devices_id(),
+        "deviceId": str(constants.DEVICE_ID),
         "jobId": "",
         "level": "info",
         "timestamp": str(datetime.now()),
@@ -217,4 +205,4 @@ def get_sn():
     return d.get_device_sn()
 
 def get_devices_id():
-    return devices.deviceId
+    return constants.DEVICE_ID

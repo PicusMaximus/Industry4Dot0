@@ -6,6 +6,7 @@ import manager
 import dbStore
 import requests
 import asyncio
+import constants
 
 ### -------------------------------------------------------------------------------------------------- ###
 
@@ -48,7 +49,7 @@ app.register_blueprint(SWAGGERUI_BLUEPRINT, url_prefix=SWAGGER_URL)
 @app.route("/api/device/getJobs", methods=['GET'])
 def getJobs():
     res = dbStore.get_simple_tasks()
-    return jsonify({"deviceId": manager.get_devices_id(), "jobs": res}), 200
+    return jsonify({"deviceId": str(manager.get_devices_id()), "jobs": res}), 200
 
 ### END GET ###
 
@@ -198,7 +199,6 @@ def setSettings():
     dbStore.set_settings(monitorIP, deviceName)
 
     manager.login(monitorIP, deviceName)
-
     return jsonify("Successfully saved Settings"), 200
 
 ### END POST ###
@@ -347,7 +347,7 @@ def getNotificationCardPartial():
     id = request.args.get('id')
     if id == None: id = uuid.uuid4()
 
-    return render_template('./components/cards/notification-card.html', data = { 'id': id })
+    return render_template('./components/cards/notification-card.html', data = { 'id': id, 'status': constants.LOG_STATUS })
 
 @app.route('/job/name-card', methods=['GET'])
 def getJobNameCardPartial():
