@@ -31,8 +31,8 @@ document.getElementById('login-monitor-btn').addEventListener('click', async () 
     
         const res = await fetch(`/api/device/settings?monitorIP=${settingLeitstelle.value}&deviceName=${settingDobotName.value}`, { method: 'POST' });
         if(res.status.toString().startsWith(4) || res.status.toString().startsWith(5)) {
-            showToast('The current settings could not be saved.', 'danger');
+            showToast('Es ist ein Fehler beim Monitor-Login aufgetreten. Überprüfe die Richtigkeit deiner Angaben.', 'danger');
             return;
         }
-        showToast('The settings were successfully saved.', 'success');
+        showToast('Erfolgreich beim Monitor angemeldet.', 'success');
 });

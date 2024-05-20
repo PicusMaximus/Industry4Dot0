@@ -1,6 +1,6 @@
 export function addEmergencyStopBtn() {
     document.getElementById('emergency-stop--btn')?.addEventListener('click', async () => {
-        await fetch('/api/device/notstop', {method: 'DELETE'});
+        await fetch('/api/device/notstop', {method: 'POST'});
         await fetch('/api/device/start', {method: 'POST'});
     });
 }

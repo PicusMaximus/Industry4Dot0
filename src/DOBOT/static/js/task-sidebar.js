@@ -15,8 +15,8 @@ export default class TaskSidebar {
     #noMarkingElement = ['add-move-btn', 'add-point-btn', 'add-point-btn', 'add-settings-btn', 'add-notification-btn', 'add-comment-btn'];
 
     // Some usefull counters
-    #pointCount = 0;
-    #moveCount = 0;
+    moveCount = 0;
+    axisCount = 0;
 
     constructor() {
         this.initSidebar();
@@ -34,31 +34,31 @@ export default class TaskSidebar {
     }
 
     createAxisLi(e, id='') {
-        if(this.#moveCount === 0) this.#$taskContainer.empty();
+        if(this.moveCount === 0) this.#$taskContainer.empty();
 
-        this.#moveCount++;
+        this.axisCount++;
     
         const $div = $('<div></div>');
     
-        if(!id?.trim?.()) this.#pointCount++ 
+        if(!id?.trim?.()) this.moveCount++ 
 
         const html = !id?.trim?.() ? this.createSubtask() : this.createAxis(id);
     
         this.#$taskContainer.append($div);
         $div[0].outerHTML = html;
     
-        const collapse = new HSCollapse(document.querySelector(`#collapse-${this.#moveCount}`));
+        const collapse = new HSCollapse(document.querySelector(`#collapse-${this.axisCount}`));
         collapse.show();
         
-        if (!id?.trim?.()) $(`#collapse-content-${this.#moveCount}`).find('.create-movement-card--btn').trigger('click');
+        if (!id?.trim?.()) $(`#collapse-content-${this.axisCount}`).find('.create-movement-card--btn').trigger('click');
     
-        specificSortableTable(`#collapse-content-${this.#moveCount} .move-list--draggable`, '.move-list-item--draggable')
+        specificSortableTable(`#collapse-content-${this.axisCount} .move-list--draggable`, '.move-list-item--draggable')
     }
 
     createMovementLi(e, id='') {
         if (!this.#valid()) return;
     
-        this.#pointCount++;
+        this.moveCount++;
     
         const container = this.#getContainer();
     
@@ -139,12 +139,12 @@ export default class TaskSidebar {
         $container.append($div);
         $div[0].outerHTML = html;
 
-        if (!id?.trim?.()) $container.find('.create-notification-card--btn:last').trigger('click');
+        if (!id?.trim?.()) $container.find('.create-comment-card--btn:last').trigger('click');
     }
 
 
     #valid() {
-        if (this.#moveCount === 0) {
+        if (this.axisCount === 0) {
             showToast(`Erstelle zuerst eine Bewegung, bevor du weitere Anweisungen anlegst.`, 'danger')
             return false;
         }
@@ -193,10 +193,9 @@ export default class TaskSidebar {
     }
 
     createSubtask() {
-        return `
-        <div class="subtask-group">
+        return `<div class="subtask-group">
             <div class="flex mt-4">
-                <button type="button" class="hs-collapse-toggle text-sm font-semibold rounded-lg border border-transparent dark:focus:outline-none dark:focus:ring-1 pl-1 pr-1 text-slate-700 hover:bg-gray-100 dark:hover:bg-gray-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:ring-gray-600" id="collapse-${this.#moveCount}" data-hs-collapse="#collapse-content-${this.#moveCount}">
+                <button type="button" class="hs-collapse-toggle text-sm font-semibold rounded-lg border border-transparent dark:focus:outline-none dark:focus:ring-1 pl-1 pr-1 text-slate-700 hover:bg-gray-100 dark:hover:bg-gray-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:ring-gray-600" id="collapse-${this.axisCount}" data-hs-collapse="#collapse-content-${this.axisCount}">
                     <svg xmlns="http://www.w3.org/2000/svg" class="hs-collapse-open:rotate-180 flex-shrink-0 size-5" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
                 </button>
                 <button type="button" data-card-id="" class="create-axis-card--btn inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg text-gray-500 hover:text-blue-600 disabled:opacity-50 disabled:pointer-events-none dark:text-neutral-400 dark:hover:text-white w-fit">
@@ -206,26 +205,24 @@ export default class TaskSidebar {
                     Fahre Achse
                 </button>
             </div>
-            <div id="collapse-content-${this.#moveCount}" class="collapse-content-container cursor-pointer hs-collapse hidden w-full overflow-hidden transition-[height] duration-300" aria-labelledby="hs-basic-collapse">
+            <div id="collapse-content-${this.axisCount}" class="collapse-content-container cursor-pointer hs-collapse hidden w-full overflow-hidden transition-[height] duration-300" aria-labelledby="hs-basic-collapse">
                 <div class="flex flex-col mt-2 ml-8 command-chain-container gap-x-1 gap-y-2 move-list--draggable">
                     <button type="button" data-card-id="" class="create-movement-card--btn move-list-item--draggable inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg text-gray-500 hover:text-blue-600 disabled:opacity-50 disabled:pointer-events-none dark:text-neutral-400 dark:hover:text-white w-fit">
                         <svg xmlns="http://www.w3.org/2000/svg" class="flex-shrink-0 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecapspic="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                             <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                         </svg>
-                        Wegpunkt ${this.#pointCount}
+                        Wegpunkt ${this.moveCount}
                     </button>
                 </div>
             </div>
-        </div>
-    `;
+        </div>`;
     }
 
     createAxis(id) {
-        return `
-        <div class="subtask-group">
+        return `<div class="subtask-group">
             <div class="flex mt-4">
-                <button type="button" class="hs-collapse-toggle text-sm font-semibold rounded-lg border border-transparent dark:focus:outline-none dark:focus:ring-1 pl-1 pr-1 text-slate-700 hover:bg-gray-100 dark:hover:bg-gray-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:ring-gray-600" id="collapse-${this.#moveCount}" data-hs-collapse="#collapse-content-${this.#moveCount}">
+                <button type="button" class="hs-collapse-toggle text-sm font-semibold rounded-lg border border-transparent dark:focus:outline-none dark:focus:ring-1 pl-1 pr-1 text-slate-700 hover:bg-gray-100 dark:hover:bg-gray-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:ring-gray-600" id="collapse-${this.axisCount}" data-hs-collapse="#collapse-content-${this.axisCount}">
                     <svg xmlns="http://www.w3.org/2000/svg" class="hs-collapse-open:rotate-180 flex-shrink-0 size-5" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
                 </button>
                 <button type="button" data-card-id="${id}" class="create-axis-card--btn inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg text-gray-500 hover:text-blue-600 disabled:opacity-50 disabled:pointer-events-none dark:text-neutral-400 dark:hover:text-white w-fit">
@@ -235,67 +232,56 @@ export default class TaskSidebar {
                     Fahre Achse
                 </button>
             </div>
-            <div id="collapse-content-${this.#moveCount}" class="collapse-content-container cursor-pointer hs-collapse hidden w-full overflow-hidden transition-[height] duration-300" aria-labelledby="hs-basic-collapse">
+            <div id="collapse-content-${this.axisCount}" class="collapse-content-container cursor-pointer hs-collapse hidden w-full overflow-hidden transition-[height] duration-300" aria-labelledby="hs-basic-collapse">
                 <div class="flex flex-col mt-2 ml-8 command-chain-container gap-x-1 gap-y-2 move-list--draggable">
                 </div>
             </div>
-        </div>
-    `;
+        </div>`;
     }
     
     createMovement(id) {
-        return `
-        <button type="button" data-card-id="${id}" class="create-movement-card--btn move-list-item--draggable inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg text-gray-500 hover:text-blue-600 disabled:opacity-50 disabled:pointer-events-none dark:text-neutral-400 dark:hover:text-white w-fit">
+        return `<button type="button" data-card-id="${id}" class="create-movement-card--btn move-list-item--draggable inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg text-gray-500 hover:text-blue-600 disabled:opacity-50 disabled:pointer-events-none dark:text-neutral-400 dark:hover:text-white w-fit">
             <svg xmlns="http://www.w3.org/2000/svg" class="flex-shrink-0 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
-            Wegpunkt ${this.#pointCount}
-        </button>
-        `
+            Wegpunkt ${this.moveCount}
+        </button>`
     }
     
     createWait(id) {
-        return `
-        <button type="button" data-card-id="${id}" class="create-wait-card--btn move-list-item--draggable inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg text-gray-500 hover:text-blue-600 disabled:opacity-50 disabled:pointer-events-none dark:text-neutral-400 dark:hover:text-white w-fit">
+        return `<button type="button" data-card-id="${id}" class="create-wait-card--btn move-list-item--draggable inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg text-gray-500 hover:text-blue-600 disabled:opacity-50 disabled:pointer-events-none dark:text-neutral-400 dark:hover:text-white w-fit">
             <svg xmlns="http://www.w3.org/2000/svg" class="flex-shrink-0 mt-0.5 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
             Wartepunkt
-        </button>
-        `
+        </button>`
     }
     
     createSettings(id) {
-        return `
-        <button type="button" data-card-id="${id}" class="create-settings-card--btn move-list-item--draggable inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg text-gray-500 hover:text-blue-600 disabled:opacity-50 disabled:pointer-events-none dark:text-neutral-400 dark:hover:text-white w-fit">
+        return `<button type="button" data-card-id="${id}" class="create-settings-card--btn move-list-item--draggable inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg text-gray-500 hover:text-blue-600 disabled:opacity-50 disabled:pointer-events-none dark:text-neutral-400 dark:hover:text-white w-fit">
             <svg xmlns="http://www.w3.org/2000/svg" class="flex-shrink-0 mt-0.5 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
             </svg>
             Einstellung
-        </button>
-        `
+        </button>`
     }
     
     createNotification(id) {
-        return `
-        <button type="button" data-card-id="${id}" class="create-notification-card--btn move-list-item--draggable inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg text-gray-500 hover:text-blue-600 disabled:opacity-50 disabled:pointer-events-none dark:text-neutral-400 dark:hover:text-white w-fit">
+        return `<button type="button" data-card-id="${id}" class="create-notification-card--btn move-list-item--draggable inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg text-gray-500 hover:text-blue-600 disabled:opacity-50 disabled:pointer-events-none dark:text-neutral-400 dark:hover:text-white w-fit">
             <svg xmlns="http://www.w3.org/2000/svg" class="flex-shrink-0 mt-0.5 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
             </svg>
             Meldung
-        </button>
-        `
+        </button>`
     }
 
     createComment(id) {
-        return `
-        <button type="button" data-card-id="${id}" class="create-comment-card--btn move-list-item--draggable inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg text-gray-500 hover:text-blue-600 disabled:opacity-50 disabled:pointer-events-none dark:text-neutral-400 dark:hover:text-white w-fit">
+        return `<button type="button" data-card-id="${id}" class="create-comment-card--btn move-list-item--draggable inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg text-gray-500 hover:text-blue-600 disabled:opacity-50 disabled:pointer-events-none dark:text-neutral-400 dark:hover:text-white w-fit">
             <svg xmlns="http://www.w3.org/2000/svg" class="flex-shrink-0 mt-0.5 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
             </svg>
             Kommentar
-        </button>
-        `
+        </button>`
     }
 }

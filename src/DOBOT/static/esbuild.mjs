@@ -10,6 +10,7 @@ try {
   ],
     bundle: true,
     minify: true,
+    // minify: false, // For debugging 
     entryNames: '[dir]/[name].min',
     outdir: './dist/',
     target: 'esnext',

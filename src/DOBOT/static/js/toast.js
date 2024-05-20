@@ -20,19 +20,19 @@ export function showToast(content, type='info') {
 
     const $toastContainer = $('<div></div>');
 
-    $(document.body).append($toastContainer);
+
+    $(document.getElementById('toast-container')).append($toastContainer);
+    // $(document.body).append($toastContainer);
 
     $toastContainer[0].outerHTML = toast;
 
-    new HSRemoveElement(document.getElementById(`${type}-toast-remove-btn-${id}`))
+    const removeElement = new HSRemoveElement(document.getElementById(`${type}-toast-remove-btn-${id}`))
 
-    setTimeout(() => {
-        const elem = document.getElementById(`${type}-toast-${id}`);
-
-        if (!elem) return;
-
-        elem.remove();
+    const timeoutId = setTimeout(() => {
+        removeElement.remove();
     }, 5000);
+
+    removeElement.el.addEventListener('click', () => clearTimeout(timeoutId), { once: true });
 }
 
 /**
@@ -53,8 +53,7 @@ function createToast(content, type = 'info', id=0) {
  * @returns {string}
  */
 function createSuccessToast(content, id) {
-    return `
-<div id="success-toast-${id}" class="absolute bottom-4 start-1/2 -translate-x-1/2 hs-removing:translate-x-5 hs-removing:opacity-0 transition duration-300 max-w-xs bg-white border border-gray-200 rounded-xl shadow-lg dark:bg-neutral-900 dark:border-neutral-700 z-50" role="alert">
+    return `<div id="success-toast-${id}" class="hs-removing:translate-x-5 hs-removing:opacity-0 transition duration-300 max-w-xs bg-white border border-gray-200 rounded-xl shadow-lg dark:bg-neutral-900 dark:border-neutral-700 z-50" role="alert">
     <div class="flex p-4">
       <div class="flex-shrink-0">
         <svg class="flex-shrink-0 size-4 text-teal-500 mt-0.5" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
@@ -72,8 +71,7 @@ function createSuccessToast(content, id) {
       </button>
       </div>
     </div>
-  </div>
-    `;
+  </div>`;
 }
 
 /**
@@ -82,8 +80,7 @@ function createSuccessToast(content, id) {
  * @returns {string}
  */
 function createDangerToast(content, id) {
-    return `
-    <div id="danger-toast-${id}" class="absolute bottom-4 start-1/2 -translate-x-1/2 hs-removing:translate-x-5 hs-removing:opacity-0 transition duration-300 max-w-xs bg-white border border-gray-200 rounded-xl shadow-lg dark:bg-neutral-900 dark:border-neutral-700 z-50 " role="alert">
+    return `<div id="danger-toast-${id}" class="hs-removing:translate-x-5 hs-removing:opacity-0 transition duration-300 max-w-xs bg-white border border-gray-200 rounded-xl shadow-lg dark:bg-neutral-900 dark:border-neutral-700 z-50 " role="alert">
     <div class="flex p-4">
       <div class="flex-shrink-0">
         <svg class="flex-shrink-0 size-4 text-red-500 mt-0.5" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
@@ -101,8 +98,7 @@ function createDangerToast(content, id) {
       </button>
       </div>
     </div>
-  </div>
-    `;
+  </div>`;
 }
 
 /**
@@ -111,8 +107,7 @@ function createDangerToast(content, id) {
  * @returns {string}
  */
 function createWarnToast(content, id) {
-    return `
-    <div id="warn-toast-${id}" class="absolute bottom-4 start-1/2 -translate-x-1/2 hs-removing:translate-x-5 hs-removing:opacity-0 transition duration-300 max-w-xs bg-white border border-gray-200 rounded-xl shadow-lg dark:bg-neutral-900 dark:border-neutral-700 z-50 " role="alert">
+    return `<div id="warn-toast-${id}" class="hs-removing:translate-x-5 hs-removing:opacity-0 transition duration-300 max-w-xs bg-white border border-gray-200 rounded-xl shadow-lg dark:bg-neutral-900 dark:border-neutral-700 z-50 " role="alert">
     <div class="flex p-4">
       <div class="flex-shrink-0">
         <svg class="flex-shrink-0 size-4 text-yellow-500 mt-0.5" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
@@ -130,8 +125,7 @@ function createWarnToast(content, id) {
       </button>
       </div>
     </div>
-  </div>
-    `;
+  </div>`;
 }
 
 /**
@@ -140,8 +134,7 @@ function createWarnToast(content, id) {
  * @returns {string}
  */
 function createInfoToast(content, id) {
-    return `
-    <div id="info-toast-${id}" class="absolute bottom-4 start-1/2 -translate-x-1/2 hs-removing:translate-x-5 hs-removing:opacity-0 transition duration-300 max-w-xs bg-white border border-gray-200 rounded-xl shadow-lg dark:bg-neutral-900 dark:border-neutral-700 z-50 " role="alert">
+    return `<div id="info-toast-${id}" class="hs-removing:translate-x-5 hs-removing:opacity-0 transition duration-300 max-w-xs bg-white border border-gray-200 rounded-xl shadow-lg dark:bg-neutral-900 dark:border-neutral-700 z-50 " role="alert">
         <div class="flex p-4">
             <div class="flex-shrink-0">
                 <svg class="flex-shrink-0 size-4 text-blue-500 mt-0.5" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
@@ -159,6 +152,5 @@ function createInfoToast(content, id) {
             </button>
             </div>
         </div>
-    </div>
-    `;
+    </div>`;
 }

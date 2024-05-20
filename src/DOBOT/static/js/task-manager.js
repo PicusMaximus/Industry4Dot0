@@ -22,16 +22,21 @@ export default class TaskManager {
         if (this.#id) this.#loadTask();
 
         document.addEventListener('click', this.#loadCardHandler.bind(this));
+        document.addEventListener('click', this.#deleteCardHandler.bind(this));
         document.getElementById('save-task-btn').addEventListener('click', this.saveTask.bind(this));
     }
 
+    /**
+     * 
+     * @param {Event} e 
+     */
     async #loadCardHandler(e) {
         for (const selector of this.#selectors) {
             const target = e.target.closest(`.create-${selector}-card--btn`);
             
             if(!target) continue;
     
-            let id = target.getAttribute('data-card-id');
+            const id = target.getAttribute('data-card-id');
 
             const taskContainer = document.getElementById('task-container');
 
@@ -49,20 +54,55 @@ export default class TaskManager {
             break;
         }
     }
+
+    /**
+     *  Event handler for handling the deletion of an item
+     * @param {Event} e 
+     */
+    async #deleteCardHandler(e) {
+        const $target = $(e.target).closest('.delete-current-item');
+
+        if (!$target.length) return;
+
+        const $currBtn = $(document.querySelector(`button[data-card-id="${this.#currentId}"]`));
+        const $currCard = $(document.getElementById(this.#currentId));
+
+        this.#data.delete(this.#currentId);
+
+        if ($currBtn.hasClass('create-axis-card--btn')) {
+            $currBtn.closest('.subtask-group').remove();
+            this.#taskSidebar.axisCount--;
+        } else {
+            $currBtn.remove();
+        }
+
+        if ($currBtn.hasClass('create-movement-card--btn')) this.#taskSidebar.moveCount--;
+
+        $currCard.remove();
+    }
   
+    /**
+     *  Function which takes a type and executes functions recording to the type...
+     * @param { string } id 
+     * @param {'axis' | 'movement' | 'wait' | 'settings' |'notification' | 'comment'} type 
+     * @returns 
+     */
     async loadCard(id, type) {
         this.#currentId = id;
 
         if (type === 'axis') return await this.#loadAxisCard(), this.listenForCardChanges(type), void 0;
         if (type === 'movement') return await this.#loadMovementCard(), this.listenForCardChanges(type), void 0;
-        if (type === 'comment') return await this.#loadCommentCard(), this.listenForCardChanges(type), void 0;
-        if (type === 'settings') return await this.#loadSettingsCard(), this.listenForCardChanges(type), void 0;
         if (type === 'wait') return await this.#loadWaitCard(), this.listenForCardChanges(type), void 0;
-        if (type === 'notification') return this.listenForCardChanges(type), void 0;
+        if (type === 'settings') return await this.#loadSettingsCard(), this.listenForCardChanges(type), void 0;
+        if (type === 'notification') return await this.#loadNotificationCard(), this.listenForCardChanges(type), void 0;
+        if (type === 'comment') return await this.#loadCommentCard(), this.listenForCardChanges(type), void 0;
 
-        // const data = this.#data.get(id);
+        throw new Error(`The given type does not exists. Type: ${type}`)
     }
   
+    /**
+     * Loades the movement card into the dom and initialiesed all the used elements...
+     */
     async #loadMovementCard() {
         const res = await fetch(`/movement-card${this.#currentId ? `?id=${this.#currentId}` : ''}`, {method: "GET"})
         const content = await res.text();
@@ -73,21 +113,21 @@ export default class TaskManager {
 
         if (!this.#currentId?.trim?.()) this.#currentId = $('#task-card-content').find('section:first').attr('id');
 
-        HSInputNumber.autoInit();
         HSTooltip.autoInit();
+        HSDropdown.autoInit();
 
         if (this.#data.has(this.#currentId)){
 
             const data = this.#data.get(this.#currentId);
 
             $('#dobot-arm-pos-x').val(data.x).attr('value', data.x);
-            $('#dobot-arm-pos-y').val(data.y).attr('value',data.y);
-            $('#dobot-arm-pos-z').val(data.z).attr('value',data.z);
-            $('#dobot-arm-pos-r').val(data.r).attr('value',data.r);
-            $('#dobot-arm-pos-j1').val(data.j1).attr('value',data.j1);
-            $('#dobot-arm-pos-j2').val(data.j2).attr('value',data.j2);
-            $('#dobot-arm-pos-j3').val(data.j3).attr('value',data.j3);
-            $('#dobot-arm-pos-j4').val(data.j4).attr('value',data.j4);
+            $('#dobot-arm-pos-y').val(data.y).attr('value', data.y);
+            $('#dobot-arm-pos-z').val(data.z).attr('value', data.z);
+            $('#dobot-arm-pos-r').val(data.r).attr('value', data.r);
+            $('#dobot-arm-pos-j1').val(data.j1).attr('value', data.j1);
+            $('#dobot-arm-pos-j2').val(data.j2).attr('value', data.j2);
+            $('#dobot-arm-pos-j3').val(data.j3).attr('value', data.j3);
+            $('#dobot-arm-pos-j4').val(data.j4).attr('value', data.j4);
         } else {
             const newTask = {
                 x: 0,
@@ -102,69 +142,11 @@ export default class TaskManager {
 
             this.#data.set(this.#currentId, newTask);
         }
-        
-        const elX = HSInputNumber.getInstance('#dobot-arm-pos-x--div');
-
-        const func = (data) => {
-            if (this.#data.has(this.#currentId)) {
-                const oldData = this.#data.get(this.#currentId)
-    
-                const newData = Object.assign(oldData, data);
-    
-                this.#data.set(this.#currentId, newData);
-                return;
-            }
-    
-            this.#data.set(this.#currentId, data);
-        }
-
-        elX.on('change', ({ inputValue }) => {
-            func({ x: inputValue });
-        });
-
-        const elY = HSInputNumber.getInstance('#dobot-arm-pos-y--div');
-
-        elY.on('change', ({ inputValue }) => {
-            func({ y: inputValue });
-        });
-
-        const elZ = HSInputNumber.getInstance('#dobot-arm-pos-z--div');
-
-        elZ.on('change', ({ inputValue }) => {
-            func({ z: inputValue });
-        });
-
-        const eR = HSInputNumber.getInstance('#dobot-arm-pos-r--div');
-
-        eR.on('change', ({ inputValue }) => {
-            func({ r: inputValue });
-        });
-
-        const elJ1 = HSInputNumber.getInstance('#dobot-arm-pos-j1--div');
-
-        elJ1.on('change', ({ inputValue }) => {
-            func({ j1: inputValue });
-        });
-
-        const elJ2 = HSInputNumber.getInstance('#dobot-arm-pos-j2--div');
-
-        elJ2.on('change', ({ inputValue }) => {
-            func({ j2: inputValue });
-        });
-
-        const elJ3 = HSInputNumber.getInstance('#dobot-arm-pos-j3--div');
-
-        elJ3.on('change', ({ inputValue }) => {
-            func({ j3: inputValue });
-        });
-
-        const elJ4 = HSInputNumber.getInstance('#dobot-arm-pos-j4--div');
-
-        elJ4.on('change', ({ inputValue }) => {
-            func({ j4: inputValue });
-        });
     }
 
+    /**
+     * Loades the wait card into the dom and initialiesed all the used elements...
+     */
     async #loadWaitCard() {
         const res = await fetch(`/wait-card${this.#currentId ? `?id=${this.#currentId}` : ''}`, {method: "GET"})
         const content = await res.text();
@@ -176,37 +158,22 @@ export default class TaskManager {
         if (!this.#currentId?.trim?.()) this.#currentId = $('#task-card-content').find('section:first').attr('id');
 
         // Init Preline NumberInput
-        HSInputNumber.autoInit();
         HSTooltip.autoInit();
+        HSDropdown.autoInit();
 
         if (this.#data.has(this.#currentId)) {
             const data = this.#data.get(this.#currentId);
     
             $('#dobot-wait-ms').val(data).attr('value', data.x);
-        } else {
-            this.#data.set(this.#currentId, 0);
+            return;
         }
-
-        const func = (data) => {
-            if (this.#data.has(this.#currentId)) {
-                const oldData = this.#data.get(this.#currentId)
-    
-                const newData = Object.assign(oldData, data);
-    
-                this.#data.set(this.#currentId, newData);
-                return;
-            }
-    
-            this.#data.set(this.#currentId, data);
-        }
-
-        const input = HSInputNumber.getInstance('#dobot-wait-ms--div');
-
-        input.on('change', ({ inputValue }) => {
-            func({ y: inputValue });
-        });
+        
+        this.#data.set(this.#currentId, 0);
     }
 
+    /**
+     * Loades the axis card into the dom and initialiesed all the used elements...
+     */
     async #loadAxisCard() {
         const res = await fetch(`/axis-card${this.#currentId ? `?id=${this.#currentId}` : ''}`, {method: "GET"})
         const content = await res.text();
@@ -218,10 +185,14 @@ export default class TaskManager {
         if (!this.#currentId?.trim?.()) this.#currentId = $('#task-card-content').find('section:first').attr('id');
 
         HSTooltip.autoInit();
+        HSDropdown.autoInit();
 
         //TODO: Add functionallity here - also add the card content
     }
 
+    /**
+     * Loades the settings card into the dom and initialiesed all the used elements...
+     */
     async #loadSettingsCard() {
         const res = await fetch(`/settings-card${this.#currentId ? `?id=${this.#currentId}` : ''}`, {method: "GET"})
         const content = await res.text();
@@ -233,6 +204,7 @@ export default class TaskManager {
         if (!this.#currentId?.trim?.()) this.#currentId = $('#task-card-content').find('section:first').attr('id');
 
         HSTooltip.autoInit();
+        HSDropdown.autoInit();
 
         if (!this.#data.has(this.#currentId)) {
             this.#data.set(this.#currentId, false);
@@ -246,6 +218,43 @@ export default class TaskManager {
         input.checked = data;
     }
 
+    /**
+     * Loades the notification card into the dom and initialiesed all the used elements...
+     */
+    async #loadNotificationCard() {
+        const res = await fetch(`/notification-card${this.#currentId ? `?id=${this.#currentId}` : ''}`, { method: "GET" })
+        const content = await res.text();
+    
+        const contentHTML = $.parseHTML(content)
+    
+        document.getElementById('task-card-content').replaceChildren(contentHTML[0]);
+
+        if (!this.#currentId?.trim?.()) this.#currentId = $('#task-card-content').find('section:first').attr('id');
+
+        HSTooltip.autoInit();
+        HSDropdown.autoInit();
+
+        if(!this.#data.has(this.#currentId)) {
+            this.#data.set(this.#currentId, { message: '', status: '' });
+            HSSelect.autoInit();
+            return;
+        }
+        
+        const data = this.#data.get(this.#currentId);
+
+        $(document.getElementById('notification-status--select')).find(`option[value="${ data.status }"]`).prop('selected', 'true');
+
+        HSSelect.autoInit();
+        
+        const input = document.getElementById('notification-message--textarea');
+
+        input.textContent = data.message;
+        // select.value = data.status;
+    }
+
+    /**
+     * Loades the comment card into the dom and initialiesed all the used elements...
+     */
     async #loadCommentCard() {
         const res = await fetch(`/comment-card${this.#currentId ? `?id=${this.#currentId}` : ''}`, { method: "GET" })
         const content = await res.text();
@@ -256,19 +265,47 @@ export default class TaskManager {
 
         if (!this.#currentId?.trim?.()) this.#currentId = $('#task-card-content').find('section:first').attr('id');
 
+
         HSTooltip.autoInit();
+        HSDropdown.autoInit();
+
+        if (!this.#data.has(this.#currentId)) {
+            this.#data.set(this.#currentId, '');
+            return;
+        }
+
+        const comment = this.#data.get(this.#currentId);
+
+        const input = document.getElementById('comment-textarea');
+
+        input.textContent = comment;
     }
 
     listenForCardChanges(type) {
         const target = document.querySelector(`section.${type}-card`);
         this.#currentId = target.id;
 
+
         if (type === 'axis') return $(target).on( "change", () => {}), void 0; 
         if (type === 'movement') return $(target).on( "change", this.#movementListener.bind(this)), void 0; 
-        if (type === 'comment') return $(target).on( "change", (e) => {}), void 0;
-        if (type === 'settings') return $(target).on( "change", this.#settingsListener.bind(this)), void 0;
         if (type === 'wait') return $(target).on( "change", this.#waitListener.bind(this)), void 0; 
-        if (type === 'notification') return $(target).on( "change", (e) => {}), void 0;
+        if (type === 'settings') return $(target).on( "change", this.#settingsListener.bind(this)), void 0;
+        if (type === 'notification') {
+            $(target).on( "change", this.#notificationListener.bind(this))
+            const el = HSSelect.getInstance('#notification-status--select');
+            el.on('change', (val) => {
+                if (this.#data.has(this.#currentId)) {
+                    const data = this.#data.get(this.#currentId)
+                    data.status = val;
+                    this.#data.set(this.#currentId, data)
+                    return;
+                }
+    
+                this.#data.set(this.#currentId, { status: val })
+            })
+            return;
+        }
+        if (type === 'comment') return $(target).on( "change", this.#commentListener.bind(this)), void 0;
 
         throw new Error(`Invalid type was given. Type: ${type} is not defined.`);
     }
@@ -338,6 +375,36 @@ export default class TaskManager {
         this.#data.set(this.#currentId, checked)
     }
 
+    #notificationListener(e) {
+        const target = e.target;
+        const apId = target?.id;
+        //TODO: Not implemented yet
+        if (apId === 'notification-message--textarea') {
+            const message = target.value;
+
+            if (this.#data.has(this.#currentId)) {
+                const data = this.#data.get(this.#currentId)
+                data.message = message;
+                this.#data.set(this.#currentId, data)
+                return;
+            }
+
+            this.#data.set(this.#currentId, { message: message })
+            return;
+        }
+    }
+
+    #commentListener(e) {
+        const target = e.target;
+        const apId = target?.id;
+        
+        if (apId !== 'comment-textarea') return;
+        
+        const comment = target.value;
+
+        this.#data.set(this.#currentId, comment)
+    }
+
     async saveTask() {
         const task = {
             subtasks: [],
@@ -380,16 +447,24 @@ export default class TaskManager {
                     continue;
                 }
             
-                if ($btn.hasClass('create-comment-card--btn')) {
-                    step.command = 'continue';
-                    step.data.comment = this.#data.get(btnId);
-                    subtask.steps.push(step);
-                    continue;
-                }
-
+                
                 if ($btn.hasClass('create-settings-card--btn')) {
                     step.command = 'settings';
                     step.data.settings = this.#data.get(btnId);
+                    subtask.steps.push(step);
+                    continue;
+                }
+                
+                if ($btn.hasClass('create-notification-card--btn')) {
+                    step.command = 'notification';
+                    step.data.notification = this.#data.get(btnId);
+                    subtask.steps.push(step);
+                    continue;
+                }
+                
+                if ($btn.hasClass('create-comment-card--btn')) {
+                    step.command = 'comment';
+                    step.data.comment = this.#data.get(btnId);
                     subtask.steps.push(step);
                     continue;
                 }
@@ -422,7 +497,6 @@ export default class TaskManager {
     }
 
     async #loadTask() {
-        // There is nothing to load!!!
         if (!this.#id) return;
 
         const res = await fetch(`/api/task?id=${this.#id}`, {method: 'GET'});
@@ -436,12 +510,10 @@ export default class TaskManager {
         let counter = -1;
 
         for (const { movementType, steps } of subtasks) {
-            // Hier -> Fahre Achse mit dem richtigen Type erstellen
             counter++;
             this.#taskSidebar.createAxisLi(null, `${id}-${counter}`);
 
             for (const { command, data } of steps) {
-                //=> Hier die einzelnen Steps nachstellen.
                 counter++;
 
                 const itemId = `${id}-${counter}`;
@@ -452,9 +524,9 @@ export default class TaskManager {
                     continue;
                 }
 
-                if (command === 'comment') {
-                    this.#taskSidebar.createCommentLi(null, itemId);
-                    this.#data.set(itemId, data.comment)
+                if (command === 'wait') {
+                    this.#taskSidebar.createWaitLi(null, itemId);
+                    this.#data.set(itemId, data.wait)
                     continue;
                 }
 
@@ -464,15 +536,15 @@ export default class TaskManager {
                     continue;
                 }
 
-                if (command === 'wait') {
-                    this.#taskSidebar.createWaitLi(null, itemId);
-                    this.#data.set(itemId, data.wait)
+                if (command === 'comment') {
+                    this.#taskSidebar.createCommentLi(null, itemId);
+                    this.#data.set(itemId, data.comment)
                     continue;
                 }
 
                 if (command === 'notification') {
                     this.#taskSidebar.createNotificationLi(null, itemId);
-                    this.#data.set(itemId, data.Notification)
+                    this.#data.set(itemId, data.notification)
                     continue;
                 }
             }
