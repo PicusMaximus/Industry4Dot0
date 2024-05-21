@@ -61,7 +61,7 @@ function createSuccessToast(content, id) {
         </svg>
       </div>
       <div class="ms-3">
-        <p class="text-sm text-gray-700 dark:text-neutral-400">
+        <p class="text-sm text-gray-700 dark:text-neutral-400 balance-text">
           ${content}
         </p>
       </div>
@@ -88,7 +88,7 @@ function createDangerToast(content, id) {
         </svg>
       </div>
       <div class="ms-3">
-        <p class="text-sm text-gray-700 dark:text-neutral-400">
+        <p class="text-sm text-gray-700 dark:text-neutral-400 balance-text">
             ${content}
         </p>
       </div>
@@ -115,7 +115,7 @@ function createWarnToast(content, id) {
         </svg>
       </div>
       <div class="ms-3">
-        <p class="text-sm text-gray-700 dark:text-neutral-400">
+        <p class="text-sm text-gray-700 dark:text-neutral-400 balance-text">
             ${content}
         </p>
       </div>
@@ -142,7 +142,7 @@ function createInfoToast(content, id) {
                 </svg>
             </div>
             <div class="ms-3">
-            <p class="text-sm text-gray-700 dark:text-neutral-400">
+            <p class="text-sm text-gray-700 dark:text-neutral-400 balance-text">
                 ${content}
             </p>
             </div>
