@@ -178,7 +178,7 @@ def get_index():
     d = get_dobot()
     return d.get_current_index()
 
-async def run_task(subtasks, monitorIp):
+def run_task(subtasks, monitorIp):
     count = 0
     for subtask in subtasks:
         for step in subtask.steps:
@@ -190,13 +190,13 @@ async def run_task(subtasks, monitorIp):
                     move_to_p(step.data.pos)
                     count = count + 1
                 elif step.command == 'settings': 
-                    toggle_suck(step.data.settings)
+                    toggle_suck(step.data.settings.suckState)
                     count = count + 1
                 elif step.command == 'wait': 
                     wait(int(step.data.wait))
                     count = count + 1
                 elif step.command == 'notification':
-                    send_log(monitorIp, step.data.message, step.data.status)
+                    send_log(monitorIp, step.data.notification.message, step.data.notification.status)
                 # elif subtask['command'] == 'grip': 
     return count
 

@@ -127,9 +127,12 @@ def get_subtasks(id):
             if hasattr(subtasks[h].steps[i].data, 'pos'):
                 subtasks[h].steps[i].data.pos = SimpleNamespace(**dict(subtasks[h].steps[i].data.pos))
             # if hasattr(subtasks[h].steps[i].data, 'wait'):
-            #     subtasks[h].steps[i].data.settings = SimpleNamespace(**dict(subtasks[h].steps[i].data.settings))
-            # if hasattr(subtasks[h].steps[i].data, 'settings'):
-            #     subtasks[h].steps[i].data.wait = SimpleNamespace(**dict(subtasks[h].steps[i].data.wait))
+                # subtasks[h].steps[i].data.wait = SimpleNamespace(**dict(subtasks[h].steps[i].data.wait))
+            if hasattr(subtasks[h].steps[i].data, 'settings'):
+                subtasks[h].steps[i].data.settings = SimpleNamespace(**dict(subtasks[h].steps[i].data.settings))
+            if hasattr(subtasks[h].steps[i].data, 'notification'):
+                subtasks[h].steps[i].data.notification = SimpleNamespace(**dict(subtasks[h].steps[i].data.notification))
+    
     return subtasks
 
 def get_task(id):

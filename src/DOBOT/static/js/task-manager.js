@@ -13,8 +13,18 @@ export default class TaskManager {
 
     #taskSidebar = new TaskSidebar();
 
-    constructor() {
+    /**
+     * @type WebSocketHandler
+     */
+    #wsHandler;
 
+    /**
+     * 
+     * @param { { ws: WebSocketHandler } } options 
+     */
+    constructor(options) {
+        this.#wsHandler = options.ws;
+ 
         const searchParams = new URLSearchParams(window.location.search);
 
         if (searchParams.has('id')) this.#id = searchParams.get('id');
@@ -23,6 +33,7 @@ export default class TaskManager {
 
         document.addEventListener('click', this.#loadCardHandler.bind(this));
         document.addEventListener('click', this.#deleteCardHandler.bind(this));
+        document.addEventListener('click', this.#specialCardMethods.bind(this));
         document.getElementById('save-task-btn').addEventListener('click', this.saveTask.bind(this));
     }
 
@@ -62,7 +73,7 @@ export default class TaskManager {
     async #deleteCardHandler(e) {
         const $target = $(e.target).closest('.delete-current-item');
 
-        if (!$target.length) return;
+        if (!$target?.length) return;
 
         const $currBtn = $(document.querySelector(`button[data-card-id="${this.#currentId}"]`));
         const $currCard = $(document.getElementById(this.#currentId));
@@ -79,6 +90,44 @@ export default class TaskManager {
         if ($currBtn.hasClass('create-movement-card--btn')) this.#taskSidebar.moveCount--;
 
         $currCard.remove();
+    }
+
+    /**
+     *  Event handler for handling the click onto a specific card button
+     * @param {Event} e 
+     */
+    async #specialCardMethods(e) {
+        const $target = $(e.target).closest('.special-card-methode');
+
+        if (!$target?.length) return;
+
+        if ($target.hasClass('goto-pos')) {
+            if (!this.#data.has(this.#currentId)) return;
+
+            const data = this.#data.get(this.#currentId);
+
+            const pos = {
+                type: 'control-command',
+                command: 'goto_pos',
+                pos: data,
+            }
+
+            this.#wsHandler.ws.send(JSON.stringify(pos));
+        }
+
+        if ($target.hasClass('execute-settings')) {
+            if (!this.#data.has(this.#currentId)) return;
+
+            const data = this.#data.get(this.#currentId);
+
+            const settings = {
+                type: 'control-command',
+                command: 'execute_settings',
+                settings: data,
+            }
+
+            this.#wsHandler.ws.send(JSON.stringify(settings));
+        }
     }
   
     /**
@@ -207,15 +256,15 @@ export default class TaskManager {
         HSDropdown.autoInit();
 
         if (!this.#data.has(this.#currentId)) {
-            this.#data.set(this.#currentId, false);
+            this.#data.set(this.#currentId, { suckState: false, /* gripState: false */ });
             return;
         }
 
-        const data = this.#data.get(this.#currentId);
+        const settings = this.#data.get(this.#currentId);
 
         const input = document.getElementById('suck-switch');
 
-        input.checked = data;
+        input.checked = settings.suckState;
     }
 
     /**
@@ -368,17 +417,47 @@ export default class TaskManager {
         const target = e.target;
         const apId = target?.id;
         
-        if (apId !== 'suck-switch') return;
-        
-        const checked = target.checked;
+        if (apId === 'suck-switch') {
+            const checked = target.checked;
 
-        this.#data.set(this.#currentId, checked)
+            if(this.#data.has(this.#currentId)) {
+                const settings = this.#data.get(this.#currentId);
+
+                settings.suckState = checked;
+
+                this.#data.set(this.#currentId, settings);
+                return;
+            }
+
+            this.#data.set(this.#currentId, { suckState: checked });
+
+            return;
+        }
+
+        // The following code could be used to implement the gripper :)
+        // if (apId === 'grip-switch') {
+        //     const checked = target.checked;
+
+        //     if(this.#data.has(this.#currentId)) {
+        //         const settings = this.#data.get(this.#currentId);
+
+        //         settings.gripState = checked;
+
+        //         this.#data.set(this.#currentId, settings);
+        //         return;
+        //     }
+
+        //     this.#data.set(this.#currentId, { gripState: checked });
+
+        //     return;
+        // }
+
     }
 
     #notificationListener(e) {
         const target = e.target;
         const apId = target?.id;
-        //TODO: Not implemented yet
+
         if (apId === 'notification-message--textarea') {
             const message = target.value;
 
@@ -447,7 +526,6 @@ export default class TaskManager {
                     continue;
                 }
             
-                
                 if ($btn.hasClass('create-settings-card--btn')) {
                     step.command = 'settings';
                     step.data.settings = this.#data.get(btnId);

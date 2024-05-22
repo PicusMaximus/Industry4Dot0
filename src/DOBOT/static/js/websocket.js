@@ -1,6 +1,10 @@
 export default class WebSocketHandler {
-    url = '';
-    ws = null;
+    url;
+
+    /**
+     * @type Websocket
+     */
+    ws;
 
     /**
      * 

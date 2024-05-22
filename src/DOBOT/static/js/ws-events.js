@@ -12,7 +12,7 @@ export function onMessage(e) {
         dobotConnection.classList.remove('text-green-500', 'hover:text-green-600', 'focus:outline-none', 'focus:text-green-700');
         dobotConnection.classList.add('text-red-500', 'hover:text-red-600', 'focus:outline-none', 'focus:text-red-700')
 
-        showToast('Die Verbindung zum Pi konnte nicht hergestellt werden.', 'danger');
+        showToast('Die Verbindung zum DoBot konnte nicht hergestellt werden.', 'danger');
     }
 
     if (data.type === 'connected') {
@@ -20,7 +20,7 @@ export function onMessage(e) {
         dobotConnection.classList.remove('text-red-500', 'hover:text-red-600', 'focus:outline-none', 'focus:text-red-700');
         dobotConnection.classList.add('text-green-500', 'hover:text-green-600', 'focus:outline-none', 'focus:text-green-700');
 
-        showToast('Die Verbindung zum Pi wurde hergestellt.', 'success');
+        showToast('Die Verbindung zum DoBot wurde hergestellt.', 'success');
     }
 }
 

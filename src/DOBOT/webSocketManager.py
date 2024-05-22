@@ -1,3 +1,4 @@
+from types import SimpleNamespace
 import cherrypy, json
 import manager
 
@@ -14,12 +15,26 @@ class SocketManager(object):
                 elif m['command'] == 'move': self.move(**m)
                 elif m['command'] == 'speed': self.setSpeed(**m)
                 elif m['command'] == 'emergency_stop': self.emergency_stop(**m)
+                elif m['command'] == 'goto_pos': self.goto_pos(**m)
+                elif m['command'] == 'execute_settings': self.execute_settings(**m)
         return
     
     @cherrypy.expose
     def move(self, direction='xn', steps=10, mode='XYZ', **args):
         manager.move_step(mode, direction, steps)
         return 'move'
+    
+    @cherrypy.expose
+    def goto_pos(self, pos, **args):
+        posDict = SimpleNamespace(**dict(pos))
+        manager.move_to_p(posDict)
+        return 'goto_pos'
+
+    @cherrypy.expose
+    def execute_settings(self, settings, **args):
+        settingsDict = SimpleNamespace(**dict(settings))
+        manager.toggle_suck(settingsDict.suckState)
+        return 'execute_settings'
 
     @cherrypy.expose
     def home(self, **args): 

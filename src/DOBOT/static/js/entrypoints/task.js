@@ -54,7 +54,7 @@ const wsHandler = new WebSocketHandler({
 
 initPanelSectionSlider();
 
-new TaskManager();
+new TaskManager({ ws: wsHandler });
 
 $(document).on('click', (e) => {
     if (!e.target.closest('#free-drive-btn')) return;
@@ -135,4 +135,4 @@ $(document).on('click', (e) => {
         e.target.closest('dialog').close();
         return;
     }
-}); 
+});

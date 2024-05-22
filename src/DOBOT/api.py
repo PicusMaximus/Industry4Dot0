@@ -5,7 +5,6 @@ import uuid
 import manager
 import dbStore
 import requests
-import asyncio
 import constants
 
 ### -------------------------------------------------------------------------------------------------- ###
@@ -66,11 +65,12 @@ def setJobOrder():
     return jsonify("Success"), 200
 
 @app.route("/api/device/startJob", methods=['POST'])
-async def startJob():
+def startJob():
     id = request.json
     order = dbStore.get_order(id['id'])
 
     subtasks = dbStore.get_subtasks(order[0])
+    settings = dbStore.get_settings()
 
     manager.clear()
 
@@ -79,7 +79,7 @@ async def startJob():
     if oldIdx is None:
         oldIdx = 0
 
-    count = await manager.run_task(subtasks)
+    count = manager.run_task(subtasks, settings[1])
     curridx = oldIdx
 
     while(curridx < int(oldIdx) + int(count)):
@@ -181,14 +181,15 @@ def reconnectDevice():
     return jsonify("Successfully reconnected"), 200
 
 @app.route("/api/device/task", methods=['POST'])
-async def runTask():
+def runTask():
     id = request.args.get('id')
 
     if id is None: return 'Bad Request', 400
 
     subtasks = dbStore.get_subtasks(id)
+    settings = dbStore.get_settings()
 
-    await manager.run_task(subtasks)
+    manager.run_task(subtasks, settings[1])
 
     return jsonify('success'), 200
 
