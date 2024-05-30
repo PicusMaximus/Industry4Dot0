@@ -35,4 +35,4 @@ Sollte jemand selber ein Tia Projekt von Grund auf erstellen wollen, folgendes m
 
 - In den Einstellungen unter Schutz und Sicherheit muss Voller Zugriff aktiviert sein
 - Unter Verbindungsmechanismus muss PUT/GET erlaubt sein
-- Im Tia Projekt muss ein Datenblock angelegt werden. Dieser sollte mehrere Boolean Werte beeinhalten. Diese werden später Referenziert bei der Definition von Jobs.
+- Im Tia Projekt muss ein Datenbank angelegt werden. Dieser sollte mehrere Boolean Werte beeinhalten. Diese werden später Referenziert bei der Definition von Jobs.
